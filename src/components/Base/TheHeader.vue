@@ -111,8 +111,16 @@ const computedLanguage = computed(() => {
 
 <style lang="scss">
 .header{
+  position: fixed;
+  margin-right: calc(-100vw - -100%);
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1000;
   padding: 14px 0px;
   font-family: Montserrat;
+  background: #FFF;
+  box-shadow: 0px 4px 50px 0px rgba(42, 102, 193, 0.08);
   &__content{
     display: flex;
   }
@@ -188,18 +196,20 @@ const computedLanguage = computed(() => {
       p:nth-child(2){
         margin-left: 8px;
         margin-right: 5px;
+        &:hover{
+            color: #F04973;
+        }
       }
       span{
         opacity: 0.6000000238418579;
       }
       p:nth-child(4){
         margin-left: 6px;
-      }
-      &:hover{
-        p{
-          color: #F04973;
+        &:hover{
+            color: #F04973;
         }
       }
+     
     }
   }
   &__lang{

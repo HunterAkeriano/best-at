@@ -1,13 +1,17 @@
 <template>
   <div class="wrapper">
     <TheHeader/>
-    <RouterView />
+    <div class="main" >
+      <RouterView />
+    </div>
+    <TheFooter/>
   </div>
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import TheHeader from '@/components/Base/TheHeader.vue'
+import TheFooter from '@/components/Base/TheFooter.vue'
 </script>
 
 <style>
@@ -33,6 +37,7 @@ h1,
 h2,
 h3,
 h4,
+h5,
 p,
 ul[class],
 ol[class],
@@ -76,6 +81,10 @@ select {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+}
+.main{
+  flex: 1 1 auto;
+  margin-top: 68px;
 }
 .container{
   max-width: 1420px;
