@@ -21,17 +21,11 @@
           <p>Регистрация</p>
         </div>
       </div>
-      <div class="header__lang" @click="selectedLanguage = !selectedLanguage">
-        <div class="header__lang-select" style="margin-left: 1px; transform: translateY(-1px) translateX(1px);">
-            <div class="header__lang-item" >
-              <component :is="selectUserLanguage.icon"/>
-              <p>{{ selectUserLanguage.lang }}</p>
-          </div>
-        </div>
-        
-        <IconArrow v-if="selectedLanguage"/>
-        <div class="header__lang-selected" v-if="!selectedLanguage">
-          <div class="header__lang-item" v-for="item in computedLanguage" @click="selectUserLanguage = item">
+      <div class="header__lang" :class="{'header__lang_selected': selectedLanguage}" @click="selectedLanguage = !selectedLanguage">
+          <div class="header__lang-container">
+            <div class="header__lang-item" 
+            v-for="(item, index) in language"
+            @click="moveToFirst(index); ">
             <component :is="item.icon"/>
             <p>{{ item.lang }}</p>
           </div>
