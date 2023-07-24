@@ -8,6 +8,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      name: 'Not Found',
+      path: '/:pathMatch(.*)*',
+      component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)
     }
   ]
 })

@@ -1,17 +1,32 @@
 <template>
   <div class="wrapper">
-    <TheHeader/>
+    <TheHeader v-if="is404Page"/>
     <div class="main" >
       <RouterView />
     </div>
-    <TheFooter/>
+    <TheFooter v-if="is404Page"/>
   </div>
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+import {ref, watch} from 'vue'
+
 import TheHeader from '@/components/Base/TheHeader.vue'
 import TheFooter from '@/components/Base/TheFooter.vue'
+
+
+const route = useRoute();
+
+const is404Page = ref(null);
+watch(route, () => {
+  if (route.name === 'Not Found') {
+    is404Page.value = false;
+  } else {
+    is404Page.value = true;
+  }
+});
+
 </script>
 
 <style>
@@ -76,6 +91,9 @@ button,
 textarea,
 select {
   font: inherit;
+}
+a{
+  text-decoration: none;
 }
 .wrapper{
   display: flex;
