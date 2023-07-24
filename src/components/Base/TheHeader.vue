@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="header__lang" @click="selectedLanguage = !selectedLanguage">
-        <div class="header__lang-select">
+        <div class="header__lang-select" style="margin-left: 1px; transform: translateY(-1px) translateX(1px);">
             <div class="header__lang-item" >
               <component :is="selectUserLanguage.icon"/>
               <p>{{ selectUserLanguage.lang }}</p>
