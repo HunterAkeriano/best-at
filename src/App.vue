@@ -69,7 +69,6 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
-  font-family: 'Montserrat', sans-serif;
   font-family: 'EB Garamond', serif;
 }
 ul[class],
