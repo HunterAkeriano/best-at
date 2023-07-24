@@ -210,6 +210,7 @@ function moveToFirst(index) {
     width: 106px;
     position: relative;
     margin-left: 38px;
+    cursor: pointer;
     &-container{
       position: absolute;
       width: 100%;
@@ -233,12 +234,11 @@ function moveToFirst(index) {
         font-weight: 600;
         line-height: 26px; /* 185.714% */
         transition: .25s;
-      }
-      &:hover{
-        p{
+        &:hover{
           color: #F04973;
         }
       }
+      
     }
     &-item:nth-child(2),
     &-item:nth-child(3){
@@ -251,6 +251,14 @@ function moveToFirst(index) {
       top: 20px;
       transition: .25s;
     }
+    &:hover{
+      .arrow{
+        path{
+          transition: .25s;
+          fill: #F04973
+        }
+      }
+    }
 
     &_selected{
       .header__lang-container{
@@ -261,6 +269,9 @@ function moveToFirst(index) {
       }
       .arrow{
         transform: rotate(180deg);
+        path{
+          fill: #F04973;
+        }
       }
     }
   }
