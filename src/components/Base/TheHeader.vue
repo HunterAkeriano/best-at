@@ -31,7 +31,7 @@
         
         <IconArrow v-if="selectedLanguage"/>
         <div class="header__lang-selected" v-if="!selectedLanguage">
-          <div class="header__lang-item" v-for="item in computedLanguage" @click="selectUserLanguage = item">
+          <div class="header__lang-item" style="transform: translateY(-0.1px);" v-for="item in computedLanguage" @click="selectUserLanguage = item">
             <component :is="item.icon"/>
             <p>{{ item.lang }}</p>
           </div>
