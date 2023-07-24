@@ -9,6 +9,7 @@
       lineHeight: lineHeight + 'px',
       textTransform: uppercaseText ? 'uppercase' : 'none',
     }"
+    :class="{'ui-button_courses': isCourses}"
     @click="emitsPressed">
   <slot/>
   </button>
@@ -36,6 +37,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  isCourses:{
+    type: Boolean,
+    default: false,
+  }
 })
 
 const emits = defineEmits(['pressed']);
@@ -44,9 +49,10 @@ function emitsPressed(){
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 .ui-button{
   display: block;
+  cursor: pointer;
   color: #FFF;
   text-align: center;
   font-family: Montserrat;
@@ -56,5 +62,16 @@ function emitsPressed(){
   border-radius: 7px;
   background: linear-gradient(90deg, #F04973 0%, #FA6655 100%);
   box-shadow: 0px 15px 25px 0px rgba(193, 42, 61, 0.20);
+  transition: background 0.55s;
+
+  &:hover{
+    background: linear-gradient(90deg, #00D2FF 0%, #2596FF 100%);
+  }
+}
+.ui-button.ui-button_courses{
+  color: #F04973;
+  outline: 2px solid rgba(240, 73, 115, 1);
+  background: none;
+  box-shadow: none;
 }
 </style>
