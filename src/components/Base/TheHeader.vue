@@ -21,22 +21,17 @@
           <p>Регистрация</p>
         </div>
       </div>
-      <div class="header__lang" @click="selectedLanguage = !selectedLanguage">
-        <div class="header__lang-select" style="margin-left: 1px; transform: translateY(-1px) translateX(1px);">
-            <div class="header__lang-item" >
-              <component :is="selectUserLanguage.icon"/>
-              <p>{{ selectUserLanguage.lang }}</p>
-          </div>
-        </div>
-        
-        <IconArrow v-if="selectedLanguage"/>
-        <div class="header__lang-selected" v-if="!selectedLanguage">
-          <div class="header__lang-item" v-for="item in computedLanguage" @click="selectUserLanguage = item">
+      <div class="header__lang" :class="{'header__lang_selected': selectedLanguage}" @click="selectedLanguage = !selectedLanguage">
+          <div class="header__lang-container">
+            <div class="header__lang-item" 
+            v-for="(item, index) in language"
+            @click="moveToFirst(index); ">
             <component :is="item.icon"/>
             <p>{{ item.lang }}</p>
           </div>
-          <IconArrow class="arrow"/>
         </div>
+      <IconArrow class="arrow"/>
+    
       </div>
     </div>
   </div>
@@ -96,15 +91,14 @@ const language = [
   }
 ]
 
-const selectedLanguage = ref(true);
+const selectedLanguage = ref(false);
+function moveToFirst(index) {
+  const selectedItem = language.splice(index, 1)[0];
+  language.unshift(selectedItem);
+  // selectedLanguage.value = false;
+}
 
-const selectUserLanguage = shallowRef(language[0]);
 
-const computedLanguage = computed(() => {
-  const selectedLanguageValue = selectUserLanguage.value;
-  const filteredLanguage = language.filter(item => item.lang !== selectedLanguageValue.lang);
-  return [selectedLanguageValue, ...filteredLanguage];
-});
 
 </script>
 
@@ -213,49 +207,60 @@ const computedLanguage = computed(() => {
     }
   }
   &__lang{
-    display: flex;
-    align-items: center;
-    margin-left: 51px;
-    padding-top: 9px;
+    width: 106px;
     position: relative;
-    transition: .15s;
-    gap: 10px;
-    &-selected{
+    margin-left: 38px;
+    &-container{
       position: absolute;
-      left: -14px;
-      transition: .15s;
+      width: 100%;
+      left: 0;
       top: 0;
-      border-radius: 10px;
-      background: #FFF;
-      box-shadow: 0px 10px 60px 0px rgba(42, 102, 193, 0.15);
-      padding: 11px 20px 10px 16px;
-      width: 106px;
-      .arrow{
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        transform: rotate(180deg);
-      }
+      padding: 10px 19.57px 10px 15px;
+      height: 41px;
+      overflow: hidden;
+      transition: .25s;
+
     }
-    &-item{
+    &-item{      
       display: flex;
-      align-items: center;
       gap: 8px;
+      align-items: center;
       cursor: pointer;
-      transition: .15s;
       p{
-        transition: .15s;
         color: #454B58;
         font-size: 14px;
         font-style: normal;
         font-weight: 600;
         line-height: 26px; /* 185.714% */
-        transform: translateX(1px);
+        transition: .25s;
       }
       &:hover{
         p{
           color: #F04973;
         }
+      }
+    }
+    &-item:nth-child(2),
+    &-item:nth-child(3){
+      margin-top: 2px;
+    }
+    .arrow{
+      position: absolute;
+      z-index: 10;
+      right: 19px;
+      top: 20px;
+      transition: .25s;
+    }
+
+    &_selected{
+      .header__lang-container{
+        height: 100px;
+        border-radius: 10px;
+        background: #FFF;
+        box-shadow: 0px 10px 60px 0px rgba(42, 102, 193, 0.15);
+      }
+      .arrow{
+        transform: rotate(180deg);
       }
     }
   }
