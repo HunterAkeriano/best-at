@@ -10,6 +10,11 @@ const router = createRouter({
       component: HomeView
     },
     {
+      name: 'Registration Page',
+      path: '/registration',
+      component: () => import("@/views/RegistrationView.vue" /* webpackChunkName: "registration" */)
+    },
+    {
       name: 'Not Found',
       path: '/:pathMatch(.*)*',
       component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)

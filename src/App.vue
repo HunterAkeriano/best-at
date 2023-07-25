@@ -93,6 +93,7 @@ select {
 }
 a{
   text-decoration: none;
+  color: inherit;
 }
 .wrapper{
   display: flex;

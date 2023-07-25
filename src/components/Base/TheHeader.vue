@@ -18,7 +18,7 @@
           <IconUser/>
           <p>Войти</p>
           <span>|</span>
-          <p>Регистрация</p>
+          <p> <router-link :to="{ path: `/registration` }"> Регистрация </router-link></p>
         </div>
       </div>
       <div class="header__lang" :class="{'header__lang_selected': selectedLanguage}" @click="selectedLanguage = !selectedLanguage">
