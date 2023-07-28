@@ -4,14 +4,19 @@
       <div class="registration__link">
         <p style="color: #454B58;">Главная</p>
         <p style="margin-left: 10px;">/</p>
-        <p style="margin-left: 8px;">Регистрация</p>
+        <p style="margin-left: 8px;" 
+        @click="SELECTED_VALUES = ''; 
+          DEFAULT_REGISTATION = true; 
+          DEFAULT_TITLE = ''" >Регистрация</p>
       </div>
       <div class="registration__title">
-        <h2>Регистрация</h2>
+        <h2>Регистрация {{  DEFAULT_TITLE }}</h2>
       </div>
       <Transition name="fade">
-        <div class="registration__type" v-if="DEFAULT_REGISTATION">
-          <div class="registration__type-item" v-for="(item, idx) in REGISTRATION_TYPE" @click="selectType(item.type)">
+        <div class="registration__type" v-if="SELECTED_VALUES == ''">
+          <div class="registration__type-item" 
+          v-for="(item, idx) in REGISTRATION_TYPE"
+           @click="selectType(item.type); DEFAULT_TITLE = item.name">
             <component :is="item.icons"/>
             <p>{{ item.name }}</p>
             <div class="select"></div>
@@ -20,6 +25,7 @@
           </div>
         </div>
       </Transition>
+      <RegistrationStudent v-if="SELECTED_VALUES == 'student'"/>
     </div>
   </div>
 </template>
@@ -31,12 +37,17 @@ import IconCompany from '@/assets/icons/registration/Company.vue'
 import IconOneState from '@/assets/icons/registration/OneState.vue'
 import IconTwoState from '@/assets/icons/registration/TwoState.vue'
 
-import {ref} from 'vue';
+
+// компоненты
+import RegistrationStudent from '@/components/Reusable/RegistrationStudent.vue'
+
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 const DEFAULT_REGISTATION = ref(true);
+const DEFAULT_TITLE = ref('');
 
 const REGISTRATION_TYPE = [
   {
@@ -56,7 +67,7 @@ const REGISTRATION_TYPE = [
   },
 ]
 
-const SELECTED_VALUES = ref('')
+const SELECTED_VALUES = ref(null)
 
 function selectType(queryParam) {
   SELECTED_VALUES.value = queryParam;
@@ -65,6 +76,29 @@ function selectType(queryParam) {
   router.push({ query: currentQuery });
   DEFAULT_REGISTATION.value = false
 }
+
+function handleRouteUpdate(to, from) {
+  const queryParam = to.query.param
+  if (queryParam) {
+    SELECTED_VALUES.value = queryParam
+    const matchedType = REGISTRATION_TYPE.find(item => item.type === queryParam)
+    if (matchedType) {
+      DEFAULT_TITLE.value = matchedType.name
+    } else {
+      DEFAULT_TITLE.value = ''
+    }
+    DEFAULT_REGISTATION.value = false
+  } else {
+    SELECTED_VALUES.value = ''
+    DEFAULT_REGISTATION.value = true
+    DEFAULT_TITLE.value = ''
+  }
+}
+
+onMounted(() => {
+  handleRouteUpdate(router.currentRoute.value, router.currentRoute.value)
+})
+
 
 </script>
 
