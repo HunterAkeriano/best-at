@@ -1,33 +1,38 @@
 <template>
   <div class="student-form">
+
     <div class="student-form__input">
       <p class="student-form__input-text">Ваш логин</p>
       <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
       <span v-if="v$?.login?.$error">Заполните поле</span>
       <IconError class="error-icons" v-if="v$?.login?.$error"/>
     </div>
+
     <div class="student-form__input" style="margin-top: 15px;">
       <p class="student-form__input-text">Ваш пароль</p>
-      <input v-model="formData.password" :type="SHOW_PASSWORD_ONE ? 'password' : 'text'">
+      <input :class="{'error': v$?.password?.$error}" v-model="formData.password" :type="SHOW_PASSWORD_ONE ? 'password' : 'text'">
       <IconShowPassOneState @click="SHOW_PASSWORD_ONE = !SHOW_PASSWORD_ONE" class="showpass" v-if="SHOW_PASSWORD_ONE"/>
       <IconShowPassTwoState @click="SHOW_PASSWORD_ONE = !SHOW_PASSWORD_ONE" class="showpass" v-else/>
       <span v-if="v$?.password?.$error">{{ v$?.password?.$errors[0].$message }}</span>
       <IconError class="error-icons" v-if="v$?.password?.$error"/>
     </div>
+
     <div class="student-form__input" style="margin-top: 16px;">
       <p class="student-form__input-text">Подтвердите пароль</p>
-      <input v-model="formData.RePassword" :type="SHOW_PASSWORD_TWO ? 'password' : 'text'">
+      <input :class="{'error': v$?.RePassword?.$error}" v-model="formData.RePassword" :type="SHOW_PASSWORD_TWO ? 'password' : 'text'">
       <IconShowPassOneState @click="SHOW_PASSWORD_TWO = !SHOW_PASSWORD_TWO" class="showpass" v-if="SHOW_PASSWORD_TWO"/>
       <IconShowPassTwoState @click="SHOW_PASSWORD_TWO = !SHOW_PASSWORD_TWO" class="showpass" v-else/>
       <span v-if="v$?.RePassword?.$error">{{ v$?.RePassword?.$errors[0].$message }}</span>
       <IconError class="error-icons" v-if="v$?.RePassword?.$error"/>
     </div>
+
     <div class="student-form__input" style="margin-top: 16px;">
       <p class="student-form__input-text">Ваш e-mail</p>
       <input :class="{'error': v$?.email?.$error}" v-model="formData.email" type="email">
       <span v-if="v$?.email?.$error">Заполните поле</span>
       <IconError class="error-icons" v-if="v$?.email?.$error"/>
     </div>
+
     <div class="student-form__accept" @click="ACCEPTED_FORM = !ACCEPTED_FORM">
       <div class="student-form__accept-icon">
         <IconCheckBoxOne v-if="!ACCEPTED_FORM"/>
@@ -36,9 +41,14 @@
       
       <p>Я принимаю условия пользовательского соглашения и <span> правила обработки персональных данных</span></p>
     </div>
+
     <div class="student-form__btn">
-      <TheButton @click="registerStudent">Зарегистрироваться</TheButton>
+      <TheButton  
+      @click="registerStudent"
+      :isDisabled="!ACCEPTED_FORM"
+      >Зарегистрироваться</TheButton>
     </div>
+    
     <div class="student-form__last">
       <p>Или войти через социальные сети</p>
       <div class="student-form__last-icons">
@@ -68,6 +78,8 @@ import IconLinkedin from '@/assets/icons/registration/social/Linkedin.vue'
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
 import {ref, computed} from 'vue'
+
+
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, minLength, sameAs } from '@vuelidate/validators'
 
@@ -149,9 +161,10 @@ async function registerStudent(){
 
 
     }
+    const randomNumber = new Date().toLocaleString();
     await createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password);
-    await setDoc(doc(db, "privateStudentData",  new Date().toLocaleString()), privateInfo);
-    await setDoc(doc(db, "publicStudentData",  new Date().toLocaleString()), publicInfo);
+    await setDoc(doc(db, "privateStudentData",  randomNumber), privateInfo);
+    await setDoc(doc(db, "publicStudentData",  randomNumber), publicInfo);
   }
   
 }

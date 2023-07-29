@@ -9,7 +9,7 @@
       lineHeight: lineHeight + 'px',
       textTransform: uppercaseText ? 'uppercase' : 'none',
     }"
-    :class="{'ui-button_courses': isCourses}"
+    :class="{'ui-button_courses': isCourses, 'ui-button_disabled': isDisabled}"
     @click="emitsPressed">
   <slot/>
   </button>
@@ -40,7 +40,11 @@ defineProps({
   isCourses:{
     type: Boolean,
     default: false,
-  }
+  },
+  isDisabled: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emits = defineEmits(['pressed']);
@@ -73,5 +77,10 @@ function emitsPressed(){
   outline: 2px solid rgba(240, 73, 115, 1);
   background: none;
   box-shadow: none;
+}
+
+.ui-button.ui-button_disabled{
+ pointer-events: none;
+ opacity: 0.5;
 }
 </style>

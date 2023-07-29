@@ -4,10 +4,7 @@
       <div class="registration__link">
         <p style="color: #454B58;">Главная</p>
         <p style="margin-left: 10px;">/</p>
-        <p style="margin-left: 8px;" 
-        @click="SELECTED_VALUES = ''; 
-          DEFAULT_REGISTATION = true; 
-          DEFAULT_TITLE = ''" >Регистрация</p>
+        <p style="margin-left: 8px;" ><router-link :to="{ path: `/registration` }"> Регистрация </router-link></p>
       </div>
       <div class="registration__title">
         <h2>Регистрация {{  DEFAULT_TITLE }}</h2>
@@ -25,7 +22,9 @@
           </div>
         </div>
       </Transition>
-      <RegistrationStudent v-if="SELECTED_VALUES == 'student'"/>
+      <Transition name="fade">
+        <RegistrationStudent v-if="SELECTED_VALUES == 'student'"/>
+      </Transition>
     </div>
   </div>
 </template>
@@ -41,7 +40,7 @@ import IconTwoState from '@/assets/icons/registration/TwoState.vue'
 // компоненты
 import RegistrationStudent from '@/components/Reusable/RegistrationStudent.vue'
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -98,6 +97,15 @@ function handleRouteUpdate(to, from) {
 onMounted(() => {
   handleRouteUpdate(router.currentRoute.value, router.currentRoute.value)
 })
+
+watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
+  const queryParam = newQuery.param;
+  if (!queryParam) {
+    SELECTED_VALUES.value = '';
+    DEFAULT_REGISTATION.value = true;
+    DEFAULT_TITLE.value = '';
+  }
+});
 
 
 </script>
