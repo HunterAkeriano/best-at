@@ -108,7 +108,7 @@ a{
   max-width: 1420px;
   width: 100%;
   margin: 0 auto;
-  padding: 0px 20px;
+  padding: 0 20px;
 }
 
 </style>

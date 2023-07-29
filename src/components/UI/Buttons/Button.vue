@@ -43,7 +43,7 @@ defineProps({
   },
   isDisabled: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 })
 

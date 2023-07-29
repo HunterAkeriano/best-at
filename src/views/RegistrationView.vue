@@ -10,7 +10,7 @@
         <h2>Регистрация {{  DEFAULT_TITLE }}</h2>
       </div>
       <Transition name="fade">
-        <div class="registration__type" v-if="SELECTED_VALUES == ''">
+        <div class="registration__type" v-if="SELECTED_VALUES == 'sadas'">
           <div class="registration__type-item" 
           v-for="(item, idx) in REGISTRATION_TYPE"
            @click="selectType(item.type); DEFAULT_TITLE = item.name">
@@ -25,6 +25,7 @@
       <Transition name="fade">
         <RegistrationStudent v-if="SELECTED_VALUES == 'student'"/>
       </Transition>
+        <RegistrationTeacher/>
     </div>
   </div>
 </template>
@@ -39,6 +40,7 @@ import IconTwoState from '@/assets/icons/registration/TwoState.vue'
 
 // компоненты
 import RegistrationStudent from '@/components/Reusable/RegistrationStudent.vue'
+import RegistrationTeacher from '@/components/Reusable/RegistrationTeacher.vue'
 
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router';
@@ -193,7 +195,7 @@ watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
 }
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: all 0.5s;
 }
 
 .fade-enter, .fade-leave-to {
