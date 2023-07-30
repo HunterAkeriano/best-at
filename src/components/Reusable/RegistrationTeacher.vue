@@ -52,7 +52,7 @@
 
     </div>
    
-    <div class="teacher-forms__two-step" v-if="!stepModal.two">
+    <div class="teacher-forms__two-step" :class="{'teacher-forms_disabled': stepModal.three}"  v-if="!stepModal.two">
       <div class="teacher-forms__photo">
         <div class="teacher-forms__photo-img" v-for="item in ava">
           <img :src="item.url" alt="" height="54" width="54">
@@ -109,13 +109,12 @@
         <div class="block" :class="{'block_open': isOpenBlock}" >
           <div class="teacher-forms__input" style="margin-top: 5px;">
             <p class="teacher-forms__input-text">Образование</p>
-            <input :class="{'error': v1$?.login?.$error}" type="text" v-model="oneStepData.login">
-            <span v-if="v1$?.login?.$error">Заполните поле</span>
-            <IconError class="error-icons" v-if="v1$?.login?.$error"/>
+            <input :class="{'error': v3$?.educationOne?.$error}" type="text" v-model="lastStepData.educationOne">
+            <IconError class="error-icons" v-if="v3$?.educationOne?.$error"/>
           </div>
 
           <div class="teacher-forms__input" style="margin-top: 5px;">
-            <input type="text" v-model="oneStepData.login">
+            <input type="text" v-model="lastStepData.educationTwo">
           </div>
 
         </div>
@@ -128,13 +127,12 @@
         <div class="block-two" :class="{'block-two_open': isOpenBlockTwo}" >
           <div class="teacher-forms__input" style="margin-top: 15px;">
             <p class="teacher-forms__input-text">Опыт работы</p>
-            <input :class="{'error': v1$?.login?.$error}" type="text" v-model="oneStepData.login">
-            <span v-if="v1$?.login?.$error">Заполните поле</span>
-            <IconError class="error-icons" v-if="v1$?.login?.$error"/>
+            <input :class="{'error': v3$?.experience?.$error}" type="text" v-model="lastStepData.experience">
+            <IconError class="error-icons" v-if="v3$?.experience?.$error"/>
           </div>
 
           <div class="teacher-forms__input" style="margin-top: 5px;">
-            <input type="text" v-model="oneStepData.login">
+            <input type="text" v-model="lastStepData.experienceTwo">
           </div>
 
         </div>
@@ -146,19 +144,35 @@
 
         <div class="document">
           <IconDocument/>
-          <input type="file"  ref="fileInput" name="" id="document">
+          <input type="file"  ref="fileInput" name="" id="document" @change="onFileSelected">
           <label for="document">Загрузить диплом</label>
+        </div>
+
+        <div class="item" style="height: 39px; margin-top: 10px;">
+          <div class="document__element" v-for="item in myPDFs">
+            <IconDocument/>
+            <p>{{ item.name }}</p>
+          </div>
+        </div>
+
+        <div class="teacher-forms__accept" @click="ACCEPTED_FORM = !ACCEPTED_FORM">
+          <div class="student-form__accept-icon">
+            <IconCheckBoxOne v-if="!ACCEPTED_FORM"/>
+            <IconCheckBoxTwo v-else/>
+          </div>
+          
+          <p>Я принимаю условия пользовательского соглашения и <span> правила обработки персональных данных</span></p>
         </div>
 
 
       <div class="teacher-forms__btn">
         <TheButton
-        :width="130"
         :padding="9"
         :lineHeight="21"
-        style="margin-top: 29px;"
-        @click="nextStepThree"
-        >Далее</TheButton>
+        style="margin-top: 29px; width: 100%;"
+        @click="createAccount"
+        :isDisabled="!ACCEPTED_FORM"
+        >Создать аккаунт</TheButton>
       </div>
 
     </div>
@@ -178,6 +192,9 @@ import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 import IconError from '@/assets/icons/registration/ErrorIcon.vue'
 import IconCreate from '@/assets/icons/registration/CreateIcon.vue'
 import IconDocument from '@/assets/icons/registration/NewDocument.vue'
+
+import IconCheckBoxOne from '@/assets/icons/registration/CheckboxOne.vue'
+import IconCheckBoxTwo from '@/assets/icons/registration/CheckboxTwo.vue'
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
@@ -283,11 +300,62 @@ async function onFileSelectedAva(event) {
 
 async function nextStepThree(){
   const results = await v2$.value.$validate();
-  console.log(results);
+  if(results) stepModal.value.three = true;
 }
 
 const isOpenBlock = ref(false)
 const isOpenBlockTwo = ref(false)
+
+
+const myPDFs = ref([]);
+async function onFileSelected(event) {
+  myPDFs.value = [];
+  const files = event.target.files;
+  const fileArray = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file.type === 'application/pdf') {
+      fileArray.push({
+        id: 0,
+        file: file,
+        name: file.name,
+        url: URL.createObjectURL(file)
+      });
+      } else {
+          console.warn(`Unsupported file type: ${file.type}`);
+        }
+  }
+  myPDFs.value.push(...fileArray);
+}
+
+const ACCEPTED_FORM = ref(false);
+
+const lastStepData = ref({
+  educationOne: '',
+  educationTwo: '',
+  experience: '',
+  experienceTwo: '',
+})
+const rulesLat = computed(() => {
+  return {
+    educationOne: { required },
+    experience: { required },
+    city: { required },
+    adress: { required },
+  };
+});
+
+const v3$ = useVuelidate(rulesLat, lastStepData)
+
+
+async function createAccount(){
+  // const results = await v3$.value.$validate();
+  // if(results){
+  //   console.log('регистрация')
+  // }
+ 
+}
 </script>
 
 
@@ -360,6 +428,25 @@ const isOpenBlockTwo = ref(false)
       top: 37px;
     }
     
+  }
+
+  &__accept{
+    display: flex;
+    gap: 10px;
+    margin-top: 17px;
+    cursor: pointer;
+    p{
+      color: #454B58;
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 17px;
+
+      span{
+        color: #F04973;
+        text-decoration-line: underline;
+      }
+    }
   }
 
   &__one-step,
@@ -437,6 +524,7 @@ const isOpenBlockTwo = ref(false)
   max-height: 65px;
   overflow: hidden;
   transition: all .5s;
+  cursor: pointer;
 
   &_open{
     max-height: 150px;
@@ -447,6 +535,7 @@ const isOpenBlockTwo = ref(false)
   max-height: 75px;
   overflow: hidden;
   transition: all .5s;
+  cursor: pointer;
 
   &_open{
     max-height: 150px;
@@ -458,6 +547,7 @@ const isOpenBlockTwo = ref(false)
   gap: 4px;
   align-items: center;
   margin-top: 24px;
+  cursor: pointer;
   input{
     opacity: 0;
     visibility: visible;
@@ -472,6 +562,13 @@ const isOpenBlockTwo = ref(false)
     font-weight: 500;
     line-height: 13px; /* 100% */
     text-decoration-line: underline;
+    cursor: pointer;
+  }
+
+  &__element{
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 }
 
