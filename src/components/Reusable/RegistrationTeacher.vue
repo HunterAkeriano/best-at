@@ -1,6 +1,6 @@
 <template>
   <div class="teacher-forms">
-    <div class="teacher-forms__one-step" v-if="stepModal.one">
+    <div class="teacher-forms__one-step" :class="{'teacher-forms_disabled': stepModal.two}" v-if="stepModal.one">
       <div class="teacher-forms__input" style="margin-top: 5px;">
         <p class="teacher-forms__input-text">Ваш логин</p>
         <input :class="{'error': v1$?.login?.$error}" type="text" v-model="oneStepData.login">
@@ -52,10 +52,115 @@
 
     </div>
    
-    <div class="teacher-forms__two-step" v-if="true">
+    <div class="teacher-forms__two-step" v-if="!stepModal.two">
       <div class="teacher-forms__photo">
-        
+        <div class="teacher-forms__photo-img" v-for="item in ava">
+          <img :src="item.url" alt="" height="54" width="54">
+        </div>
+        <div class="teacher-forms__photo-text">
+          <input id="img" @change="onFileSelectedAva($event)"   ref="fileInput" type="file" accept="image/* " >
+          <label for="img">Загрузить фотографию</label>
+        </div>
       </div>
+      
+      <div class="teacher-forms__input" style="margin-top: 20px;">
+        <p class="teacher-forms__input-text">Паспорт</p>
+        <input :class="{'error': v2$?.pass?.$error}" type="text" v-model="twoStepData.pass">
+        <span v-if="v2$?.pass?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v2$?.pass?.$error"/>
+      </div>
+
+      <div class="teacher-forms__input" style="margin-top: 15px;">
+        <p class="teacher-forms__input-text">Страна</p>
+        <input :class="{'error': v2$?.country?.$error}" type="text" v-model="twoStepData.country">
+        <span v-if="v2$?.country?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v2$?.country?.$error"/>
+      </div>
+
+      <div class="teacher-forms__input" style="margin-top: 18px;">
+        <p class="teacher-forms__input-text">Город</p>
+        <input :class="{'error': v2$?.city?.$error}" type="text" v-model="twoStepData.city">
+        <span v-if="v2$?.city?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v2$?.city?.$error"/>
+      </div>
+
+      <div class="teacher-forms__input" style="margin-top: 15px;">
+        <p class="teacher-forms__input-text">Адрес</p>
+        <input :class="{'error': v2$?.adress?.$error}" type="text" v-model="twoStepData.adress">
+        <span v-if="v2$?.adress?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v1$?.adress?.$error"/>
+      </div>
+
+      <div class="teacher-forms__btn">
+        <TheButton
+        :width="130"
+        :padding="9"
+        :lineHeight="21"
+        style="margin-top: 29px;"
+        @click="nextStepThree"
+        >Далее</TheButton>
+      </div>
+
+    </div>
+     
+
+      <div class="teacher-forms__three-step" v-if="!stepModal.three">
+        
+        <div class="block" :class="{'block_open': isOpenBlock}" >
+          <div class="teacher-forms__input" style="margin-top: 5px;">
+            <p class="teacher-forms__input-text">Образование</p>
+            <input :class="{'error': v1$?.login?.$error}" type="text" v-model="oneStepData.login">
+            <span v-if="v1$?.login?.$error">Заполните поле</span>
+            <IconError class="error-icons" v-if="v1$?.login?.$error"/>
+          </div>
+
+          <div class="teacher-forms__input" style="margin-top: 5px;">
+            <input type="text" v-model="oneStepData.login">
+          </div>
+
+        </div>
+
+        <div class="create" @click="isOpenBlock = true"  v-if="!isOpenBlock">
+          <IconCreate/>
+          <p>Добавить поле</p>
+        </div>
+
+        <div class="block-two" :class="{'block-two_open': isOpenBlockTwo}" >
+          <div class="teacher-forms__input" style="margin-top: 15px;">
+            <p class="teacher-forms__input-text">Опыт работы</p>
+            <input :class="{'error': v1$?.login?.$error}" type="text" v-model="oneStepData.login">
+            <span v-if="v1$?.login?.$error">Заполните поле</span>
+            <IconError class="error-icons" v-if="v1$?.login?.$error"/>
+          </div>
+
+          <div class="teacher-forms__input" style="margin-top: 5px;">
+            <input type="text" v-model="oneStepData.login">
+          </div>
+
+        </div>
+
+        <div class="create" @click="isOpenBlockTwo = true"  v-if="!isOpenBlockTwo">
+          <IconCreate/>
+          <p>Добавить поле</p>
+        </div>
+
+        <div class="document">
+          <IconDocument/>
+          <input type="file"  ref="fileInput" name="" id="document">
+          <label for="document">Загрузить диплом</label>
+        </div>
+
+
+      <div class="teacher-forms__btn">
+        <TheButton
+        :width="130"
+        :padding="9"
+        :lineHeight="21"
+        style="margin-top: 29px;"
+        @click="nextStepThree"
+        >Далее</TheButton>
+      </div>
+
     </div>
    
   </div>
@@ -71,7 +176,8 @@ import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
 import IconError from '@/assets/icons/registration/ErrorIcon.vue'
-
+import IconCreate from '@/assets/icons/registration/CreateIcon.vue'
+import IconDocument from '@/assets/icons/registration/NewDocument.vue'
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
@@ -126,17 +232,69 @@ const rulesOne = computed(() => {
 const v1$ = useVuelidate(rulesOne, oneStepData)
 
 async function nextStep(){
-  // const results = await v1$.value.$validate()
-  // if(results) stepModal.value.two = true;
-  stepModal.value.two = true;
+  const results = await v1$.value.$validate()
+  if(results) stepModal.value.two = true;
 }
 
+const  ava = ref([
+  {
+    img: null,
+    url: new URL('../../assets/img/registration/Avatar.svg', import.meta.url),
+    }
+]);
+
+const twoStepData = ref({
+  pass: '',
+  country: '',
+  city: '',
+  adress: '',
+})
+const rulesTwo = computed(() => {
+  return {
+    pass: { required },
+    country: { required },
+    city: { required },
+    adress: { required },
+    
+  };
+});
+
+const v2$ = useVuelidate(rulesTwo, twoStepData)
+
+async function onFileSelectedAva(event) {
+  const top = event.target.files;
+  ava.value = [];
+  for (let i = 0; i < top.length; i++) {
+    const file = top[i];
+    const img = new Image();
+    await new Promise(resolve => {
+      img.onload = resolve;
+      img.onerror = resolve;
+      img.src = URL.createObjectURL(file);
+    });
+    ava.value.push({
+      id: 0,
+      img: file,
+      url: URL.createObjectURL(file)
+    });     
+  }  
+
+}
+
+async function nextStepThree(){
+  const results = await v2$.value.$validate();
+  console.log(results);
+}
+
+const isOpenBlock = ref(false)
+const isOpenBlockTwo = ref(false)
 </script>
 
 
 <style lang="scss">
 .teacher-forms{
   display: flex;
+  align-items: flex-start;
   justify-content: center;
   font-family: Montserrat;
   transition: all .5s;
@@ -205,7 +363,8 @@ async function nextStep(){
   }
 
   &__one-step,
-  &__two-step{
+  &__two-step,
+  &__three-step{
     max-width: 380px;
     width: 100%;
     border-radius: 10px;
@@ -216,8 +375,105 @@ async function nextStep(){
     padding-bottom: 43px;
     margin-top: 25px;
   }
+
+  &_disabled{
+    pointer-events: none;
+  }
+
+  &__photo{
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 54px;
+    &-img{
+     width: 54px;
+     height: 54px;
+     border-radius: 280px/100px;
+     img{
+      border-radius: 100%;
+      display: block;
+      width: 100%;
+      height: 100%;
+     }
+    }
+
+    label{
+        color: #454B58;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 13px; /* 100% */
+        text-decoration-line: underline;
+        cursor: pointer;
+    }
+
+    input{
+      opacity: 0;
+      visibility: visible;
+      width: 0px;
+      height: 0px;
+    }
+  }
 }
 
+.create{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  p{
+    color: #F04973;
+
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 130%; /* 14.3px */
+  }
+}
+
+
+.block{
+  max-height: 65px;
+  overflow: hidden;
+  transition: all .5s;
+
+  &_open{
+    max-height: 150px;
+  }
+}
+
+.block-two{
+  max-height: 75px;
+  overflow: hidden;
+  transition: all .5s;
+
+  &_open{
+    max-height: 150px;
+  }
+}
+
+.document{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 24px;
+  input{
+    opacity: 0;
+    visibility: visible;
+    width: 0px;
+    height: 0px;
+  }
+
+  label{
+    color: #454B58;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 13px; /* 100% */
+    text-decoration-line: underline;
+  }
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: all 0.5s;
