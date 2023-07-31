@@ -52,7 +52,7 @@
 
     </div>
    
-    <div class="teacher-forms__two-step" :class="{'teacher-forms_disabled': stepModal.three}"  v-if="!stepModal.two">
+    <div class="teacher-forms__two-step" :class="{'teacher-forms_disabled': stepModal.three}"  v-if="stepModal.two">
       <div class="teacher-forms__photo">
         <div class="teacher-forms__photo-img" v-for="item in ava">
           <img :src="item.url" alt="" height="54" width="54">
@@ -104,7 +104,7 @@
     </div>
      
 
-      <div class="teacher-forms__three-step" v-if="!stepModal.three">
+      <div class="teacher-forms__three-step" v-if="stepModal.three">
         
         <div class="block" :class="{'block_open': isOpenBlock}" >
           <div class="teacher-forms__input" style="margin-top: 5px;">
@@ -198,6 +198,9 @@ import IconCheckBoxTwo from '@/assets/icons/registration/CheckboxTwo.vue'
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
+// mixins
+import FirebaseMethods from '../../mixins/FirebaseMethods'
+
 const SHOW_PASSWORD_ONE = ref(true)
 const SHOW_PASSWORD_TWO = ref(true)
 
@@ -255,7 +258,8 @@ async function nextStep(){
 
 const  ava = ref([
   {
-    img: null,
+    obj: null,
+    name: 'ava-' + Date.now(),
     url: new URL('../../assets/img/registration/Avatar.svg', import.meta.url),
     }
 ]);
@@ -291,7 +295,8 @@ async function onFileSelectedAva(event) {
     });
     ava.value.push({
       id: 0,
-      img: file,
+      obj: file,
+      name: 'ava-' + Date.now(),
       url: URL.createObjectURL(file)
     });     
   }  
@@ -318,7 +323,7 @@ async function onFileSelected(event) {
     if (file.type === 'application/pdf') {
       fileArray.push({
         id: 0,
-        file: file,
+        obj: file,
         name: file.name,
         url: URL.createObjectURL(file)
       });
@@ -341,8 +346,6 @@ const rulesLat = computed(() => {
   return {
     educationOne: { required },
     experience: { required },
-    city: { required },
-    adress: { required },
   };
 });
 
@@ -350,11 +353,44 @@ const v3$ = useVuelidate(rulesLat, lastStepData)
 
 
 async function createAccount(){
-  // const results = await v3$.value.$validate();
-  // if(results){
-  //   console.log('регистрация')
-  // }
- 
+    const results = await v3$.value.$validate();
+    console.log(results)
+    if(results){
+      const userInfo = 'user-' + Date.now();
+      const avaInfo = `users/teachers/${userInfo}/ava/`;
+      const docInfo = `users/teachers/${userInfo}/doc/`;
+      await FirebaseMethods.sendDocumentStorage(ava.value, avaInfo);
+      await FirebaseMethods.sendDocumentStorage(myPDFs.value, docInfo);
+      const objPrivateUser = {
+        login: oneStepData.value.login,
+        password: oneStepData.value.password,
+        email: oneStepData.value.email,
+        phone: oneStepData.value.phone,
+        pass: twoStepData.value.pass,
+        ava: ava.value,
+      }
+      await FirebaseMethods.sendDocumentDataBase('privateTeachers', userInfo, objPrivateUser);
+      const objPublicUser = {
+        country: [
+          {
+            country: twoStepData.value.country,
+          }
+        ],
+        city: twoStepData.value.city,
+        adress: twoStepData.value.adress,
+        education: {
+          educationOne: lastStepData.value.educationOne,
+          educationTwo: lastStepData.value.educationTwo,
+        },
+        experience: {
+          experienceOne: lastStepData.value.experience,
+          experienceTwo: lastStepData.value.experienceTwo,
+        },
+        document: myPDFs.value,
+      }
+      await FirebaseMethods.sendDocumentDataBase('publicTeachers', userInfo, objPublicUser);
+      await FirebaseMethods.registerUser(oneStepData.value.email, oneStepData.value.password)
+    }
 }
 </script>
 
