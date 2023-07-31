@@ -10,7 +10,7 @@
         <h2>Регистрация {{  DEFAULT_TITLE }}</h2>
       </div>
       <Transition name="fade">
-        <div class="registration__type" v-if="SELECTED_VALUES == 'sadas'">
+        <div class="registration__type" v-if="SELECTED_VALUES == ''">
           <div class="registration__type-item" 
           v-for="(item, idx) in REGISTRATION_TYPE"
            @click="selectType(item.type); DEFAULT_TITLE = item.name">
@@ -25,7 +25,8 @@
       <Transition name="fade">
         <RegistrationStudent v-if="SELECTED_VALUES == 'student'"/>
       </Transition>
-        <RegistrationTeacher/>
+        <RegistrationTeacher v-if="SELECTED_VALUES == 'teachers'"/>
+        <RegistrationCompany v-if="SELECTED_VALUES == 'company'"/>
     </div>
   </div>
 </template>
@@ -41,6 +42,7 @@ import IconTwoState from '@/assets/icons/registration/TwoState.vue'
 // компоненты
 import RegistrationStudent from '@/components/Reusable/RegistrationStudent.vue'
 import RegistrationTeacher from '@/components/Reusable/RegistrationTeacher.vue'
+import RegistrationCompany from '@/components/Reusable/RegistrationCompany.vue'
 
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router';
@@ -116,6 +118,7 @@ watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
 .registration{
   margin-top: 25px;
   margin-bottom: 300px;
+  transition: all .25s;
   &__link{
     display: flex;
     align-items: center;
