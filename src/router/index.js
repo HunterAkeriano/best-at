@@ -10,6 +10,11 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/teachers',
+      name: 'teachers',
+      component: () => import("@/views/TeachersCatalogView.vue" /* webpackChunkName: "teachers" */)
+    },
+    {
       name: 'Registration Page',
       path: '/registration',
       component: () => import("@/views/RegistrationView.vue" /* webpackChunkName: "registration" */)
