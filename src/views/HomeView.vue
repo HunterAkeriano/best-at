@@ -1,10 +1,10 @@
 <template>
-   <h2>Главная страница</h2>
+   <TeachersSwiper />
 </template>
 
 
 <script setup>
-
+import TeachersSwiper from '@/components/Base/TeachersSwiper.vue'
 </script>
 
 
