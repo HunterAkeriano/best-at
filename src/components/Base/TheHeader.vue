@@ -18,7 +18,7 @@
           <IconUser/>
           <p>Войти</p>
           <span>|</span>
-          <p>Регистрация</p>
+          <p> <router-link :to="{ path: `/registration` }"> Регистрация </router-link></p>
         </div>
       </div>
       <div class="header__lang" :class="{'header__lang_selected': selectedLanguage}" @click="selectedLanguage = !selectedLanguage">
@@ -44,7 +44,7 @@ import IconArrow from '@/assets/icons/header/Arrow.vue'
 import IconUkrainer from '@/assets/icons/header/country/Ukraine.vue'
 import IconBritish from '@/assets/icons/header/country/British.vue'
 import IconSpain from '@/assets/icons/header/country/Spain.vue'
-import {ref, shallowRef, computed   } from 'vue';
+import {ref} from 'vue';
 const navLink = [
   {
     link: 'Курсы',
@@ -95,7 +95,6 @@ const selectedLanguage = ref(false);
 function moveToFirst(index) {
   const selectedItem = language.splice(index, 1)[0];
   language.unshift(selectedItem);
-  // selectedLanguage.value = false;
 }
 
 
