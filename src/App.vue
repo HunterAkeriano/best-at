@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import {ref, watch} from 'vue'
 
 import TheHeader from '@/components/Base/TheHeader.vue'
@@ -20,11 +20,7 @@ const route = useRoute();
 
 const is404Page = ref(null);
 watch(route, () => {
-  if (route.name === 'Not Found') {
-    is404Page.value = false;
-  } else {
-    is404Page.value = true;
-  }
+  is404Page.value = route.name !== 'Not Found';
 });
 
 </script>
@@ -69,7 +65,7 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
-  font-family: 'EB Garamond', serif;
+  font-family: 'Montserrat', sans-serif;
 }
 ul[class],
 ol[class] {
@@ -102,7 +98,7 @@ a{
 }
 .main{
   flex: 1 1 auto;
-  margin-top: 68px;
+  margin-top: 70px;
 }
 .container{
   max-width: 1420px;
