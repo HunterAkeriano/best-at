@@ -2,12 +2,15 @@
   <div class="teachers-swiper">
     <div class="container">
       <swiper
+          grab-cursor
           :slides-per-view="1"
           :modules="[Navigation]"
           :navigation="{
             nextEl: '.teachers-swiper__navigation-right',
             prevEl: '.teachers-swiper__navigation-left'
           }"
+          @slideNextTransitionStart="nextSlide"
+          @slidePrevTransitionStart="prevSlide"
       >
         <div class="teachers-swiper__navigation">
           <div class="teachers-swiper__navigation-left" @click="prevSlide" />
