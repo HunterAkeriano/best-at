@@ -18,7 +18,7 @@ export const stateUser = defineStore({
           }
           
       })
-      // signOut(auth)
+      signOut(auth)
      
      
     },

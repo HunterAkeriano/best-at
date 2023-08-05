@@ -16,7 +16,7 @@
       <div class="header__user" v-if="!authStore.user">
         <div class="header__user-auth">
           <IconUser/>
-          <p>Войти</p>
+          <p> <router-link :to="{ path: `/login` }"> Войти </router-link></p>
           <span>|</span>
           <p> <router-link :to="{ path: `/registration` }"> Регистрация </router-link></p>
         </div>

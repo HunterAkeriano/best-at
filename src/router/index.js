@@ -24,6 +24,14 @@ const router = createRouter({
       },
     },
     {
+      name: 'Login Page',
+      path: '/login',
+      component: () => import("@/views/LoginViews.vue" /* webpackChunkName: "registration" */),
+      meta: {
+        requiresVisitor: true
+      },
+    },
+    {
       name: 'Not Found',
       path: '/:pathMatch(.*)*',
       component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)
