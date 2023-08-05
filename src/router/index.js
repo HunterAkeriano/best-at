@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import {stateUser} from '@/stores/StateUser'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -17,7 +18,10 @@ const router = createRouter({
     {
       name: 'Registration Page',
       path: '/registration',
-      component: () => import("@/views/RegistrationView.vue" /* webpackChunkName: "registration" */)
+      component: () => import("@/views/RegistrationView.vue" /* webpackChunkName: "registration" */),
+      meta: {
+        requiresVisitor: true
+      },
     },
     {
       name: 'Not Found',
@@ -25,6 +29,29 @@ const router = createRouter({
       component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)
     }
   ]
+})
+
+
+router.beforeEach((to, from, next) => {
+  const authStore = stateUser();
+  authStore.checkAuth().then(() => {
+    if (to.matched.some(record => record.meta.requiresVisitor)) {
+      if (JSON.parse(window.localStorage.user)) {
+        next('/');
+      } else {
+        next();
+      }
+    } else if (to.matched.some(record => record.meta.Auth)) {
+      if (JSON.parse(window.localStorage.user)) {
+        next();
+      } else {
+        next('/');
+      }
+    }  
+    else {
+      next();
+    }
+  });
 })
 
 export default router

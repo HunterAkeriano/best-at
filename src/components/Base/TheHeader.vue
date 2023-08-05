@@ -1,7 +1,7 @@
 <template>
 <header class="header">
   <div class="container">
-    <div class="header__content">
+    <div class="header__content" :class="{'header__content_auth': authStore.user}">
       <div class="header__logo">
           <p>BeBest</p>
           <span>at</span>
@@ -13,7 +13,7 @@
           </ul>
         </nav>
       </div>
-      <div class="header__user">
+      <div class="header__user" v-if="!authStore.user">
         <div class="header__user-auth">
           <IconUser/>
           <p>Войти</p>
@@ -21,6 +21,13 @@
           <p> <router-link :to="{ path: `/registration` }"> Регистрация </router-link></p>
         </div>
       </div>
+
+      <div class="header__auth" v-if="authStore.user">
+        <IconAcademy/>
+        <IconMessage/>
+        <IconMain/>
+      </div>
+
       <div class="header__lang" :class="{'header__lang_selected': selectedLanguage}" @click="selectedLanguage = !selectedLanguage">
           <div class="header__lang-container">
             <div class="header__lang-item" 
@@ -41,10 +48,17 @@
 <script setup>
 import IconUser from '@/assets/icons/header/User.vue'
 import IconArrow from '@/assets/icons/header/Arrow.vue'
+import IconAcademy from '@/assets/icons/header/auth/IconAcademy.vue'
+import IconMain from '@/assets/icons/header/auth/IconMain.vue'
+import IconMessage from '@/assets/icons/header/auth/IconMessage.vue'
 import IconUkrainer from '@/assets/icons/header/country/Ukraine.vue'
 import IconBritish from '@/assets/icons/header/country/British.vue'
 import IconSpain from '@/assets/icons/header/country/Spain.vue'
+
 import {ref} from 'vue';
+import {stateUser} from '@/stores/StateUser'
+const authStore = stateUser();
+
 const navLink = [
   {
     link: 'Курсы',
@@ -272,6 +286,38 @@ function moveToFirst(index) {
           fill: #F04973;
         }
       }
+    }
+  }
+  &__content_auth{
+    .header__link{
+      margin-left: 144px;
+    }
+    .header__auth{
+      display: flex;
+      align-items: center;
+      margin-left: 142px;
+      
+      svg{
+        cursor: pointer;
+        transition: all .25s;
+
+        &:hover{
+          path{
+            transition: all .25s;
+            fill: #F04973;
+          }
+        }
+      }
+      svg:nth-child(2){
+        margin-left: 20px;
+      }
+
+      svg:nth-child(3){
+        margin-left: 20px;
+      }
+    }
+    .header__lang{
+      margin-left: 28px;
     }
   }
 }
