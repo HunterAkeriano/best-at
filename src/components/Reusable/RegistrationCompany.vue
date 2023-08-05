@@ -1,4 +1,5 @@
 <template>
+  <TheLoader v-if="isProssesing"/>
   <div class="company-form">
     <div class="company-form__one-step">
       <div class="company-form__input">
@@ -124,6 +125,7 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
@@ -134,8 +136,9 @@ import IconCheckBoxTwo from '@/assets/icons/registration/CheckboxTwo.vue'
 
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
+import TheLoader from '../UI/Loader/TheLoader.vue'
 
-import {ref, computed, watch} from 'vue'
+import {ref, computed} from 'vue'
 
 
 import { useVuelidate } from '@vuelidate/core'
@@ -143,7 +146,8 @@ import { required, email, helpers, minLength, sameAs } from '@vuelidate/validato
 
 // mixins
 import FirebaseMethods from '../../mixins/FirebaseMethods'
-const stateRegistration = ref(FirebaseMethods.stateRegistration);
+const isProssesing = ref(false);
+const router = useRouter();
 
 const formData = ref({
   login: '',
@@ -208,11 +212,8 @@ const ACCEPTED_FORM = ref(false)
 
 const v1$ = useVuelidate(rulesTwo, formTwoData)
 
-async function registration(){
-  const results = await v1$.value.$validate()
-
-  if(results){
-    const companyInfo = 'company-' + Date.now();
+async function sendRegistred(){
+  const companyInfo = 'company-' + Date.now();
     const objPrivate = {
       login: formData.value.login,
       password: formData.value.password,
@@ -230,7 +231,18 @@ async function registration(){
     }
     await FirebaseMethods.sendDocumentDataBase('privateCompany', companyInfo, objPrivate);
     await FirebaseMethods.sendDocumentDataBase('publicCompany', companyInfo, objPublic);
-    await FirebaseMethods.registerUser(formData.value.email, formData.value.password)
+    await FirebaseMethods.registerUser(formData.value.email, formData.value.password);
+
+}
+
+async function registration(){
+  const results = await v1$.value.$validate()
+
+  if(results){
+    isProssesing.value = true;
+    await sendRegistred();
+    isProssesing.value = false;
+    router.push('/')
   }
 }
 

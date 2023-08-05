@@ -22,9 +22,7 @@
           </div>
         </div>
       </Transition>
-      <Transition name="fade">
         <RegistrationStudent v-if="SELECTED_VALUES == 'student'"/>
-      </Transition>
         <RegistrationTeacher v-if="SELECTED_VALUES == 'teachers'"/>
         <RegistrationCompany v-if="SELECTED_VALUES == 'company'"/>
     </div>

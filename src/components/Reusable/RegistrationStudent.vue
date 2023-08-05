@@ -1,4 +1,5 @@
 <template>
+  <TheLoader v-if="isProssesing"/>
   <div class="student-form">
 
     <div class="student-form__input">
@@ -61,6 +62,9 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import TheLoader from '../UI/Loader/TheLoader.vue'
+
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
@@ -78,7 +82,7 @@ import IconLinkedin from '@/assets/icons/registration/social/Linkedin.vue'
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
 import {ref, computed} from 'vue'
-
+const router = useRouter();
 
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, minLength, sameAs } from '@vuelidate/validators'
@@ -92,7 +96,7 @@ import { doc, setDoc } from "firebase/firestore";
 const SHOW_PASSWORD_ONE = ref(true)
 const SHOW_PASSWORD_TWO = ref(true)
 const ACCEPTED_FORM = ref(false);
-
+const isProssesing = ref(false);
 
 const formData = ref({
   login: '',
@@ -121,10 +125,8 @@ const rules = computed(() => {
 
 const v$ = useVuelidate(rules, formData)
 
-async function registerStudent(){
-  const results = await v$.value.$validate()
-  if(results){
-    const privateInfo = {
+async function register(){
+  const privateInfo = {
       login: formData.value.login,
       email: formData.value.email,
       password: formData.value.password,
@@ -165,6 +167,15 @@ async function registerStudent(){
     await createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password);
     await setDoc(doc(db, "privateStudentData",  randomNumber), privateInfo);
     await setDoc(doc(db, "publicStudentData",  randomNumber), publicInfo);
+}
+
+async function registerStudent(){
+  const results = await v$.value.$validate()
+  if(results){
+    isProssesing.value = true;
+    await register();
+    isProssesing.value = false;
+    router.push('/')
   }
   
 }

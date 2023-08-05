@@ -1,4 +1,5 @@
 <template>
+   <TheLoader v-if="isProssesing"/>
   <div class="teacher-forms">
     <div class="teacher-forms__one-step" :class="{'teacher-forms_disabled': stepModal.two}" v-if="stepModal.one">
       <div class="teacher-forms__input" style="margin-top: 5px;">
@@ -185,7 +186,8 @@ import {ref, computed} from 'vue'
 
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, minLength, sameAs } from '@vuelidate/validators'
-
+import { useRouter } from 'vue-router';
+import TheLoader from '../UI/Loader/TheLoader.vue'
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
@@ -200,7 +202,9 @@ import TheButton from '@/components/UI/Buttons/Button.vue'
 
 // mixins
 import FirebaseMethods from '../../mixins/FirebaseMethods'
+const router = useRouter();
 
+const isProssesing = ref(false);
 const SHOW_PASSWORD_ONE = ref(true)
 const SHOW_PASSWORD_TWO = ref(true)
 
@@ -352,25 +356,22 @@ const rulesLat = computed(() => {
 const v3$ = useVuelidate(rulesLat, lastStepData)
 
 
-async function createAccount(){
-    const results = await v3$.value.$validate();
-    console.log(results)
-    if(results){
-      const userInfo = 'user-' + Date.now();
-      const avaInfo = `users/teachers/${userInfo}/ava/`;
-      const docInfo = `users/teachers/${userInfo}/doc/`;
-      await FirebaseMethods.sendDocumentStorage(ava.value, avaInfo);
-      await FirebaseMethods.sendDocumentStorage(myPDFs.value, docInfo);
-      const objPrivateUser = {
-        login: oneStepData.value.login,
-        password: oneStepData.value.password,
-        email: oneStepData.value.email,
-        phone: oneStepData.value.phone,
-        pass: twoStepData.value.pass,
-        ava: ava.value,
-      }
-      await FirebaseMethods.sendDocumentDataBase('privateTeachers', userInfo, objPrivateUser);
-      const objPublicUser = {
+async function register(){
+  const userInfo = 'user-' + Date.now();
+  const avaInfo = `users/teachers/${userInfo}/ava/`;
+  const docInfo = `users/teachers/${userInfo}/doc/`;
+  await FirebaseMethods.sendDocumentStorage(ava.value, avaInfo);
+  await FirebaseMethods.sendDocumentStorage(myPDFs.value, docInfo);
+    const objPrivateUser = {
+      login: oneStepData.value.login,
+      password: oneStepData.value.password,
+      email: oneStepData.value.email,
+      phone: oneStepData.value.phone,
+      pass: twoStepData.value.pass,
+      ava: ava.value,
+    }
+    await FirebaseMethods.sendDocumentDataBase('privateTeachers', userInfo, objPrivateUser);
+    const objPublicUser = {
         country: [
           {
             country: twoStepData.value.country,
@@ -390,7 +391,17 @@ async function createAccount(){
       }
       await FirebaseMethods.sendDocumentDataBase('publicTeachers', userInfo, objPublicUser);
       await FirebaseMethods.registerUser(oneStepData.value.email, oneStepData.value.password)
+}
+
+async function createAccount(){
+    const results = await v3$.value.$validate();
+    console.log(results)
+    if(results){
+      isProssesing.value = true;
+      await register();
+      router.push('/')
     }
+     
 }
 </script>
 
