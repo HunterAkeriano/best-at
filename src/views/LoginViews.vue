@@ -16,7 +16,7 @@
 
           <div class="login__forms-input" style="margin-top: 15px;">
             <h5>Ваш пароль</h5>
-            <input :type="SHOW_PASSWORD_ONE ? 'password' : 'text'" v-model="formData.value">
+            <input :type="SHOW_PASSWORD_ONE ? 'password' : 'text'" v-model="formData.password">
             <IconShowPassOneState @click="SHOW_PASSWORD_ONE = !SHOW_PASSWORD_ONE" class="showpass" v-if="SHOW_PASSWORD_ONE"/>
             <IconShowPassTwoState @click="SHOW_PASSWORD_ONE = !SHOW_PASSWORD_ONE" class="showpass" v-else/>
           </div>
@@ -27,7 +27,7 @@
               :padding="9"
               :lineHeight="21"
               style="margin-top: 20px;"
-              @click="login"
+              @click="sigin"
               >Войти</TheButton>
           </div>
         </div>
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
@@ -46,8 +47,8 @@ import {ref} from 'vue'
 import { auth } from "@/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { stateUser } from '@/stores/StateUser.js'
-const userState = stateUser();
+const router = useRouter();
+
 const SHOW_PASSWORD_ONE = ref(true);
 const ERROR_MESSAGE = ref('')
 
@@ -55,6 +56,8 @@ const formData = ref({
   login: '',
   password: '',
 })
+
+const isProssesing = ref(false);
 
 async function login(){
   signInWithEmailAndPassword(auth, formData.value.login, formData.value.password)
@@ -73,10 +76,15 @@ async function login(){
           ERROR_MESSAGE.value = 'Не верный пароль';
           break;
         default:
-          ERROR_MESSAGE.value = 'Неизвестная ошибка';
+          ERROR_MESSAGE.value = `${error.code}`;
           break;
       }
   });
+}
+
+async function sigin(){
+  await login();
+  router.push('/')
 }
 </script>
 
