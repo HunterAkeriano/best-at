@@ -11,16 +11,20 @@
         <div class="login__forms-block">
           <div class="login__forms-input">
             <h5>Ваш email</h5>
-            <input type="text" v-model="formData.login">
+            <input :class="{'error': v$?.email?.$error}" type="text" v-model="formData.email">
+            <span v-if="v$?.email?.$error">Введите email</span>
+            <IconError class="error-icons" v-if="v$?.email?.$error"/>
           </div>
 
           <div class="login__forms-input" style="margin-top: 15px;">
             <h5>Ваш пароль</h5>
-            <input :type="SHOW_PASSWORD_ONE ? 'password' : 'text'" v-model="formData.password">
+            <input :class="{'error': v$?.password?.$error}" @input="filterInput" :type="SHOW_PASSWORD_ONE ? 'password' : 'text'" v-model="formData.password">
             <IconShowPassOneState @click="SHOW_PASSWORD_ONE = !SHOW_PASSWORD_ONE" class="showpass" v-if="SHOW_PASSWORD_ONE"/>
             <IconShowPassTwoState @click="SHOW_PASSWORD_ONE = !SHOW_PASSWORD_ONE" class="showpass" v-else/>
+            <span v-if="v$?.password?.$error">{{ v$?.password?.$errors[0].$message }}</span>
+            <IconError class="error-icons" v-if="v$?.password?.$error"/>
           </div>
-          <p>{{ ERROR_MESSAGE }}</p>
+         
           <div class="login__forms-btn">
             <TheButton
               :width="130"
@@ -30,6 +34,7 @@
               @click="sigin"
               >Войти</TheButton>
           </div>
+          <p class='login__forms-error'>{{ ERROR_MESSAGE }}</p>
         </div>
       </div>
     </div>
@@ -40,29 +45,50 @@
 import { useRouter } from 'vue-router';
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
+import IconError from '@/assets/icons/registration/ErrorIcon.vue'
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 // firebase BDSM
 import { auth } from "@/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
+
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, helpers, minLength } from '@vuelidate/validators'
+
+function filterInput() {
+  formData.value.password = formData.value.password.replace(/[^a-zA-Z0-9@]/g, '');
+}
+
+const formData = ref({
+  email: '',
+  password: '',
+})
+
+const rules = computed(() => {
+  return {
+    email: { required, email },
+    password: {
+      required: helpers.withMessage('Введите пароль', required),
+      minLength: helpers.withMessage('Минимальная длина пароля 6 символов', minLength(6)),
+    },
+  };
+});
+
+
+const v$ = useVuelidate(rules, formData)
 const router = useRouter();
 
 const SHOW_PASSWORD_ONE = ref(true);
 const ERROR_MESSAGE = ref('')
 
-const formData = ref({
-  login: '',
-  password: '',
-})
-
-const isProssesing = ref(false);
 
 async function login(){
-  signInWithEmailAndPassword(auth, formData.value.login, formData.value.password)
+  signInWithEmailAndPassword(auth, formData.value.email, formData.value.password)
     .then((data) => {
       localStorage.setItem('user', JSON.stringify(data.user))
+      router.push('/')
     })
     .catch((error) => {
       switch (error.code) {
@@ -83,8 +109,10 @@ async function login(){
 }
 
 async function sigin(){
-  await login();
-  router.push('/')
+  const results = await v$.value.$validate()
+  if(results){
+    await login();
+  }
 }
 </script>
 
@@ -165,6 +193,40 @@ async function sigin(){
         right: 15px;
         top: 36px;
       }
+
+      .error{
+      outline: 1px solid #EF4848;
+      &:focus{
+        outline: 1px solid #EF4848;
+      }
+    }
+
+    span{
+        position: absolute;
+        right: 0;
+        bottom: -13px;
+        color: #EF4848;
+        font-size: 9px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 10px; 
+    }
+
+    .error-icons{
+      position: absolute;
+      right: -29px;
+      top: 29px;
+
+    }
+    }
+
+    &-error{
+      color: #EF4848;
+      font-size: 9px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 10px;
+      margin-top: 20px;
     }
   }
 }
