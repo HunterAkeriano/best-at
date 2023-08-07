@@ -229,8 +229,30 @@ async function sendRegistred(){
       postAdress: formTwoData.value.postadress,
       teachers: [],
     }
+    const allInfo = {
+      login: formData.value.login,
+      password: formData.value.password,
+      email: formData.value.email,
+      phone: formData.value.phone,
+      nameCompany: formTwoData.value.name,
+      inn: formTwoData.value.number,
+      country: formTwoData.value.country,
+      city: formTwoData.value.city,
+      urAdress: formTwoData.value.adress,
+      postAdress: formTwoData.value.postadress,
+      teachers: [],
+      country: 0,
+      timed: 0,
+      type:{
+        student: false,
+        teachers: false,
+        company: true,
+      },
+
+    }
     await FirebaseMethods.sendDocumentDataBase('privateCompany', companyInfo, objPrivate);
     await FirebaseMethods.sendDocumentDataBase('publicCompany', companyInfo, objPublic);
+    await FirebaseMethods.sendDocumentDataBase('allUser', companyInfo, allInfo);
     await FirebaseMethods.registerUser(formData.value.email, formData.value.password);
 
 }

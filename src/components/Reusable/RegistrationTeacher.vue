@@ -357,7 +357,7 @@ const v3$ = useVuelidate(rulesLat, lastStepData)
 
 
 async function register(){
-  const userInfo = 'user-' + Date.now();
+  const userInfo = 'teacher-' + Date.now();
   const avaInfo = `users/teachers/${userInfo}/ava/`;
   const docInfo = `users/teachers/${userInfo}/doc/`;
   await FirebaseMethods.sendDocumentStorage(ava.value, avaInfo);
@@ -388,9 +388,38 @@ async function register(){
           experienceTwo: lastStepData.value.experienceTwo,
         },
         document: myPDFs.value,
-      }
-      await FirebaseMethods.sendDocumentDataBase('publicTeachers', userInfo, objPublicUser);
-      await FirebaseMethods.registerUser(oneStepData.value.email, oneStepData.value.password)
+    }
+    await FirebaseMethods.sendDocumentDataBase('publicTeachers', userInfo, objPublicUser);
+    const allInfo = {
+      id: userInfo,
+      login: oneStepData.value.login,
+      password: oneStepData.value.password,
+      email: oneStepData.value.email,
+      phone: oneStepData.value.phone,
+      pass: twoStepData.value.pass,
+      ava: ava.value,
+      country: 0,
+      timed: 0,
+      city: twoStepData.value.city,
+      adress: twoStepData.value.adress,
+      education: {
+        educationOne: lastStepData.value.educationOne,
+        educationTwo: lastStepData.value.educationTwo,
+      },
+      experience: {
+        experienceOne: lastStepData.value.experience,
+        experienceTwo: lastStepData.value.experienceTwo,
+      },
+      document: myPDFs.value,
+      type:{
+        student: false,
+        teachers: true,
+        company: false,
+      },
+    }
+    await FirebaseMethods.sendDocumentDataBase('allUser', userInfo, allInfo);
+
+    await FirebaseMethods.registerUser(oneStepData.value.email, oneStepData.value.password)
 }
 
 async function createAccount(){

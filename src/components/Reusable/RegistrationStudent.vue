@@ -126,6 +126,7 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, formData)
 
 async function register(){
+  const randomNumber = 'student-' + Date.now();
   const privateInfo = {
       login: formData.value.login,
       email: formData.value.email,
@@ -163,10 +164,33 @@ async function register(){
 
 
     }
-    const randomNumber = new Date().toLocaleString();
+    const allInfo = {
+      login: formData.value.login,
+      email: formData.value.email,
+      password: formData.value.password,
+      RePassword: formData.value.RePassword,
+      name: '',
+      surname: '',
+      phone: '',
+      country: 0,
+      timed: 0,
+      about: '',
+      lessons: [],
+      selectedTeacher: [],
+      payment: [],
+      statistic: [],
+      type:{
+        student: true,
+        teachers: false,
+        company: false,
+      },
+      id: randomNumber,
+    }
+    
     await createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password);
     await setDoc(doc(db, "privateStudentData",  randomNumber), privateInfo);
     await setDoc(doc(db, "publicStudentData",  randomNumber), publicInfo);
+    await setDoc(doc(db, "allUser",  randomNumber), allInfo);
 }
 
 async function registerStudent(){
@@ -174,7 +198,6 @@ async function registerStudent(){
   if(results){
     isProssesing.value = true;
     await register();
-    isProssesing.value = false;
     router.push('/')
   }
   
