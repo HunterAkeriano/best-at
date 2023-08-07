@@ -21,11 +21,17 @@ export default{
   },
 
   async sendDocumentDataBase(selectCollection, nameDocument, obj){
+    this.prossec = true;
     await setDoc(doc(db, selectCollection, `${nameDocument}`), obj);
   },
 
-  async registerUser(email, password){
-    await createUserWithEmailAndPassword(auth, email, password);
-  }
+  async registerUser(email, password) {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('Error while registering user:', error);
+      throw error;
+    }
+  },
 
 }

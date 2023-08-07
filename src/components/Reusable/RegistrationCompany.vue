@@ -1,4 +1,5 @@
 <template>
+  <TheLoader v-if="isProssesing"/>
   <div class="company-form">
     <div class="company-form__one-step">
       <div class="company-form__input">
@@ -51,63 +52,80 @@
       </div>
     </div>
 
-    <div class="company-form__one-step">
+    <div class="company-form__one-step" v-if="nextStepInfo">
       <div class="company-form__input">
         <p class="company-form__input-text">Наименование компании</p>
-        <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
-        <span v-if="v$?.login?.$error">Заполните поле</span>
-        <IconError class="error-icons" v-if="v$?.login?.$error"/>
+        <input :class="{'error': v1$?.name?.$error}" type="text" v-model="formTwoData.name">
+        <span v-if="v1$?.name?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v1$?.name?.$error"/>
       </div>
 
       <div class="company-form__input" style="margin-top: 16px;">
         <p class="company-form__input-text">ИНН</p>
-        <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
-        <span v-if="v$?.login?.$error">Заполните поле</span>
-        <IconError class="error-icons" v-if="v$?.login?.$error"/>
+        <input :class="{'error': v1$?.number?.$error}" type="text" v-model="formTwoData.number">
+        <span v-if="v1$?.number?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v1$?.number?.$error"/>
       </div>
 
       <div class="company-form__input" style="margin-top: 16px;">
         <p class="company-form__input-text">Страна</p>
-        <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
-        <span v-if="v$?.login?.$error">Заполните поле</span>
-        <IconError class="error-icons" v-if="v$?.login?.$error"/>
+        <input :class="{'error': v1$?.country?.$error}" type="text" v-model="formTwoData.country">
+        <span v-if="v1$?.country?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v1$?.country?.$error"/>
       </div>
 
       <div class="company-form__input" style="margin-top: 16px;">
         <p class="company-form__input-text">Город</p>
-        <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
-        <span v-if="v$?.login?.$error">Заполните поле</span>
-        <IconError class="error-icons" v-if="v$?.login?.$error"/>
+        <input :class="{'error': v1$?.city?.$error}" type="text" v-model="formTwoData.city">
+        <span v-if="v1$?.city?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v1$?.city?.$error"/>
       </div>
 
       <div class="company-form__input" style="margin-top: 16px;">
         <p class="company-form__input-text">Юридический адрес</p>
-        <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
-        <span v-if="v$?.login?.$error">Заполните поле</span>
-        <IconError class="error-icons" v-if="v$?.login?.$error"/>
+        <input :class="{'error': v1$?.adress?.$error}" type="text" v-model="formTwoData.adress">
+        <span v-if="v1$?.adress?.$error">Заполните поле</span>
+        <IconError class="error-icons" v-if="v1$?.adress?.$error"/>
       </div>
 
       <div class="company-form__input" style="margin-top: 16px;">
         <p class="company-form__input-text">Почтовый адрес</p>
-        <input :class="{'error': v$?.login?.$error}" type="text" v-model="formData.login">
-        <span v-if="v$?.login?.$error">Заполните поле</span>
-        <IconError class="error-icons" v-if="v$?.login?.$error"/>
+        <input  type="text" v-model="formTwoData.postadress">
+      </div>
+
+      <div class="student-form__accept" @click="isAdress = !isAdress">
+        <div class="student-form__accept-icon">
+            <IconCheckBoxOne v-if="!isAdress"/>
+            <IconCheckBoxTwo v-else/>
+          </div>
+          
+          <p>Совпадает с юридическим</p>
+      </div>
+
+      <div style="margin-top: 7px;" class="student-form__accept" @click="ACCEPTED_FORM = !ACCEPTED_FORM">
+        <div class="student-form__accept-icon">
+            <IconCheckBoxOne v-if="!ACCEPTED_FORM"/>
+            <IconCheckBoxTwo v-else/>
+          </div>
+          
+          <p>Я принимаю условия пользовательского соглашения и <span> правила обработки персональных данных</span></p>
       </div>
 
       <div class="company-form__btn">
         <TheButton
-        :width="130"
         :padding="9"
         :lineHeight="21"
-        style="margin-top: 20px;"
-        @click="nextStep"
-        >Далее</TheButton>
+        style="margin-top: 20px; width: 100%;"
+        :isDisabled="!ACCEPTED_FORM"
+        @click="registration"
+        >Создать аккаунт</TheButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
@@ -118,6 +136,7 @@ import IconCheckBoxTwo from '@/assets/icons/registration/CheckboxTwo.vue'
 
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
+import TheLoader from '../UI/Loader/TheLoader.vue'
 
 import {ref, computed} from 'vue'
 
@@ -125,6 +144,10 @@ import {ref, computed} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, minLength, sameAs } from '@vuelidate/validators'
 
+// mixins
+import FirebaseMethods from '../../mixins/FirebaseMethods'
+const isProssesing = ref(false);
+const router = useRouter();
 
 const formData = ref({
   login: '',
@@ -157,9 +180,73 @@ const SHOW_PASSWORD_ONE = ref(true)
 const SHOW_PASSWORD_TWO = ref(true)
 
 
+const nextStepInfo = ref(false);
 async function nextStep(){
   const results = await v$.value.$validate()
+  if(results) nextStepInfo.value = true;
 }
+
+const formTwoData = ref({
+  name: '',
+  number: '',
+  country: '',
+  RePassword: '',
+  city: '',
+  adress: '',
+  postadress: '',
+})
+
+const rulesTwo = computed(() => {
+  return {
+    name: { required },
+    number: { required },
+    country: { required },
+    city: { required },
+    adress: { required },
+  };
+});
+
+
+const isAdress = ref(false);
+const ACCEPTED_FORM = ref(false)
+
+const v1$ = useVuelidate(rulesTwo, formTwoData)
+
+async function sendRegistred(){
+  const companyInfo = 'company-' + Date.now();
+    const objPrivate = {
+      login: formData.value.login,
+      password: formData.value.password,
+      email: formData.value.email,
+      phone: formData.value.phone,
+    }
+    const objPublic = {
+      nameCompany: formTwoData.value.name,
+      inn: formTwoData.value.number,
+      country: formTwoData.value.country,
+      city: formTwoData.value.city,
+      urAdress: formTwoData.value.adress,
+      postAdress: formTwoData.value.postadress,
+      teachers: [],
+    }
+    await FirebaseMethods.sendDocumentDataBase('privateCompany', companyInfo, objPrivate);
+    await FirebaseMethods.sendDocumentDataBase('publicCompany', companyInfo, objPublic);
+    await FirebaseMethods.registerUser(formData.value.email, formData.value.password);
+
+}
+
+async function registration(){
+  const results = await v1$.value.$validate()
+
+  if(results){
+    isProssesing.value = true;
+    await sendRegistred();
+    isProssesing.value = false;
+    router.push('/')
+  }
+}
+
+
 
 </script>
 
