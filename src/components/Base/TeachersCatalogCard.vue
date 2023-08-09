@@ -9,7 +9,7 @@
         <!--       img         -->
       </div>
 
-      <div class="teacher-card__stars" />
+      <TheStars :rating="4" />
 
       <div class="teacher-card__recommended" />
     </div>
@@ -88,7 +88,8 @@
 <script setup>
 import { ref } from 'vue'
 import TheCalendar from '@/components/UI/TheCalendar.vue'
-import Button from "@/components/UI/Buttons/Button.vue";
+import Button from '@/components/UI/Buttons/Button.vue'
+import TheStars from '@/components/Base/TheStars.vue'
 
 
 defineProps({
@@ -153,15 +154,6 @@ function switchTab (tab) {
     background: #FFFFFF;
     border-radius: 100px;
     box-shadow: 0 10px 60px 0 rgba(42, 102, 193, 0.15);
-  }
-
-  &__stars {
-    //
-    width: 83px;
-    height: 13px;
-    background: #FFC452;
-    //
-    margin: 0 auto 23px;
   }
 
   &__recommended {
