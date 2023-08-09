@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="main page">
     <div class="page__bg">
 
     </div>
