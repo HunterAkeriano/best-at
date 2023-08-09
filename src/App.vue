@@ -1,21 +1,23 @@
 <template>
   <div class="wrapper">
     <TheHeader v-if="is404Page"/>
-    <div class="main" >
-      <RouterView />
-    </div>
+    <TheModal v-if="modalsStore.currentModal" />
+    <RouterView />
     <TheFooter v-if="is404Page"/>
   </div>
 </template>
 
 <script setup>
 import { RouterView, useRoute } from 'vue-router'
-import {ref, watch} from 'vue'
+import { ref, watch } from 'vue'
+import { useModalsStore } from '@/stores/modals'
 
 import TheHeader from '@/components/Base/TheHeader.vue'
 import TheFooter from '@/components/Base/TheFooter.vue'
+import TheModal from '@/components/Base/TheModal.vue'
 
 
+const modalsStore = useModalsStore()
 const route = useRoute();
 
 const is404Page = ref(null);
@@ -27,6 +29,7 @@ watch(route, () => {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 #app {
     height: 100vh;
     font-style: normal;
@@ -34,15 +37,18 @@ watch(route, () => {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
 }
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
+
 ul[class],
 ol[class] {
   padding: 0;
 }
+
 body,
 h1,
 h2,
@@ -60,6 +66,7 @@ dl,
 dd {
   margin: 0;
 }
+
 body {
   min-height: 100vh;
   scroll-behavior: smooth;
@@ -67,44 +74,68 @@ body {
   line-height: 1.5;
   font-family: 'Montserrat', sans-serif;
 }
+
 ul[class],
 ol[class] {
   list-style: none;
 }
+
 a:not([class]) {
   text-decoration-skip-ink: auto;
 }
+
 img {
   max-width: 100%;
   display: block;
 }
+
 article > * + * {
   margin-top: 1em;
 }
+
 input,
 button,
 textarea,
 select {
   font: inherit;
 }
+
 a{
   text-decoration: none;
   color: inherit;
 }
+
 .wrapper{
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  position: relative;
 }
+
 .main{
   flex: 1 1 auto;
   margin-top: 70px;
 }
+
 .container{
   max-width: 1420px;
   width: 100%;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: EB Garamond, serif;
+}
+
+h2 {
+  color: #292C32;
+  font-size: 50px;
+  text-align: center;
 }
 
 </style>

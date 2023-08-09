@@ -1,5 +1,5 @@
 <template>
-  <div class="registration">
+  <div class="main registration">
     <div class="container">
       <div class="registration__link">
         <p style="color: #454B58;">Главная</p>
@@ -11,7 +11,7 @@
       </div>
       <Transition name="fade">
         <div class="registration__type" v-if="SELECTED_VALUES == ''">
-          <div class="registration__type-item" 
+          <div class="registration__type-item"
           v-for="(item, idx) in REGISTRATION_TYPE"
            @click="selectType(item.type); DEFAULT_TITLE = item.name">
             <component :is="item.icons"/>

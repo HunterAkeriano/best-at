@@ -1,5 +1,5 @@
 <template>
-<div class="not-found">
+<div class="main not-found">
   <div class="container">
     <div class="not-found__title">
       <h2>Увы, страница не найдена</h2>
