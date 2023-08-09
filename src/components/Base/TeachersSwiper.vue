@@ -196,6 +196,7 @@ const prevSlide = () => {
 
   &__text {
     color: #454B58;
+    font-size: 14px;
     line-height: 25px;
     max-width: 475px;
     margin-top: 26px;
