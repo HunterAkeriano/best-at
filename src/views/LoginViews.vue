@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="main login">
     <div class="container">
       <div class="login__links">
         <p>Главная</p>
@@ -24,7 +24,7 @@
             <span v-if="v$?.password?.$error">{{ v$?.password?.$errors[0].$message }}</span>
             <IconError class="error-icons" v-if="v$?.password?.$error"/>
           </div>
-         
+
           <div class="login__forms-btn">
             <TheButton
               :width="130"
@@ -149,7 +149,7 @@ async function sigin(){
     }
 
     &-block{
-     
+
       width: 380px;
       margin: 0 auto;
       padding: 40px 50px;
@@ -182,11 +182,11 @@ async function sigin(){
         font-size: 13px;
         font-style: normal;
         font-weight: 500;
-        line-height: 24px; 
+        line-height: 24px;
         &:focus{
           outline: 0;
         }
-      
+
       }
       svg{
         position: absolute;
@@ -209,7 +209,7 @@ async function sigin(){
         font-size: 9px;
         font-style: normal;
         font-weight: 600;
-        line-height: 10px; 
+        line-height: 10px;
     }
 
     .error-icons{

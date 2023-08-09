@@ -13,11 +13,11 @@
           @slidePrevTransitionStart="prevSlide"
       >
         <div class="teachers-swiper__navigation">
-          <div class="teachers-swiper__navigation-left" @click="prevSlide" />
+          <div class="teachers-swiper__navigation-left" />
 
           0{{ currentSlide }} <span>/ 03</span>
 
-          <div class="teachers-swiper__navigation-right" @click="nextSlide" />
+          <div class="teachers-swiper__navigation-right" />
         </div>
 
         <swiper-slide>
@@ -128,10 +128,8 @@ const prevSlide = () => {
     transform: rotate(-90deg);
     top: 202px;
     left: -26px;
-    font-family: Montserrat, sans-serif;
     color: #F14A74;
     font-size: 35px;
-    font-style: normal;
     font-weight: 600;
     line-height: 30px;
     z-index: 10;
@@ -188,7 +186,6 @@ const prevSlide = () => {
     color: #292C32;
     font-family: EB Garamond, serif;
     font-size: 60px;
-    font-style: normal;
     font-weight: 600;
     line-height: 60px;
 
@@ -199,14 +196,11 @@ const prevSlide = () => {
 
   &__text {
     color: #454B58;
-    font-family: Montserrat, sans-serif;
     font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
     line-height: 25px;
     max-width: 475px;
     margin-top: 26px;
-    margin-bottom: 50px;
+    margin-bottom: 51px;
   }
 }
 </style>

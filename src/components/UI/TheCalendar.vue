@@ -1,23 +1,24 @@
 <template>
-  <div class="calendar" :class="{ 'calendar--mini': miniCalendar }" >
+  <div class="calendar" :class="{ 'calendar--mini': miniCalendar, 'calendar--month': monthCalendar }" >
     <div class="calendar__header" v-if="!miniCalendar">
-      <button id="prevBtn">&lt;</button>
+      <button @click="prevBtn">&lt;</button>
       <h2 id="weekRange"></h2>
-      <button id="nextBtn">&gt;</button>
+      <button @click="nextBtn">&gt;</button>
     </div>
     <table class="calendar__table">
       <thead>
       <tr>
         <th></th>
-        <th v-for="(day, index) in weekArray" :key="index">
-          {{ getLocalDate(day) }}
+        <th v-for="day in daysArray.length" :key="day">
+          {{ getLocalDate(daysArray[day-1]) }}
         </th>
       </tr>
       </thead>
+
       <tbody>
       <tr v-for="(interval, index) in hoursArray" :key="index">
         <td class="hours">{{ interval }}</td>
-        <td class="cell" v-for="cell in 7" :key="cell" @click="console.log(interval, cell-1)"></td>
+        <td class="cell" v-for="cell in daysArray.length" :key="cell" @click="console.log(interval, cell-1)"></td>
       </tr>
       </tbody>
     </table>
@@ -29,21 +30,38 @@ import { ref, onMounted } from 'vue'
 
 
 const props = defineProps({
+  monthCalendar: {
+    type: Boolean,
+    default: false
+  },
   miniCalendar: {
     type: Boolean,
     default: false
   }
 })
 
-const today = new Date()
-const weekArray = ref([])
+const daysArray = ref([])
 const hoursArray = ref([])
+const currentDate = ref(null)
+const currentMonth = ref(null)
+
+function getCurrentMonth() {
+  daysArray.value = []
+  const currentYear = currentDate.value.getFullYear()
+  const daysInMonth = new Date(currentYear, currentMonth.value + 1, 0).getDate()
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(currentYear, currentMonth.value, day)
+    daysArray.value.push(date)
+  }
+}
 
 function getCurrentWeek() {
+  daysArray.value = []
   for (let i = 0; i < 7; i++) {
-    const nextDay = new Date(today)
-    nextDay.setDate(today.getDate() + i)
-    weekArray.value.push(nextDay)
+    const nextDay = new Date(currentDate.value)
+    nextDay.setDate(currentDate.value.getDate() + i)
+    daysArray.value.push(nextDay)
   }
 }
 
@@ -58,7 +76,7 @@ function getHours() {
     }
   } else {
     const startHour = 8
-    const endHour = 20
+    const endHour = 23
     for (let hour = startHour; hour <= endHour; hour++) {
       const currentTime = new Date()
       currentTime.setHours(hour, 0, 0)
@@ -70,13 +88,54 @@ function getHours() {
 }
 
 function getLocalDate(date) {
-  const options = { month: 'short' }
-  const dateFormatter = new Intl.DateTimeFormat('ru-RU', options)
-  return date.getDate() + ' ' + dateFormatter.formatToParts(date)[0].value
+  if (props.monthCalendar) {
+    return date.getDate()
+  } else {
+    const options = { month: 'short' }
+    const dateFormatter = new Intl.DateTimeFormat('ru-RU', options)
+    return date.getDate() + ' ' + dateFormatter.formatToParts(date)[0].value
+  }
+}
+
+function prevBtn() {
+  if (props.monthCalendar) {
+    currentMonth.value = currentDate.value.getMonth() - 1
+    if (currentMonth.value < 0) {
+      currentMonth.value = 11
+      currentDate.value.setFullYear(currentDate.value.getFullYear() - 1)
+    }
+    currentDate.value.setMonth(currentMonth.value)
+    getCurrentMonth()
+  } else {
+    currentDate.value.setDate(currentDate.value.getDate() - 7)
+    getCurrentWeek()
+  }
+}
+
+function nextBtn() {
+  if (props.monthCalendar) {
+    currentMonth.value = currentDate.value.getMonth() + 1
+    if (currentMonth.value > 11) {
+      currentMonth.value = 0
+      currentDate.value.setFullYear(currentDate.value.getFullYear() + 1)
+    }
+    currentDate.value.setMonth(currentMonth.value)
+    getCurrentMonth()
+  } else {
+    currentDate.value.setDate(currentDate.value.getDate() + 7)
+    getCurrentWeek()
+  }
 }
 
 onMounted(() => {
-  getCurrentWeek()
+  currentDate.value = new Date()
+  currentMonth.value = currentDate.value.getMonth()
+
+  if (props.monthCalendar) {
+    getCurrentMonth()
+  } else {
+    getCurrentWeek()
+  }
   getHours()
 })
 </script>
@@ -116,6 +175,15 @@ onMounted(() => {
     opacity: 0.6;
     color: #454B58;
     font-weight: 600;
+  }
+}
+
+.calendar--month {
+  max-width: 100%;
+
+  th {
+    min-width: 27px;
+    min-height: 27px;
   }
 }
 
