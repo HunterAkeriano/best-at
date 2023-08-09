@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar" :class="{ 'calendar--mini': miniCalendar }" >
+  <div class="calendar" :class="{ 'calendar--mini': miniCalendar, 'calendar--month': monthCalendar }" >
     <div class="calendar__header" v-if="!miniCalendar">
       <button id="prevBtn">&lt;</button>
       <h2 id="weekRange"></h2>
@@ -9,15 +9,16 @@
       <thead>
       <tr>
         <th></th>
-        <th v-for="(day, index) in weekArray" :key="index">
-          {{ getLocalDate(day) }}
+        <th v-for="day in daysArray.length" :key="day">
+          {{ getLocalDate(daysArray[day-1]) }}
         </th>
       </tr>
       </thead>
+
       <tbody>
       <tr v-for="(interval, index) in hoursArray" :key="index">
         <td class="hours">{{ interval }}</td>
-        <td class="cell" v-for="cell in 7" :key="cell" @click="console.log(interval, cell-1)"></td>
+        <td class="cell" v-for="cell in daysArray.length" :key="cell" @click="console.log(interval, cell-1)"></td>
       </tr>
       </tbody>
     </table>
@@ -29,6 +30,10 @@ import { ref, onMounted } from 'vue'
 
 
 const props = defineProps({
+  monthCalendar: {
+    type: Boolean,
+    default: false
+  },
   miniCalendar: {
     type: Boolean,
     default: false
@@ -36,14 +41,26 @@ const props = defineProps({
 })
 
 const today = new Date()
-const weekArray = ref([])
+const daysArray = ref([])
 const hoursArray = ref([])
+
+function getCurrentMonth() {
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
+  const currentMonth = currentDate.getMonth()
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(currentYear, currentMonth, day)
+    daysArray.value.push(date)
+  }
+}
 
 function getCurrentWeek() {
   for (let i = 0; i < 7; i++) {
     const nextDay = new Date(today)
     nextDay.setDate(today.getDate() + i)
-    weekArray.value.push(nextDay)
+    daysArray.value.push(nextDay)
   }
 }
 
@@ -70,13 +87,21 @@ function getHours() {
 }
 
 function getLocalDate(date) {
-  const options = { month: 'short' }
-  const dateFormatter = new Intl.DateTimeFormat('ru-RU', options)
-  return date.getDate() + ' ' + dateFormatter.formatToParts(date)[0].value
+  if (props.monthCalendar) {
+    return date.getDate()
+  } else {
+    const options = { month: 'short' }
+    const dateFormatter = new Intl.DateTimeFormat('ru-RU', options)
+    return date.getDate() + ' ' + dateFormatter.formatToParts(date)[0].value
+  }
 }
 
 onMounted(() => {
-  getCurrentWeek()
+  if (props.monthCalendar) {
+    getCurrentMonth()
+  } else {
+    getCurrentWeek()
+  }
   getHours()
 })
 </script>
@@ -116,6 +141,15 @@ onMounted(() => {
     opacity: 0.6;
     color: #454B58;
     font-weight: 600;
+  }
+}
+
+.calendar--month {
+  max-width: 100%;
+
+  th {
+    min-width: 27px;
+    min-height: 27px;
   }
 }
 
