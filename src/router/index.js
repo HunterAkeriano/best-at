@@ -31,6 +31,12 @@ const router = createRouter({
         requiresVisitor: true
       },
     },
+
+    {
+      name: 'Help Page',
+      path: '/help',
+      component: () => import("@/views/HelpersPage.vue" /* webpackChunkName: "registration" */),
+    },
     {
       name: 'Not Found',
       path: '/:pathMatch(.*)*',

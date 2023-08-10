@@ -25,7 +25,7 @@
       <div class="header__auth" v-if="authStore.user">
         <IconAcademy/>
         <IconMessage/>
-        <IconMain/>
+        <IconMain @click="logout"/>
       </div>
 
       <div class="header__lang" :class="{'header__lang_selected': selectedLanguage}" @click="selectedLanguage = !selectedLanguage">
@@ -111,6 +111,10 @@ function moveToFirst(index) {
   language.unshift(selectedItem);
 }
 
+function logout(){
+  authStore.logout();
+  authStore.user = null;
+}
 
 
 </script>
