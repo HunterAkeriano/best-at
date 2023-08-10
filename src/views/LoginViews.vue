@@ -118,8 +118,7 @@ async function sigin(){
 
 <style lang="scss">
 .login{
-  font-family: Montserrat;
-  margin-top: 25px;
+  margin-top: 92px;
   margin-bottom: 40px;
   &__links{
     display: flex;
@@ -162,12 +161,14 @@ async function sigin(){
 
     &-input{
       position: relative;
+      
       h5{
         color: #8B919E;
         font-size: 13px;
         font-style: normal;
         font-weight: 500;
         line-height: 23px; /* 176.923% */
+        font-family: Montserrat;
       }
 
       input{

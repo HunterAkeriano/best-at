@@ -18,9 +18,11 @@ export const stateUser = defineStore({
           }
           
       })
-      // signOut(auth)
-     
-     
+      // 
     },
+    async logout(){
+      signOut(auth);
+      localStorage.setItem('user', null);
+    }
   }
 })
