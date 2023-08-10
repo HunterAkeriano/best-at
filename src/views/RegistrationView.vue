@@ -120,6 +120,7 @@ watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
   &__link{
     display: flex;
     align-items: center;
+    margin-top: 68px;
     p{
       color: #7D7F83;
       font-family: Montserrat;
