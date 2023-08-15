@@ -344,6 +344,7 @@ cursor: pointer;
   border-radius: 100%;
   cursor: grab;
   box-shadow: none;
+  
   &:focus {
       outline: none;
       box-shadow: none;
