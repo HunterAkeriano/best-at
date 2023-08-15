@@ -1,5 +1,5 @@
 <template>
-  <div class="select-comp" :class="{'select-comp_opened': stateMenu}">
+  <div class="select-comp" :class="{'select-comp_opened': stateMenu}" ref="selectComp">
     <div class="select-comp__selected" @click="openMenu">
       <p>{{ SELECTED_ELEMENT.title }}</p>
       <IconArrow/>
@@ -11,9 +11,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-
-
+import { ref, onMounted, onUnmounted } from 'vue';
 import IconArrow from '@/assets/icons/header/Arrow.vue'
 
 
@@ -38,6 +36,22 @@ const props = defineProps({
     default: [],
   },
 })
+
+onMounted(() => {
+  window.addEventListener('click', closeOnOutsideClick);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('click', closeOnOutsideClick);
+});
+
+const selectComp = ref(null);
+function closeOnOutsideClick(event) {
+  if (stateMenu.value && !selectComp.value.contains(event.target)) {
+    stateMenu.value = false;
+  }
+}
+
 </script>
 
 <style lang="scss">
