@@ -1,5 +1,5 @@
 <template>
-  <div class="select-comp" :class="{'select-comp_opened': stateMenu}">
+  <div class="select-comp" :class="{'select-comp_opened': stateMenu}" ref="selectComp">
     <div class="select-comp__selected" @click="openMenu">
       <p>{{ SELECTED_ELEMENT.title }}</p>
       <IconArrow/>
@@ -11,9 +11,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-
-
+import { ref, onMounted, onUnmounted } from 'vue';
 import IconArrow from '@/assets/icons/header/Arrow.vue'
 
 
@@ -35,9 +33,26 @@ function selectedItem(idx){
 const props = defineProps({
   items: {
     type: Array,
-    default: [],
+    default: () => ([]),
+    required: true,
   },
 })
+
+onMounted(() => {
+  window.addEventListener('click', closeOnOutsideClick);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('click', closeOnOutsideClick);
+});
+
+const selectComp = ref(null);
+function closeOnOutsideClick(event) {
+  if (stateMenu.value && !selectComp.value.contains(event.target)) {
+    stateMenu.value = false;
+  }
+}
+
 </script>
 
 <style lang="scss">
@@ -53,15 +68,16 @@ const props = defineProps({
     align-items: center;
     justify-content: space-between;
     padding-right: 13px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    height: 35px;
 
     p{
       color: #454B58;
       font-weight: 500;
       line-height: 24px;
       font-size: 13px;
-      padding-left: 20px;
-      padding-top: 5px;
-      padding-bottom: 6px;
     }
 
     svg{
@@ -72,14 +88,14 @@ const props = defineProps({
   &__item{
     overflow: hidden;
     position: absolute;
-    max-height: 0;
     opacity: 0;
     left: 0;
     top: 33px;
     width: 100%;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 0px 20px;
     background: #F2F5FA;
     transition: all .25s;
+    max-height: 0;
 
     p{
       color: #454B58;
@@ -99,11 +115,10 @@ const props = defineProps({
       border-radius: 20px 20px 0 0;
     }
     .select-comp__item{
-      max-height: 200px;
+      max-height: 167px;
       opacity: 1;
       overflow: auto;
       z-index: 10;
-      padding-bottom: 20px;
 
       p:hover{
         background-color: rgb(242, 241, 241);
