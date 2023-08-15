@@ -115,7 +115,7 @@ function closeOnOutsideClick(event) {
       border-radius: 20px 20px 0 0;
     }
     .select-comp__item{
-      max-height: 180px;
+      max-height: 167px;
       opacity: 1;
       overflow: auto;
       z-index: 10;
