@@ -33,7 +33,8 @@ function selectedItem(idx){
 const props = defineProps({
   items: {
     type: Array,
-    default: [],
+    default: () => ([]),
+    required: true,
   },
 })
 
@@ -67,15 +68,16 @@ function closeOnOutsideClick(event) {
     align-items: center;
     justify-content: space-between;
     padding-right: 13px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    height: 35px;
 
     p{
       color: #454B58;
       font-weight: 500;
       line-height: 24px;
       font-size: 13px;
-      padding-left: 20px;
-      padding-top: 5px;
-      padding-bottom: 6px;
     }
 
     svg{
@@ -86,14 +88,14 @@ function closeOnOutsideClick(event) {
   &__item{
     overflow: hidden;
     position: absolute;
-    max-height: 0;
     opacity: 0;
     left: 0;
     top: 33px;
     width: 100%;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 0px 20px;
     background: #F2F5FA;
     transition: all .25s;
+    max-height: 0;
 
     p{
       color: #454B58;
@@ -113,11 +115,10 @@ function closeOnOutsideClick(event) {
       border-radius: 20px 20px 0 0;
     }
     .select-comp__item{
-      max-height: 200px;
+      max-height: 180px;
       opacity: 1;
       overflow: auto;
       z-index: 10;
-      padding-bottom: 20px;
 
       p:hover{
         background-color: rgb(242, 241, 241);
