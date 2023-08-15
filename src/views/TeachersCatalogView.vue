@@ -23,16 +23,28 @@
           <div class="filter__title">Фильтры</div>
 
           <div class="filter__label">Язык преподавания</div>
-          <div class="filter__item" />
+          <TheSelect 
+          :items="TeachersHelpers.langeuages"
+          style="margin-bottom: 15px;"
+          />
 
-          <div class="filter__label">Язык преподавания</div>
-          <div class="filter__item" />
+          <div class="filter__label">Время преподавания</div>
+          <TheSelect 
+          :items="TeachersHelpers.times"
+          style="margin-bottom: 15px;"
+          />
 
-          <div class="filter__label">Язык преподавания</div>
-          <div class="filter__item" />
+          <div class="filter__label">Страна преподавателя</div>
+          <TheSelect 
+          :items="TeachersHelpers.country"
+          style="margin-bottom: 15px;"
+          />
 
-          <div class="filter__label">Язык преподавания</div>
-          <div class="filter__item" />
+          <div class="filter__label">Язык общения</div>
+          <TheSelect 
+          :items="TeachersHelpers.langeuages"
+          style="margin-bottom: 15px;"
+          />
 
           <div class="filter__range">
             <div class="filter__label">Язык преподавания</div>
@@ -75,11 +87,16 @@
 </template>
 
 <script setup>
+import TeachersHelpers from '../mixins/TeachersHelpers';
 import TeacherCard from '@/components/Base/TeachersCatalogCard.vue'
+import TheSelect from '@/components/UI/TheSelect/TheSelect.vue'
 
 function getActiveTab (tab, id) {
   console.log(tab, id)
 }
+
+
+
 </script>
 
 <style scoped lang="scss">
