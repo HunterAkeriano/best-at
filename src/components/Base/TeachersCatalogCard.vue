@@ -9,7 +9,7 @@
         <!--       img         -->
       </div>
 
-      <TheStars :rating="4" />
+      <TheStars :rating="2" />
 
       <div class="teacher-card__recommended" />
     </div>
