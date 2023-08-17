@@ -35,9 +35,5 @@ import ReviewsCourse from '@/components/Base/ReviewsCourse.vue'
 .teachers {
   height: 854px;
 }
-
-.reviews {
-  height: 571px;
-}
 </style>
 
