@@ -36,7 +36,7 @@
               </div>
             </SwiperSlide>
 
-            <SwiperSlide style="opacity: 0;"/>
+            <SwiperSlide style="background: none;"/>
            
 
           </Swiper>
@@ -162,7 +162,7 @@ onMounted(() => {
         height: 400px;
         width: 320px !important;
         cursor: pointer;
-
+        opacity: 1 !important;
         .slide-item{
           &__img{
             width: 155px;
