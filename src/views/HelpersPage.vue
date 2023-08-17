@@ -149,11 +149,12 @@ async function send(){
         rate: rate.value,
         students: students.value,
         isLessons: isLessons.value,
+        description: description.value,
         id: Data,
-       // photo: 'загрузить на фаирбейс и отправить вставить сюда ссылку'
+       photo: 'https://firebasestorage.googleapis.com/v0/b/best-at-cb209.appspot.com/o/users%2Fteachers%2Fphoto_2023-07-13_12-44-35.jpg?alt=media&token=5eb0b7cd-3117-4f87-a3ce-86fcacdf65ee'
     }
     await createUserWithEmailAndPassword(auth, email.value, password.value);
-    await setDoc(doc(db, 'publicTeacher', `${Data}`), userInfo);
+    await setDoc(doc(db, 'publishedTeachers', `${Data}`), userInfo);
 }
 
 // photo: 'загрузить на фаирбейс и отправить вставить сюда ссылку'
