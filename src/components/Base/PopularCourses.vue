@@ -2,58 +2,14 @@
   <div class="popular-courses">
     <div class="container">
       <h2>Популярные курсы</h2>
-
-      <div class="popular-courses__wrapper">
-        <div class="popular-courses__card">
-          <div class="popular-courses__card-img" />
-
-          <div class="popular-courses__card-content">
-            <div class="popular-courses__card-title">Курс создания программного обеспечения</div>
-
-            <Button
-                :width="130"
-                :padding="10"
-            >
-              Начать
-            </Button>
+      <div class="popular-courses__wrapper" style="height: 410px;">
+        <div class="popular-courses__card" v-for="item in arrayCourse">
+          <div class="popular-courses__card-img" >
+            <img :src="item.img" alt="" width="315" height="240">
           </div>
-        </div>
-
-        <div class="popular-courses__card">
-          <div class="popular-courses__card-img" />
 
           <div class="popular-courses__card-content">
-            <div class="popular-courses__card-title">Курс создания программного обеспечения</div>
-
-            <Button
-                :width="130"
-                :padding="10"
-            >
-              Начать
-            </Button>
-          </div>
-        </div>
-
-        <div class="popular-courses__card">
-          <div class="popular-courses__card-img" />
-
-          <div class="popular-courses__card-content">
-            <div class="popular-courses__card-title">Базовые навыки разговорного испанского языка</div>
-
-            <Button
-                :width="130"
-                :padding="10"
-            >
-              Начать
-            </Button>
-          </div>
-        </div>
-
-        <div class="popular-courses__card">
-          <div class="popular-courses__card-img" />
-
-          <div class="popular-courses__card-content">
-            <div class="popular-courses__card-title">Базовые навыки разговорного испанского языка</div>
+            <div class="popular-courses__card-title" style="height: 46px;">{{ item.title }}</div>
 
             <Button
                 :width="130"
@@ -69,7 +25,24 @@
 </template>
 
 <script setup>
+import {ref, onMounted} from 'vue'
+import { db } from "@/firebase/firebase";
+import {getDocs,  collection} from "firebase/firestore";
+
 import Button from '@/components/UI/Buttons/Button.vue'
+
+const arrayCourse = ref([]);
+async function getCourse(){
+  const querySnapshot = await getDocs(collection(db, "homeCousrse"));
+  querySnapshot.forEach((doc) => {
+    arrayCourse.value.push(doc.data());
+  });
+}
+
+onMounted(() => {
+  getCourse();
+})
+
 </script>
 
 <style scoped lang="scss">
