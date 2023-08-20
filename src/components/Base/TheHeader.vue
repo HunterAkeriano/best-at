@@ -1,7 +1,7 @@
 <template>
 <header class="header">
   <div class="container">
-    <div class="header__content" :class="{'header__content_auth': authStore.user}">
+    <div class="header__content" :class="{'header__content_auth': authStore.auth}">
       <div class="header__logo">
           <p>BeBest</p>
           <span>at</span>
@@ -13,7 +13,7 @@
           </ul>
         </nav>
       </div>
-      <div class="header__user" v-if="!authStore.user">
+      <div class="header__user" v-if="!authStore.auth">
         <div class="header__user-auth">
           <IconUser/>
           <p> <router-link :to="{ path: `/login` }"> Войти </router-link></p>
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="header__auth" v-if="authStore.user">
+      <div class="header__auth" v-if="authStore.auth">
         <IconAcademy/>
         <IconMessage/>
         <IconMain @click="logout"/>
@@ -113,7 +113,7 @@ function moveToFirst(index) {
 
 function logout(){
   authStore.logout();
-  authStore.user = null;
+  authStore.auth = null;
 }
 
 

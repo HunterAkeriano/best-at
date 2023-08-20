@@ -5,13 +5,15 @@ import {onAuthStateChanged, signOut} from "firebase/auth";
 export const stateUser = defineStore({
   id: 'stateUser',
   state: () => ({
-    user: null,
+    user: [],
+    auth: null,
+    userId: null,
   }),
   actions: {
     async checkAuth() {
       onAuthStateChanged(auth, (user) => {
           if (user) {
-            this.user = user;
+            this.auth = user;
             localStorage.setItem('user', JSON.stringify(user))
           } else {
               localStorage.setItem('user', null)

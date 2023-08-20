@@ -234,7 +234,7 @@ async function sendRegistred(){
       password: formData.value.password,
       email: formData.value.email,
       phone: formData.value.phone,
-      nameCompany: formTwoData.value.name,
+      name: formTwoData.value.name,
       inn: formTwoData.value.number,
       country: formTwoData.value.country,
       city: formTwoData.value.city,

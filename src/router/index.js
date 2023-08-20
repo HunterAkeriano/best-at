@@ -38,6 +38,11 @@ const router = createRouter({
       component: () => import("@/views/HelpersPage.vue" /* webpackChunkName: "registration" */),
     },
     {
+      name: 'Profile Page',
+      path: '/profile',
+      component: () => import("@/views/profile/ProfileMain.vue" /* webpackChunkName: "registration" */),
+    },
+    {
       name: 'Not Found',
       path: '/:pathMatch(.*)*',
       component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)
