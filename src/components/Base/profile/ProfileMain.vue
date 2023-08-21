@@ -3,7 +3,7 @@
     <h4>Аккаунт</h4>
 
     <div class="account__inputs">
-      <div class="account__inputs-input" v-if="usersStore.user[usersStore.userId].type.student">
+      <div class="account__inputs-input">
         <p>ФИО</p>
         <input type="text" v-model="usersStore.user[usersStore.userId].newName">
       </div>
@@ -107,6 +107,7 @@ async function editUser() {
     font-style: normal;
     font-weight: 700;
     line-height: 22px; /* 110% */
+    font-family: Montserrat;
   }
 
   &__inputs{

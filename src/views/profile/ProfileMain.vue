@@ -30,9 +30,47 @@
                 </div>
               </div>
             </div>
+
+            <div class="links">
+              <div class="links__items">
+                <UserIcon/>
+                <p>Аккаунт</p>
+              </div>
+              <div class="links__items">
+                <DataIcon/>
+                <p>Личные данные</p>
+              </div>
+              <div class="links__items">
+                <LessonsIcon/>
+                <p>Мои уроки</p>
+              </div>
+              <div class="links__items" v-if="usersStore.user[usersStore.userId].type.student">
+                <TeacherIcon/>
+                <p>Мои преподаватели</p>
+              </div>
+              <div class="links__items">
+                <PaymentIcon/>
+                <p>Платежная информация</p>
+              </div>
+              <div class="links__items"  v-if="usersStore.user[usersStore.userId].type.teachers || usersStore.user[usersStore.userId].type.company">
+                <EduIcon/>
+                <p>Услуги</p>
+              </div>
+              <div class="links__items">
+                <StatsIcon/>
+                <p>Статистика</p>
+              </div>
+              <div class="links__items" v-if="usersStore.user[usersStore.userId].type.company">
+                <CommandIcon/>
+                <p>Команда компании</p>
+              </div>
+              <div class="links__items">
+                <ChatsIcon/>
+                <p>Чаты</p>
+              </div>
+            </div>
           </div>
         </div>
-
         <div class="profile__wrapper-info">
           <ProfileMain/>
         </div>
@@ -50,6 +88,16 @@ import { db } from "@/firebase/firebase";
 const usersStore = stateUser();
 
 import ProfileMain from '@/components/Base/profile/ProfileMain.vue'
+
+import UserIcon from '@/assets/icons/profile/UserIcon.vue'
+import DataIcon from '@/assets/icons/profile/DataIcon.vue'
+import LessonsIcon from '@/assets/icons/profile/LessonsIcon.vue'
+import TeacherIcon from '@/assets/icons/profile/TeacherIcon.vue'
+import PaymentIcon from '@/assets/icons/profile/PaymentIcon.vue'
+import StatsIcon from '@/assets/icons/profile/StatsIcon.vue'
+import ChatsIcon from '@/assets/icons/profile/ChatIcon.vue'
+import EduIcon from '@/assets/icons/profile/EduIcon.vue'
+import CommandIcon from '@/assets/icons/profile/CommandIcon.vue'
 
 const userEmail = ref();
 
@@ -177,6 +225,41 @@ onBeforeMount(() => {
                 color: #F04973;
                 text-decoration: none;
                 cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+
+      .links{
+        margin-top: 10px;
+
+        &__items{
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding-top: 11px;
+          padding-bottom: 9px;
+          cursor: pointer;
+          border-top: 1px solid #DCE3E8;
+          transition: all .25s;
+
+          p{
+            color: #454B58;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 150%;
+          }
+
+          &:hover{
+            p{
+              color: #F04973;
+            }
+
+            svg{
+              path{
+                fill: #F04973;
               }
             }
           }
