@@ -1,19 +1,22 @@
 <template>
 <header class="header">
   <div class="container">
-    <div class="header__content" :class="{'header__content_auth': authStore.user}">
+    <div class="header__content" :class="{'header__content_auth': authStore.auth}">
       <div class="header__logo">
+        <router-link :to="{ path: `/` }">
           <p>BeBest</p>
           <span>at</span>
+        </router-link>
       </div>
       <div class="header__link">
         <nav class="header__link-nav">
           <ul>
-            <li v-for="item in navLink"> {{ item.link }}</li>
+            <li v-for="item in navLink">
+               <router-link :to="{ path: `${item.router}` }"> {{ item.link }} </router-link></li>
           </ul>
         </nav>
       </div>
-      <div class="header__user" v-if="!authStore.user">
+      <div class="header__user" v-if="!authStore.auth">
         <div class="header__user-auth">
           <IconUser/>
           <p> <router-link :to="{ path: `/login` }"> Войти </router-link></p>
@@ -22,8 +25,8 @@
         </div>
       </div>
 
-      <div class="header__auth" v-if="authStore.user">
-        <IconAcademy/>
+      <div class="header__auth" v-if="authStore.auth">
+        <router-link :to="{ path: `/profile` }"><IconAcademy/></router-link>
         <IconMessage/>
         <IconMain @click="logout"/>
       </div>
@@ -113,7 +116,7 @@ function moveToFirst(index) {
 
 function logout(){
   authStore.logout();
-  authStore.user = null;
+  authStore.auth = null;
 }
 
 
@@ -136,8 +139,11 @@ function logout(){
     display: flex;
   }
   &__logo{
-    display: flex;
-    align-items: center;
+    
+    a{
+      display: flex;
+      align-items: center;
+    }
     p{
       font-size: 26px;
       font-style: normal;
@@ -300,6 +306,11 @@ function logout(){
       display: flex;
       align-items: center;
       margin-left: 142px;
+
+      a{
+        width: 28px;
+        height: 20px;
+      }
       
       svg{
         cursor: pointer;

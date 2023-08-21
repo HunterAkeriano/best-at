@@ -398,6 +398,7 @@ async function register(){
       phone: oneStepData.value.phone,
       pass: twoStepData.value.pass,
       ava: ava.value,
+      name: '',
       country: 0,
       timed: 0,
       city: twoStepData.value.city,
