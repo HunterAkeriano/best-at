@@ -46,9 +46,9 @@ import {stateUser} from "@/stores/StateUser";
 
 
 // firebase
-import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
-import { db, secondaryApp, auth } from "@/firebase/firebase";
-import {getAuth, updatePassword, updateEmail, deleteUser, signInWithEmailAndPassword} from "firebase/auth";
+import {  doc, updateDoc  } from "firebase/firestore";
+import { db,  auth } from "@/firebase/firebase";
+import { updatePassword, updateEmail, signInWithEmailAndPassword} from "firebase/auth";
 
 const usersStore = stateUser();
 
@@ -56,7 +56,6 @@ const SHOW_PASSWORD = ref(true);
 
 
 async function editUser() {
-  // const auth = getAuth(secondaryApp);
   signInWithEmailAndPassword(auth, usersStore.user[usersStore.userId].email, usersStore.user[usersStore.userId].password)
     .then(async (userCredential) => {
       const user = userCredential.user;
@@ -90,9 +89,8 @@ async function editUser() {
         password: usersStore.user[usersStore.userId].password,
         name: usersStore.user[usersStore.userId].name,
         phone: usersStore.user[usersStore.userId].phone,
-        type: usersStore.user[usersStore.userId].type,
       };
-      await setDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+      await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
     });
 }
 </script>

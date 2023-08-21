@@ -32,15 +32,22 @@
             </div>
 
             <div class="links">
-              <div class="links__items">
+              <div class="links__items"
+              :class="{'active': SELECTED_ROUTER == ''}"
+              @click="selectRouter('')">
                 <UserIcon/>
                 <p>Аккаунт</p>
               </div>
-              <div class="links__items">
+              <div class="links__items" 
+              :class="{'active': SELECTED_ROUTER == 'data'}"
+              @click="selectRouter('data')">
                 <DataIcon/>
                 <p>Личные данные</p>
               </div>
-              <div class="links__items">
+              <div class="links__items"
+              :class="{'active': SELECTED_ROUTER == 'lessons'}"
+              @click="selectRouter('lessons')"
+              >
                 <LessonsIcon/>
                 <p>Мои уроки</p>
               </div>
@@ -71,8 +78,9 @@
             </div>
           </div>
         </div>
-        <div class="profile__wrapper-info">
-          <ProfileMain/>
+        <div class="profile__wrapper-info" v-if="usersStore.userId !== null">
+          <ProfileMain v-if="SELECTED_ROUTER == ''"/>
+          <ProfileDataStudent v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.student"/>
         </div>
       </div>
     </div>
@@ -80,7 +88,7 @@
 </template>
 
 <script setup>
-import {ref, onBeforeMount} from 'vue'
+import {ref, onBeforeMount, watch} from 'vue'
 import {stateUser} from "@/stores/StateUser";
 import { collection, getDocs} from "firebase/firestore";
 import { db } from "@/firebase/firebase";
@@ -88,6 +96,8 @@ import { db } from "@/firebase/firebase";
 const usersStore = stateUser();
 
 import ProfileMain from '@/components/Base/profile/ProfileMain.vue'
+import ProfileDataStudent from '@/components/Base/profile/data/ProfileDataStudent.vue'
+
 
 import UserIcon from '@/assets/icons/profile/UserIcon.vue'
 import DataIcon from '@/assets/icons/profile/DataIcon.vue'
@@ -117,6 +127,10 @@ async function getUser(){
       emailNew: doc.data().email,
       passwordNew: doc.data().password,
       type: doc.data().type,
+      country: doc.data().country,
+      language: doc.data().language,
+      time: doc.data().timed,
+      about: doc.data().about,
     })
   })
 }
@@ -130,7 +144,45 @@ onBeforeMount(() => {
       }
     })
   })
+
+  handleRouteUpdate(router.currentRoute.value)
 })
+
+
+// роутинг
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const SELECTED_ROUTER = ref('');
+
+function selectRouter(queryParam) {
+  if (queryParam === "") {
+    SELECTED_ROUTER.value = '';
+    router.push({ query: null }); 
+  } else {
+    SELECTED_ROUTER.value = queryParam;
+    const currentQuery = { ...router.currentRoute.value.query };
+    currentQuery.param = queryParam;
+    router.push({ query: currentQuery });
+  }
+}
+
+function handleRouteUpdate(to) {
+  const queryParam = to.query.param
+  if (queryParam) {
+    SELECTED_ROUTER.value = queryParam
+  } else {
+    SELECTED_ROUTER.value = ''
+  }
+}
+
+watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
+  const queryParam = newQuery.param;
+  if (!queryParam) {
+    SELECTED_ROUTER.value = '';
+  }
+});
 
 </script>
 
@@ -252,6 +304,7 @@ onBeforeMount(() => {
             line-height: 150%;
           }
 
+          &.active,
           &:hover{
             p{
               color: #F04973;

@@ -305,4 +305,18 @@ export default {
     { id: 49, title: 'Кыргызстан' },
   ],
 
+  gmt: [
+    { id: 0, title: '+0 GMT' },
+    { id: 1, title: '+1 GMT' },
+    { id: 2, title: '+2 GMT' },
+    { id: 3, title: '+3 GMT' },
+    { id: 4, title: '+4 GMT' },
+    { id: 5, title: '+5 GMT' },
+    { id: 6, title: '+6 GMT' },
+    { id: 7, title: '+7 GMT' },
+    { id: 8, title: '+8 GMT' },
+    { id: 9, title: '+9 GMT' },
+    { id: 10, title: '+10 GMT' }
+  ]
+
 }

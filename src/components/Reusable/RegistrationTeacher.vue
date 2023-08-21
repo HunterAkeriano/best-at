@@ -400,7 +400,9 @@ async function register(){
       ava: ava.value,
       name: '',
       country: 0,
+      language: 0,
       timed: 0,
+      about: '',
       city: twoStepData.value.city,
       adress: twoStepData.value.adress,
       education: {
