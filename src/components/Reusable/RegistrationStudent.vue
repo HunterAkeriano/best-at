@@ -137,25 +137,8 @@ async function register(){
       name: '',
       surname: '',
       phone: '',
-      country: [
-        {
-          name: 'Украина'
-        },
-        {
-          name: 'Казахстан'
-        },
-        {
-          name: 'Польща'
-        }
-      ],
-      timed: [
-        {
-         name: '+3 GMT',
-        },
-        {
-          name: '+1 GMT'
-        }
-      ],
+      country: 0,
+      timed: 2,
       about: '',
       lessons: [],
       selectedTeacher: [],
@@ -172,8 +155,9 @@ async function register(){
       name: '',
       surname: '',
       phone: '',
-      country: 0,
+      country: "",
       timed: 0,
+      language: 0,
       about: '',
       lessons: [],
       selectedTeacher: [],

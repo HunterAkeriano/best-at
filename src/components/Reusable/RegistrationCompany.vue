@@ -237,11 +237,13 @@ async function sendRegistred(){
       name: formTwoData.value.name,
       inn: formTwoData.value.number,
       country: formTwoData.value.country,
+      language: 0,
       city: formTwoData.value.city,
       urAdress: formTwoData.value.adress,
       postAdress: formTwoData.value.postadress,
       teachers: [],
       country: 0,
+      about: '',
       timed: 0,
       type:{
         student: false,

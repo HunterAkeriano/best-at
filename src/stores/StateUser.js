@@ -25,6 +25,8 @@ export const stateUser = defineStore({
     async logout(){
       signOut(auth);
       localStorage.setItem('user', null);
+      this.user = [];
+      this.userId = null;
     }
   }
 })

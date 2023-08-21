@@ -15,7 +15,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import IconArrow from '@/assets/icons/header/Arrow.vue'
 
 
-const SELECTED_ELEMENT = ref(props.items[0])
+const SELECTED_ELEMENT = ref(props.items[props.idx])
 
 const stateMenu = ref(false)
 function openMenu(){
@@ -36,6 +36,11 @@ const props = defineProps({
     default: () => ([]),
     required: true,
   },
+  idx: {
+    type: Number,
+    default: 0,
+    required: true,
+  }
 })
 
 onMounted(() => {
