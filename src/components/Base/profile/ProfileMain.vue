@@ -4,20 +4,20 @@
 
     <div class="account__inputs">
       <div class="account__inputs-input" v-if="usersStore.user[usersStore.userId].type.student">
-        <p>Логин</p>
-        <input type="text" v-model="usersStore.user[usersStore.userId].login">
+        <p>ФИО</p>
+        <input type="text" v-model="usersStore.user[usersStore.userId].newName">
       </div>
 
       <div class="account__inputs-input" style="margin-top: 19px;">
         <p>Пароль</p>
-        <input :type="!SHOW_PASSWORD ? 'password' : 'text'" v-model="usersStore.user[usersStore.userId].password">
+        <input :type="!SHOW_PASSWORD ? 'password' : 'text'" v-model="usersStore.user[usersStore.userId].passwordNew">
         <IconShowPassOneState @click="SHOW_PASSWORD = !SHOW_PASSWORD" v-if="SHOW_PASSWORD"/>
         <IconShowPassTwoState  @click="SHOW_PASSWORD = !SHOW_PASSWORD" v-else/>
       </div>
 
       <div class="account__inputs-input"  style="margin-top: 16px;">
         <p>E-mail</p>
-        <input type="text" v-model="usersStore.user[usersStore.userId].email">
+        <input type="text" v-model="usersStore.user[usersStore.userId].emailNew">
       </div>
 
       <div class="account__inputs-input"  style="margin-top: 16px;">
@@ -29,6 +29,7 @@
       :width="239"
       :padding="15"
       style="margin-top: 28px;"
+      @click="editUser()"
       >Сохранить изменения</TheButton>
     </div>
   </div>
@@ -43,9 +44,57 @@ import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
 
 import {stateUser} from "@/stores/StateUser";
 
+
+// firebase
+import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { db, secondaryApp, auth } from "@/firebase/firebase";
+import {getAuth, updatePassword, updateEmail, deleteUser, signInWithEmailAndPassword} from "firebase/auth";
+
 const usersStore = stateUser();
 
 const SHOW_PASSWORD = ref(true);
+
+
+async function editUser() {
+  // const auth = getAuth(secondaryApp);
+  signInWithEmailAndPassword(auth, usersStore.user[usersStore.userId].email, usersStore.user[usersStore.userId].password)
+    .then(async (userCredential) => {
+      const user = userCredential.user;
+      if (user.email !== usersStore.user[usersStore.userId].emailNew) {
+        usersStore.user[usersStore.userId].email = usersStore.user[usersStore.userId].emailNew;
+        updateEmail(user, usersStore.user[usersStore.userId].emailNew)
+        .then(async () => {
+          const data = await signInWithEmailAndPassword(auth, usersStore.user[usersStore.userId].email, usersStore.user[usersStore.userId].password);
+          usersStore.auth = data.user;
+          localStorage.setItem('user', JSON.stringify(data.user));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+      if (usersStore.user[usersStore.userId].passwordNew !==  usersStore.user[usersStore.userId].password ) {
+        usersStore.user[usersStore.userId].password = usersStore.user[usersStore.userId].passwordNew;
+        updatePassword(user, usersStore.user[usersStore.userId].password)
+        .then(async () => {
+          const data = await signInWithEmailAndPassword(auth, usersStore.user[usersStore.userId].email, usersStore.user[usersStore.userId].password);
+          usersStore.auth = data.user;
+          localStorage.setItem('user', JSON.stringify(data.user));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+      usersStore.user[usersStore.userId].name = usersStore.user[usersStore.userId].newName;
+      const userData = {
+        email: usersStore.user[usersStore.userId].email,
+        password: usersStore.user[usersStore.userId].password,
+        name: usersStore.user[usersStore.userId].name,
+        phone: usersStore.user[usersStore.userId].phone,
+        type: usersStore.user[usersStore.userId].type,
+      };
+      await setDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+    });
+}
 </script>
 
 <style lang="scss">

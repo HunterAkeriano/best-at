@@ -2,9 +2,9 @@
   <div class="profile">
     <div class="container">
       <div class="profile__links">
-        <p>Главная</p>
+        <p><router-link :to="{ path: `/` }">Главная</router-link></p>
         <span>/</span>
-        <p>Личный кабинет</p>
+        <p style="cursor: pointer;">Личный кабинет</p>
       </div>
 
       <div class="profile__title">
@@ -58,13 +58,17 @@ async function getUser(){
   usersData.forEach((doc) => {
     usersStore.user.push({
       id: usersStore.user.length,
+      docName: doc.id,
       name: doc.data().name,
+      newName: doc.data().name,
       email: doc.data().email,
       login: doc.data().login,
       password: doc.data().password,
       phone: doc.data().phone,
       type: doc.data().type,
-
+      emailNew: doc.data().email,
+      passwordNew: doc.data().password,
+      type: doc.data().type,
     })
   })
 }

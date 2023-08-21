@@ -3,13 +3,16 @@
   <div class="container">
     <div class="header__content" :class="{'header__content_auth': authStore.auth}">
       <div class="header__logo">
+        <router-link :to="{ path: `/` }">
           <p>BeBest</p>
           <span>at</span>
+        </router-link>
       </div>
       <div class="header__link">
         <nav class="header__link-nav">
           <ul>
-            <li v-for="item in navLink"> {{ item.link }}</li>
+            <li v-for="item in navLink">
+               <router-link :to="{ path: `${item.router}` }"> {{ item.link }} </router-link></li>
           </ul>
         </nav>
       </div>
@@ -23,7 +26,7 @@
       </div>
 
       <div class="header__auth" v-if="authStore.auth">
-        <IconAcademy/>
+        <router-link :to="{ path: `/profile` }"><IconAcademy/></router-link>
         <IconMessage/>
         <IconMain @click="logout"/>
       </div>
@@ -136,8 +139,11 @@ function logout(){
     display: flex;
   }
   &__logo{
-    display: flex;
-    align-items: center;
+    
+    a{
+      display: flex;
+      align-items: center;
+    }
     p{
       font-size: 26px;
       font-style: normal;
@@ -300,6 +306,11 @@ function logout(){
       display: flex;
       align-items: center;
       margin-left: 142px;
+
+      a{
+        width: 28px;
+        height: 20px;
+      }
       
       svg{
         cursor: pointer;
