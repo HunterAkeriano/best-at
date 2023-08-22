@@ -419,6 +419,9 @@ async function register(){
         teachers: true,
         company: false,
       },
+      timedZone: '',
+      yearStudent: [0, 1],
+      langTeacher: [0]
     }
     await FirebaseMethods.sendDocumentDataBase('allUser', userInfo, allInfo);
 

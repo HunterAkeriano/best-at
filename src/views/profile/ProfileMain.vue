@@ -81,6 +81,7 @@
         <div class="profile__wrapper-info" v-if="usersStore.userId !== null">
           <ProfileMain v-if="SELECTED_ROUTER == ''"/>
           <ProfileDataStudent v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.student"/>
+          <ProfileDataTeacher v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.teachers"/>
         </div>
       </div>
     </div>
@@ -97,7 +98,7 @@ const usersStore = stateUser();
 
 import ProfileMain from '@/components/Base/profile/ProfileMain.vue'
 import ProfileDataStudent from '@/components/Base/profile/data/ProfileDataStudent.vue'
-
+import ProfileDataTeacher from '@/components/Base/profile/data/ProfileDataTeacher.vue'
 
 import UserIcon from '@/assets/icons/profile/UserIcon.vue'
 import DataIcon from '@/assets/icons/profile/DataIcon.vue'
@@ -131,6 +132,10 @@ async function getUser(){
       language: doc.data().language,
       time: doc.data().timed,
       about: doc.data().about,
+      timedZone: doc.data().timedZone,
+      langArr: doc.data().langArr,
+      yearStudent: doc.data().yearStudent,
+      langTeacher: doc.data().langTeacher,
     })
   })
 }
