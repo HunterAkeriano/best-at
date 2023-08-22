@@ -100,6 +100,48 @@
       </div>
     </div>
 
+    <div class="profile-data__subitle">
+        <h4>Стоимость уроков</h4>
+      </div>
+
+    <div class="profile-data__price">
+
+      <div class="profile-data__price-left">
+        <div class="profile-data__price-input" style="margin-top: 10px;">
+          <p>За 1 урок</p>
+          <input  v-model="usersStore.user[usersStore.userId].lessonsPrice.one" type="number">
+        </div>
+        <div class="profile-data__price-input" style="margin-top: 22px;">
+          <p>За 5 уроков</p>
+          <input v-model="usersStore.user[usersStore.userId].lessonsPrice.five" type="number">
+        </div>
+        <div class="profile-data__price-input" style="margin-top: 21px;">
+          <p>Длительность уроков</p>
+            <TheSelect
+              style="margin-top: 6px; width: 330px;"
+              v-for="(item, i) in usersStore.user[usersStore.userId].yearStudent"
+              :items="TeachersHelpers.timeLessons"
+              @setActiveSelect="selectTimeLessons"
+              :idx="usersStore.user[usersStore.userId].lessonsPrice.time"/>
+        </div>
+        
+
+      </div>
+      
+      <div class="profile-data__price-right">
+        <div class="profile-data__price-input" style="margin-top: 9px;">
+          <p>За 10 уроков</p>
+          <input  v-model="usersStore.user[usersStore.userId].lessonsPrice.teen" type="number">
+        </div>
+        <div class="profile-data__price-input" style="margin-top: 22px;">
+          <p>За 20 уроков</p>
+          <input v-model="usersStore.user[usersStore.userId].lessonsPrice.theeteen" type="number">
+        </div>
+      </div>
+
+      
+    </div>
+
 
     <TheButton
       :width="239"
@@ -159,6 +201,10 @@ function addLangTeacherItmes(){
   usersStore.user[usersStore.userId].itemTeacher.push(0);
 }
 
+function selectTimeLessons(idx){
+  usersStore.user[usersStore.userId].lessonsPrice.time = idx;
+}
+
 
 import {  doc, updateDoc  } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
@@ -172,6 +218,7 @@ async function editUser(){
     langTeacher: usersStore.user[usersStore.userId].langTeacher,
     itemTeacher: usersStore.user[usersStore.userId].itemTeacher,
     about: usersStore.user[usersStore.userId].about,
+    lessonsPrice:  usersStore.user[usersStore.userId].lessonsPrice,
   };
   await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
 }
@@ -190,6 +237,19 @@ async function editUser(){
       font-style: normal;
       font-weight: 700;
       line-height: 22px; /* 110% */
+    }
+  }
+
+  &__subitle{
+    margin-top: 39px;
+
+    h4{
+      color: #292C32;
+      font-family: Montserrat;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 19px; /* 126.667% */
     }
   }
 
@@ -254,6 +314,35 @@ async function editUser(){
 
     &-right{
       margin-left: 40px;
+    }
+  }
+
+  &__price{
+    display: flex;
+   
+    &-input{
+      p{
+        color: #8B919E;
+        font-family: Montserrat;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 23px; /* 176.923% */
+      }
+
+      input{
+        border-radius: 20px;
+        background: #F2F5FA;
+        border: 0;
+        width: 330px;
+        margin-top: 3px;
+        padding: 5px 10px;
+        font-size: 13px;
+       }
+    }
+
+    &-right{
+      margin-left: 41px;
     }
   }
 }

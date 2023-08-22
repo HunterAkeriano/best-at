@@ -250,6 +250,15 @@ async function sendRegistred(){
         teachers: false,
         company: true,
       },
+      info: {
+        ogrn: '',
+        kpp: '',
+        okpo: '',
+        price: '',
+        bank: '',
+        bik: '',
+      }
+
 
     }
     await FirebaseMethods.sendDocumentDataBase('privateCompany', companyInfo, objPrivate);
