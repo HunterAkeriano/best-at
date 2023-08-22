@@ -136,6 +136,7 @@ async function getUser(){
       langArr: doc.data().langArr,
       yearStudent: doc.data().yearStudent,
       langTeacher: doc.data().langTeacher,
+      itemTeacher: doc.data().itemTeacher,
     })
   })
 }

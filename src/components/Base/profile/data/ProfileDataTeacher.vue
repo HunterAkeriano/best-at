@@ -66,20 +66,47 @@
             <div class="el__select">
               <TheSelect
               style="margin-top: 6px; width: 305px;"
-              v-for="(item, i) in usersStore.user[usersStore.userId].langArr"
+              v-for="(item, i) in usersStore.user[usersStore.userId].langTeacher"
               :items="TeachersHelpers.langeuages"
-              @setActiveSelect="activeLanguage(i, $event)"
+              @setActiveSelect="activeLanguageTeachet(i, $event)"
               :idx="item"/>
             </div>
             <IconAdd
             style="margin-top: 10px; margin-left: 3px; cursor: pointer;"
-            @click="addLang"
+            @click="addLangTeacher"
+            />  
+          </div>
+           
+        </div>
+
+        <div class="profile-data__wrapper-select" style="margin-top: 13px;">
+          <p>Предметы обучения</p>
+          <div class="el" style="display: flex; flex-wrap: wrap; width: 100%;">
+            <div class="el__select">
+              <TheSelect
+              style="margin-top: 6px; width: 305px;"
+              v-for="(item, i) in usersStore.user[usersStore.userId].itemTeacher"
+              :items="TeachersHelpers.langeuages"
+              @setActiveSelect="activeLanguageItems(i, $event)"
+              :idx="item"/>
+            </div>
+            <IconAdd
+            style="margin-top: 10px; margin-left: 3px; cursor: pointer;"
+            @click="addLangTeacherItmes"
             />  
           </div>
            
         </div>
       </div>
     </div>
+
+
+    <TheButton
+      :width="239"
+      :padding="15"
+      style="margin-top: 18px;"
+      @click="editUser()"
+      >Сохранить изменения</TheButton>
   </div>
 
 </template>
@@ -87,6 +114,7 @@
 <script setup>
 import {ref} from 'vue'
 import {stateUser} from "@/stores/StateUser";
+import TheButton from '@/components/UI/Buttons/Button.vue'
 import TheSelect from '@/components/UI/TheSelect/TheSelect.vue'
 import TeachersHelpers from '../../../../mixins/TeachersHelpers'
 import IconAdd from '@/assets/icons/profile/AddIcon.vue'
@@ -113,7 +141,40 @@ function addYearStudent(){
   usersStore.user[usersStore.userId].yearStudent.push(0);
 }
 
+const activeLanguageTeachet = (i, idx) => {
+  usersStore.user[usersStore.userId].langTeacher[i] = idx;
+};
 
+function addLangTeacher(){
+  if(usersStore.user[usersStore.userId].langTeacher.length > 5) return;
+  usersStore.user[usersStore.userId].langTeacher.push(0);
+}
+
+const activeLanguageItems = (i, idx) => {
+  usersStore.user[usersStore.userId].itemTeacher[i] = idx;
+};
+
+function addLangTeacherItmes(){
+  if(usersStore.user[usersStore.userId].itemTeacher.length > 5) return;
+  usersStore.user[usersStore.userId].itemTeacher.push(0);
+}
+
+
+import {  doc, updateDoc  } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+
+async function editUser(){
+  const userData = {
+    country: usersStore.user[usersStore.userId].country,
+    timedZone: usersStore.user[usersStore.userId].timedZone,
+    langArr: usersStore.user[usersStore.userId].langArr,
+    yearStudent: usersStore.user[usersStore.userId].yearStudent,
+    langTeacher: usersStore.user[usersStore.userId].langTeacher,
+    itemTeacher: usersStore.user[usersStore.userId].itemTeacher,
+    about: usersStore.user[usersStore.userId].about,
+  };
+  await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+}
 
 </script>
 

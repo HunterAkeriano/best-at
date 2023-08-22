@@ -376,6 +376,6 @@ export default {
       id: 13,
       title: '49-50 лет'
     }
-  ]
+  ],
 
 }
