@@ -315,5 +315,6 @@ async function registerStudent(){
       gap: 15px;
     }
   }
+
 }
 </style>

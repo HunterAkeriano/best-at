@@ -371,25 +371,6 @@ async function register(){
       ava: ava.value,
     }
     await FirebaseMethods.sendDocumentDataBase('privateTeachers', userInfo, objPrivateUser);
-    const objPublicUser = {
-        country: [
-          {
-            country: twoStepData.value.country,
-          }
-        ],
-        city: twoStepData.value.city,
-        adress: twoStepData.value.adress,
-        education: {
-          educationOne: lastStepData.value.educationOne,
-          educationTwo: lastStepData.value.educationTwo,
-        },
-        experience: {
-          experienceOne: lastStepData.value.experience,
-          experienceTwo: lastStepData.value.experienceTwo,
-        },
-        document: myPDFs.value,
-    }
-    await FirebaseMethods.sendDocumentDataBase('publicTeachers', userInfo, objPublicUser);
     const allInfo = {
       id: userInfo,
       login: oneStepData.value.login,
@@ -397,9 +378,9 @@ async function register(){
       email: oneStepData.value.email,
       phone: oneStepData.value.phone,
       pass: twoStepData.value.pass,
+      country: twoStepData.value.country,
       ava: ava.value,
       name: '',
-      country: 0,
       language: 0,
       timed: 0,
       about: '',
@@ -419,6 +400,18 @@ async function register(){
         teachers: true,
         company: false,
       },
+      timedZone: '',
+      yearStudent: [0, 1],
+      langTeacher: [0],
+      langArr: [0],
+      itemTeacher: [0],
+      lessonsPrice: {
+        one: 0,
+        five: 0,
+        teen: 0,
+        theeteen: 0,
+        time: 0,
+      }
     }
     await FirebaseMethods.sendDocumentDataBase('allUser', userInfo, allInfo);
 

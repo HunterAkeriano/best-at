@@ -1,7 +1,10 @@
 <template>
   <div class="account" v-if="usersStore.userId !== null">
     <h4>Аккаунт</h4>
-
+    <div class="delete" @click="modals.currentModal = 1">
+      <DeleteIcon/>
+      <p>Удалить аккаунт</p>
+    </div>
     <div class="account__inputs">
       <div class="account__inputs-input">
         <p>ФИО</p>
@@ -41,9 +44,12 @@ import {ref} from 'vue'
 import TheButton from '@/components/UI/Buttons/Button.vue'
 import IconShowPassOneState from '@/assets/icons/registration/ShowPassOne.vue'
 import IconShowPassTwoState from '@/assets/icons/registration/ShowPassTwo.vue'
+import DeleteIcon from '@/assets/icons/profile/DeleteIcon.vue'
 
 import {stateUser} from "@/stores/StateUser";
+import {useModalsStore} from "@/stores/modals";
 
+const modals = useModalsStore();
 
 // firebase
 import {  doc, updateDoc  } from "firebase/firestore";
@@ -98,6 +104,26 @@ async function editUser() {
 <style lang="scss">
 .account{
   font-family: Montserrat;
+
+  .delete{
+    position: absolute;
+    right: 20px;
+    top: 200px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    p{
+      color: #8B919E;
+      font-family: Montserrat;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 182.85%; /* 23.771px */
+      text-decoration-line: underline;
+      margin-left: 6.35px;
+    }
+  }
 
   h4{
     color: #292C32;

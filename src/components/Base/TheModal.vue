@@ -21,6 +21,7 @@
           :width="160"
           :padding="16"
           is-courses
+          @click="deletesUser"
       >
         Удалить
       </Button>
@@ -178,9 +179,45 @@ function getHours() {
   }
 }
 
+// Удаление аккаунта
+import {deleteDoc, doc} from "firebase/firestore";
+import { db, auth } from "@/firebase/firebase";
+import {deleteUser, signInWithEmailAndPassword} from "firebase/auth";
+
+import { useRouter } from 'vue-router';
+import {stateUser} from "@/stores/StateUser";
+const usersStore = stateUser();
+const router = useRouter();
+
+
+async function deletesUser(){
+  signInWithEmailAndPassword(auth, usersStore.user[usersStore.userId].email, usersStore.user[usersStore.userId].password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      deleteUser(user).then(async () => {
+      await deleteDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName));
+      usersStore.user = [];
+      usersStore.userId = null;
+      usersStore.auth = null;
+      localStorage.setItem('user', null)
+      router.push('/');
+      modalsStore.closeModal();
+  }).catch((e) => {
+    console.log(e);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
+
+
+
+
 onMounted(() => {
   getHours()
 })
+
 </script>
 
 <style scoped lang="scss">

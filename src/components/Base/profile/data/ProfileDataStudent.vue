@@ -59,8 +59,7 @@ const usersStore = stateUser();
 
 
 import {  doc, updateDoc  } from "firebase/firestore";
-import { db,  auth } from "@/firebase/firebase";
-import { updatePassword, updateEmail, signInWithEmailAndPassword} from "firebase/auth";
+import { db } from "@/firebase/firebase";
 
 function langeuages(idx){
   usersStore.user[usersStore.userId].language = idx;
