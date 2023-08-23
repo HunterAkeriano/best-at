@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <TheHeader v-if="is404Page"/>
-    <TheModal v-if="modalsStore.currentModal" />
+    <TheModal v-if="modalsStore.currentModal !== undefined" />
     <RouterView />
     <TheFooter v-if="is404Page"/>
   </div>
