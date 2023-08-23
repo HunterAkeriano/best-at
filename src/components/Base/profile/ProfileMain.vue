@@ -106,6 +106,9 @@ async function editUser() {
   font-family: Montserrat;
 
   .delete{
+    position: absolute;
+    right: 20px;
+    top: 200px;
     display: flex;
     align-items: center;
     cursor: pointer;
