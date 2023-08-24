@@ -70,6 +70,7 @@ const card = ref({
   user: '',
   cvv: '',
   timed: '',
+  main: false,
 })
 
 

@@ -149,6 +149,7 @@ const idxCardEdit = ref(0);
 
 function editCardFun(idx){
   if(editCards.value) return;
+  newCard.value = false;
   if(addCardInfo.value){
     newCard.value = false;
     addCardInfo.value = false;

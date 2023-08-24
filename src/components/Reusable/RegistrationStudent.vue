@@ -168,7 +168,15 @@ async function register(){
         teachers: false,
         company: false,
       },
-      cards: [],
+      cards: [
+        {
+          number: '',
+          user: '',
+          cvv: '',
+          timed: '',
+          main: false,
+        }
+      ],
       id: randomNumber,
     }
     
