@@ -24,7 +24,7 @@
             :width="262"
             :padding="19"
             uppercase-text
-            @click="modalsStore.currentModal = 'Пробный урок'"
+            @click="modalsStore.currentModal = 0"
         >
           забронировать урок
         </Button>
