@@ -257,7 +257,8 @@ async function sendRegistred(){
         price: '',
         bank: '',
         bik: '',
-      }
+      },
+      cards: [],
 
 
     }

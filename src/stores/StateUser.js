@@ -8,6 +8,7 @@ export const stateUser = defineStore({
     user: [],
     auth: null,
     userId: null,
+    
   }),
   actions: {
     async checkAuth() {
