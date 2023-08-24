@@ -27,7 +27,7 @@
           <h4 @click="selectMain(idx)" v-else>Сделать основной</h4>
           <div class="info__delete">
             <DeleteIcon/>
-            <p>Удалить</p>
+            <p @click="deleteCard(idx)">Удалить</p>
           </div>
         </div>
       </div>
@@ -68,12 +68,15 @@
           :width="239"
           :padding="15"
           style="margin-top: 25px;"
-          @click="editCars"
+          @click="createCard"
           >Добавить карту</TheButton>
       </div>
     </div>
 
-    <!-- <CreateCard/> -->
+    <CreateCard 
+    v-if="addCardInfo"
+    @close="closeCardMenu"
+    />
 
   </div>
 </template>
@@ -121,23 +124,36 @@ function lastWord(cardNumber) {
   return maskedPart + lastDigits;
 }
 
-function selectMain(idx) {
+async function selectMain(idx) {
   if(editCards.value) return;
-  if (idx >= 0 && idx < cards.value.length) {
-    const updatedCards = cards.value.map((item, index) => {
+  if (idx >= 0 && idx < usersStore.user[usersStore.userId].cards.length) {
+    const updatedCards = usersStore.user[usersStore.userId].cards.map((item, index) => {
       return { ...item, main: index === idx };
     });
-    cards.value = updatedCards;
+    usersStore.user[usersStore.userId].cards = updatedCards;
+
+    const userData = {
+      cards: usersStore.user[usersStore.userId].cards,
+    };
+    await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+
   }
 }
 
 const editCards = ref(false);
 const newCard = ref(true);
+const addCardInfo = ref(false)
+
+
 const idxCardEdit = ref(0);
 
 function editCardFun(idx){
   if(editCards.value) return;
-  newCard.value = false;
+  if(addCardInfo.value){
+    newCard.value = false;
+    addCardInfo.value = false;
+  }
+ 
   editCards.value = true;
   idxCardEdit.value = idx;
 }
@@ -153,6 +169,29 @@ async function editCars(){
   editCards.value = false;
   idxCardEdit.value = null;
   newCard.value = true;
+}
+
+
+function createCard(){
+  if(usersStore.user[usersStore.userId].cards.length > 3) return
+  newCard.value = false;
+  addCardInfo.value = true;
+}
+
+function closeCardMenu(){
+  newCard.value = true;
+  addCardInfo.value = false;
+}
+
+
+async function deleteCard(idx){
+  if(usersStore.user[usersStore.userId].cards[idx].main) return 
+  if(usersStore.user[usersStore.userId].cards.length == 1) return 
+  usersStore.user[usersStore.userId].cards.splice(idx, 1);
+  const userData = {
+    cards: usersStore.user[usersStore.userId].cards,
+  };
+  await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
 }
 
 </script>
