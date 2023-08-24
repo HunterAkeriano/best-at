@@ -146,6 +146,7 @@ async function getUser(){
       lessonsPrice: doc.data().lessonsPrice,
       urAdress: doc.data().urAdress,
       info: doc.data().info,
+      cards: doc.data().cards,
     })
   })
 }

@@ -1,11 +1,11 @@
 <template>
   <div class="edit" v-if="usersStore.userId !== null">
-    <h3>Редактировать карту</h3>
+    <h3>Добавить карту</h3>
 
     <div class="edit__input" style="margin-top: 20px;">
       <p>Номер карты</p>
       <input type="text" 
-      v-model="usersStore.user[usersStore.userId].cards[index].number"
+      v-model="card.number"
       @input="onCardNumberInput"
       maxlength="19">
     </div>
@@ -13,7 +13,7 @@
     <div class="edit__input" style="margin-top: 15px;">
       <p>Владелец карты</p>
       <input type="text" 
-      v-model="usersStore.user[usersStore.userId].cards[index].user">
+      v-model="card.user">
     </div>
 
     <div class="blocks" style="display: flex; gap: 25px; align-items: center;">
@@ -23,7 +23,7 @@
       @input="onCardTimedInput"
       style="width: 172px;" 
       maxlength="5"
-      v-model="usersStore.user[usersStore.userId].cards[index].timed">
+      v-model="card.timed">
     </div>
     <div class="edit__input" style="margin-top: 15px;">
       <p>CVV</p>
@@ -31,25 +31,47 @@
       style="width: 131px;" 
       @input="onCardCvvInput"
       maxlength="3"
-      v-model="usersStore.user[usersStore.userId].cards[index].cvv">
+      v-model="card.cvv">
     </div>
+    </div>
+
+    <div class="btn" style="display: flex; align-items: center;">
+      <TheButton
+          :width="239"
+          :padding="15"
+          style="margin-top: 25px;"
+          @click="createCards"
+          >Привязать</TheButton>
+
+          <p 
+          style="color: #8B919E;
+          font-family: Montserrat;
+          font-size: 13px;
+          font-style: normal;
+          font-weight: 600;
+          text-decoration: underline;
+          margin-top: 20px;
+          margin-left: 25px;
+          cursor: pointer;"
+          >Отмена</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import {onMounted} from 'vue'
+import {ref} from 'vue';
+import TheButton from '@/components/UI/Buttons/Button.vue'
+
 import {stateUser} from "@/stores/StateUser";
 const usersStore = stateUser();
 
-
-const props = defineProps({
-  index: {
-    type: Number,
-    default: 0,
-    required: true,
-  }
+const card = ref({
+  number: '',
+  user: '',
+  cvv: '',
+  timed: '',
 })
+
 
 function formatCardNumber(cardNumber) {
   let input = cardNumber.replace(/\D/g, '');
@@ -62,7 +84,7 @@ function formatCardNumber(cardNumber) {
 }
 
 const onCardNumberInput = (event) => {
-  usersStore.user[usersStore.userId].cards[props.index].number = formatCardNumber(event.target.value);
+  card.value.number = formatCardNumber(event.target.value);
 };
 
 
@@ -75,18 +97,18 @@ function formatCardTimed(cardTimed) {
 }
 
 const onCardTimedInput = (event) => {
-  usersStore.user[usersStore.userId].cards[props.index].timed = formatCardTimed(event.target.value);
+  card.value.timed = formatCardTimed(event.target.value);
 };
 
 const onCardCvvInput = (event) => {
-  usersStore.user[usersStore.userId].cards[props.index].cvv = event.target.value.replace(/\D/g, '').substring(0, 3);
+  card.value.cvv = event.target.value.replace(/\D/g, '').substring(0, 3);
 };
 
 
-onMounted(() => {
-  usersStore.user[usersStore.userId].cards[props.index].number = formatCardNumber( usersStore.user[usersStore.userId].cards[props.index].number);
-  usersStore.user[usersStore.userId].cards[props.index].timed = formatCardTimed( usersStore.user[usersStore.userId].cards[props.index].timed);
-});
+async function createCards(){
+
+
+}
 
 </script>
 

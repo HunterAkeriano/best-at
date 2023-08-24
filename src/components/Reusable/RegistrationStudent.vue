@@ -168,6 +168,7 @@ async function register(){
         teachers: false,
         company: false,
       },
+      cards: [],
       id: randomNumber,
     }
     

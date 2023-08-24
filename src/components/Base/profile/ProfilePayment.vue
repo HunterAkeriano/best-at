@@ -9,7 +9,7 @@
 
     <div class="payments__cards">
       <div class="payments__cards-card"
-        v-for="(card, idx) in cards"
+        v-for="(card, idx) in usersStore.user[usersStore.userId].cards"
         >
         <div class="card"
         @click="editCardFun(idx)">
@@ -44,7 +44,7 @@
           :width="239"
           :padding="15"
           style="margin-top: 25px;"
-          @click="editUser()"
+          @click="editCars"
           >Сохранить изменения</TheButton>
 
           <p 
@@ -56,9 +56,25 @@
           text-decoration: underline;
           margin-top: 20px;
           margin-left: 25px;
-          cursor: pointer;">Отмена</p>
+          cursor: pointer;"
+          @click="editCards = false"
+          >Отмена</p>
       </div>
     </div>
+
+    <div class="payments__components" v-if="newCard">
+      <div class="payments__components-btn">
+        <TheButton
+          :width="239"
+          :padding="15"
+          style="margin-top: 25px;"
+          @click="editCars"
+          >Добавить карту</TheButton>
+      </div>
+    </div>
+
+    <!-- <CreateCard/> -->
+
   </div>
 </template>
 
@@ -66,30 +82,18 @@
 <script setup>
 import {ref} from 'vue';
 
+import {stateUser} from "@/stores/StateUser";
+const usersStore = stateUser();
+
+
 import MasterCardIcon from '@/assets/icons/profile/MasterCard.vue'
 import VisaCardIcon from '@/assets/icons/profile/VisaCard.vue'
 import DeleteIcon from '@/assets/icons/profile/DeleteIcon.vue'
 
 import EditCard from '../profile/payments/Edit.vue'
+import CreateCard from '../profile/payments/Create.vue'
+
 import TheButton from '@/components/UI/Buttons/Button.vue'
-
-const cards = ref([
-  {
-    main: true,
-    number: '4441 5588 6666 8888',
-    user: 'Дмитрий Гулак',
-    timed: '02/25',
-    cvv: '223',
-  },
-
-  {
-    main: false,
-    number: '5556 5588 6666 8888',
-    user: 'Дмитрий Гулак',
-    timed: '02/25',
-    cvv: '223',
-  }
-])
 
 function selectCard(cardNumber) {
   const firstDigits = cardNumber.substring(0, 4);
@@ -118,6 +122,7 @@ function lastWord(cardNumber) {
 }
 
 function selectMain(idx) {
+  if(editCards.value) return;
   if (idx >= 0 && idx < cards.value.length) {
     const updatedCards = cards.value.map((item, index) => {
       return { ...item, main: index === idx };
@@ -127,13 +132,28 @@ function selectMain(idx) {
 }
 
 const editCards = ref(false);
+const newCard = ref(true);
 const idxCardEdit = ref(0);
 
 function editCardFun(idx){
+  if(editCards.value) return;
+  newCard.value = false;
   editCards.value = true;
   idxCardEdit.value = idx;
 }
 
+
+import {  doc, updateDoc  } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+async function editCars(){
+  const userData = {
+    cards: usersStore.user[usersStore.userId].cards,
+  };
+  await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+  editCards.value = false;
+  idxCardEdit.value = null;
+  newCard.value = true;
+}
 
 </script>
 
