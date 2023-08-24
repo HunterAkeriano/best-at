@@ -1,6 +1,8 @@
 <template>
   <div class="modal">
-    <div class="modal__bg" />
+    <div class="modal__bg">
+      <img src="../../assets/img/modal/modal-bg.png" alt="">
+    </div>
 
     <div class="modal__close" @click="modalsStore.closeModal">
       <Close />
@@ -200,7 +202,7 @@ async function deletesUser(){
       usersStore.userId = null;
       usersStore.auth = null;
       localStorage.setItem('user', null)
-      router.push('/');
+      await router.push('/');
       modalsStore.closeModal();
   }).catch((e) => {
     console.log(e);
@@ -225,11 +227,23 @@ onMounted(() => {
   position: fixed;
   width: 100%;
   height: 100vh;
-  background: #FFF url("../../assets/img/modal/modal-bg.png") no-repeat;
+  background: #FFF;
   z-index: 1001;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  &__bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 
   &__close {
     position: absolute;
