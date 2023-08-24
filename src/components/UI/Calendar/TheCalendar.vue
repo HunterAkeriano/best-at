@@ -2,7 +2,7 @@
   <div class="calendar" :class="{ 'calendar--mini': miniCalendar, 'calendar--month': monthCalendar }" >
     <div class="calendar__header" v-if="!miniCalendar">
       <button @click="prevBtn">&lt;</button>
-      <h2 id="weekRange"></h2>
+      <h2 class="calendar__header-title">{{ getCalendarTitle() }}</h2>
       <button @click="nextBtn">&gt;</button>
     </div>
     <table class="calendar__table">
@@ -44,6 +44,29 @@ const daysArray = ref([])
 const hoursArray = ref([])
 const currentDate = ref(null)
 const currentMonth = ref(null)
+const monthNames = [
+  "Январь", "Февраль", "Март",
+  "Апрель", "Май", "Июнь",
+  "Июль", "Август", "Сентябрь",
+  "Октябрь", "Ноябрь", "Декабрь"
+]
+
+function getCalendarTitle() {
+  if (currentDate.value) {
+    if (props.monthCalendar) {
+      return monthNames[currentDate.value.getMonth()]
+    }
+    else {
+      let nextWeek = new Date()
+      nextWeek.setDate(currentDate.value.getDate() + 7)
+      let formattedToday = `${currentDate.value.getDate()} ${getFormattedMonthName(currentDate.value.getMonth())} ${currentDate.value.getFullYear()} г.`
+      let formattedNextWeek = `${nextWeek.getDate()} ${getFormattedMonthName(nextWeek.getMonth())} ${nextWeek.getFullYear()} г.`
+      return `${formattedToday} – ${formattedNextWeek}`
+    }
+  } else {
+    return ''
+  }
+}
 
 function getCurrentMonth() {
   daysArray.value = []
@@ -95,6 +118,16 @@ function getLocalDate(date) {
     const dateFormatter = new Intl.DateTimeFormat('ru-RU', options)
     return date.getDate() + ' ' + dateFormatter.formatToParts(date)[0].value
   }
+}
+
+function getFormattedMonthName(monthIndex) {
+  const formattedMonths = [
+    "января", "февраля", "марта",
+    "апреля", "мая", "июня",
+    "июля", "августа", "сентября",
+    "октября", "ноября", "декабря"
+  ];
+  return formattedMonths[monthIndex];
 }
 
 function prevBtn() {
@@ -179,7 +212,7 @@ onMounted(() => {
 }
 
 .calendar--month {
-  max-width: 100%;
+  max-width: 940px;
 
   th {
     min-width: 27px;
