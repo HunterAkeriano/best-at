@@ -18,7 +18,6 @@
   </div>
 </template>
 
-
 <script setup>
 import TeachersSwiper from '@/components/Base/TeachersSwiper.vue'
 import PopularCourses from '@/components/Base/PopularCourses.vue'
@@ -29,11 +28,3 @@ import TrialLesson from '@/components/Base/TrialLesson.vue'
 import TeacherWord from '@/components/Base/TeacherWord.vue'
 import ReviewsCourse from '@/components/Base/ReviewsCourse.vue'
 </script>
-
-
-<style lang="scss">
-.teachers {
-  height: 854px;
-}
-</style>
-
