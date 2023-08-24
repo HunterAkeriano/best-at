@@ -3,46 +3,46 @@
     <div class="teacher-card__column">
       <div class="teacher-card__pfp">
         <div class="teacher-card__fav">
-          <!--        favourite icon          -->
+          <Heart/>
         </div>
 
-        <!--       img         -->
+        <img :src="teacher.photo" alt="">
       </div>
 
-      <TheStars :rating="2" />
+      <TheStars :rating="teacher.rate"/>
 
-      <div class="teacher-card__recommended" />
+      <div class="teacher-card__recommended" style="display: none"/>
     </div>
 
     <div class="teacher-card__column">
       <div class="teacher-card__info">
-        <div class="teacher-card__name">Анна Михайлова</div>
+        <div class="teacher-card__name">{{ teacher.nameUser }}</div>
 
-        <div class="teacher-card__country">Украина</div>
+        <div class="teacher-card__country">{{ TeachersHelpers.country[teacher.countryUser].title }}</div>
       </div>
 
       <div class="teacher-card__info">
         <div class="teacher-card__label">Язык обучения</div>
 
-        <div class="teacher-card__text">испанский</div>
+        <div class="teacher-card__text">{{ TeachersHelpers.langeuages[teacher.langTeacher].title }}</div>
       </div>
 
       <div class="teacher-card__info">
         <div class="teacher-card__label">Языки общения</div>
 
-        <div class="teacher-card__text">английский, голландский, китайский</div>
+        <div class="teacher-card__text">{{ TeachersHelpers.langeuages[teacher.langTeacher].title }}</div>
       </div>
 
       <div class="teacher-card__info">
         <div class="teacher-card__label">Кол-во учеников</div>
 
-        <div class="teacher-card__text">15</div>
+        <div class="teacher-card__text">{{ teacher.students }}</div>
       </div>
 
       <div class="teacher-card__info">
         <div class="teacher-card__label">Кол-во проведенных уроков</div>
 
-        <div class="teacher-card__text">34</div>
+        <div class="teacher-card__text">{{ teacher.isLessons }}</div>
       </div>
     </div>
 
@@ -58,24 +58,30 @@
         </div>
       </div>
 
-      <div class="teacher-card__description" v-if="activeTab === 'Описание'">
-        Укрепление и развитие структуры позволяет выполнять важные задания по разработке системы обучения кадров, соответствует насущным потребностям.
-        Укрепление и развитие структуры позволяет выполнять важные задания по разработке системы обучения кадров, соответствует насущным потребностям.
+      <div class="teacher-card__video" v-if="activeTab === 'Видеоприветствие'">
+        <iframe width="277" height="166" :src="teacher.youtbeIframe" title="YouTube video player"
+                frameborder="0" allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        />
       </div>
 
-      <TheCalendar v-else-if="activeTab === 'Календарь'" mini-calendar />
+      <div class="teacher-card__description" v-if="activeTab === 'Описание'">
+        {{ teacher.description }}
+      </div>
+
+      <TheCalendar v-else-if="activeTab === 'Календарь'" mini-calendar/>
 
       <div class="teacher-card__buttons">
         <Button
             :width="161"
-            :padding="17"
+            :padding="16"
         >
           Пробный урок
         </Button>
 
         <Button
             :width="226"
-            :padding="17"
+            :padding="16"
             is-courses
         >
           Профиль преподавателя
@@ -86,33 +92,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import TheCalendar from '@/components/UI/TheCalendar.vue'
+import {ref} from 'vue'
+import TheCalendar from '@/components/UI/Calendar/TheCalendar.vue'
 import Button from '@/components/UI/Buttons/Button.vue'
 import TheStars from '@/components/Base/TheStars.vue'
+import Heart from '@/assets/icons/Heart.vue'
+import TeachersHelpers from '../../../mixins/TeachersHelpers'
 
 
 defineProps({
   teacher: {
     type: Object,
-    default: () => {}
+    default: () => {
+    }
   }
 })
 
 const tabs = ['Видеоприветствие', 'Описание', 'Календарь']
 const activeTab = ref('Видеоприветствие')
 
-function switchTab (tab) {
+function switchTab(tab) {
   activeTab.value = tab
 }
 </script>
 
 <style scoped lang="scss">
 .teacher-card {
-  //
   width: 1030px;
   height: 370px;
-  //
   display: flex;
   align-items: flex-start;
   padding: 37px 35px 35px;
@@ -129,20 +136,20 @@ function switchTab (tab) {
     height: 100%;
 
     &:nth-last-child(1) {
-      margin-right: 0;
-      margin-left: 48px;
+      margin-right: 8px;
+      margin-left: auto;
     }
   }
 
   &__pfp {
-    //
     width: 155px;
     height: 155px;
-    background: #DFE3E7;
-    //
-    border-radius: 100px;
     position: relative;
     margin-bottom: 20px;
+
+    img {
+      border-radius: 100px;
+    }
   }
 
   &__fav {
@@ -151,16 +158,17 @@ function switchTab (tab) {
     right: -5px;
     width: 46px;
     height: 46px;
+    display: flex;
     background: #FFFFFF;
     border-radius: 100px;
     box-shadow: 0 10px 60px 0 rgba(42, 102, 193, 0.15);
+    justify-content: center;
+    align-items: center;
   }
 
   &__recommended {
-    //
     width: 144px;
     height: 36px;
-    //
     border-radius: 20px;
     background: #28DA9A;
     margin: 0 auto;
@@ -240,10 +248,12 @@ function switchTab (tab) {
   &__buttons {
     display: flex;
     margin-top: auto;
+    margin-bottom: 7px;
 
     .ui-button_courses {
       margin-left: 16px;
     }
   }
+
 }
 </style>
