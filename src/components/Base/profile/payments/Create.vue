@@ -103,11 +103,16 @@ const onCardTimedInput = (event) => {
 const onCardCvvInput = (event) => {
   card.value.cvv = event.target.value.replace(/\D/g, '').substring(0, 3);
 };
-
-
+const emits = defineEmits(['close', 'click',]);
+import {  doc, updateDoc  } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
 async function createCards(){
-
-
+  usersStore.user[usersStore.userId].cards.push(card.value);
+  const userData = {
+    cards: usersStore.user[usersStore.userId].cards,
+  };
+  await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+  emits('close');
 }
 
 </script>
