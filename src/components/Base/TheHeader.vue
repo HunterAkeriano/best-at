@@ -12,7 +12,7 @@
         <nav class="header__link-nav">
           <ul>
             <li v-for="item in navLink">
-               <router-link :to="{ path: `${item.router}` }"> {{ item.link }} </router-link></li>
+               <router-link :to="{ path: `/${item.router}` }"> {{ item.link }} </router-link></li>
           </ul>
         </nav>
       </div>
@@ -89,7 +89,7 @@ const navLink = [
   },
   {
     link: 'Сообщество',
-    router: 'community'
+    router: 'forum'
   },
 ]
 

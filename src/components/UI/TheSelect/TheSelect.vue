@@ -34,12 +34,10 @@ const props = defineProps({
   items: {
     type: Array,
     default: () => ([]),
-    required: true,
   },
   idx: {
     type: Number,
     default: 0,
-    required: true,
   }
 })
 

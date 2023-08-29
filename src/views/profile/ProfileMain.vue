@@ -61,7 +61,10 @@
                 <PaymentIcon/>
                 <p>Платежная информация</p>
               </div>
-              <div class="links__items"  v-if="usersStore.user[usersStore.userId].type.teachers || usersStore.user[usersStore.userId].type.company">
+              <div class="links__items" 
+              @click="selectRouter('poslugi')" 
+              :class="{'active': SELECTED_ROUTER == 'poslugi'}"
+              v-if="usersStore.user[usersStore.userId].type.teachers || usersStore.user[usersStore.userId].type.company">
                 <EduIcon/>
                 <p>Услуги</p>
               </div>
@@ -86,6 +89,7 @@
           <ProfileDataTeacher v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.teachers"/>
           <ProfileDataCompany v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.company"/>
           <ProfilePayment v-if="SELECTED_ROUTER == 'payments'"/>
+          <ProfilePoslugi v-if="SELECTED_ROUTER == 'poslugi'  && usersStore.user[usersStore.userId].type.teachers"/>
         </div>
       </div>
     </div>
@@ -105,6 +109,7 @@ import ProfileDataStudent from '@/components/Base/profile/data/ProfileDataStuden
 import ProfileDataTeacher from '@/components/Base/profile/data/ProfileDataTeacher.vue'
 import ProfileDataCompany from '@/components/Base/profile/data/ProfileDataCompany.vue'
 import ProfilePayment from '@/components/Base/profile/ProfilePayment.vue'
+import ProfilePoslugi from '@/components/Base/profile/ProfilePoslugi.vue'
 
 import UserIcon from '@/assets/icons/profile/UserIcon.vue'
 import DataIcon from '@/assets/icons/profile/DataIcon.vue'

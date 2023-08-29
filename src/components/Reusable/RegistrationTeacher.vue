@@ -412,7 +412,15 @@ async function register(){
         theeteen: 0,
         time: 0,
       },
-      cards: [],
+      cards: [
+        {
+          number: '',
+          user: '',
+          cvv: '',
+          timed: '',
+          main: false,
+        }
+      ],
     }
     await FirebaseMethods.sendDocumentDataBase('allUser', userInfo, allInfo);
 

@@ -258,7 +258,15 @@ async function sendRegistred(){
         bank: '',
         bik: '',
       },
-      cards: [],
+      cards: [
+        {
+          number: '',
+          user: '',
+          cvv: '',
+          timed: '',
+          main: false,
+        }
+      ],
 
 
     }

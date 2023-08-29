@@ -154,7 +154,6 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
 import {stateUser} from "@/stores/StateUser";
 import TheButton from '@/components/UI/Buttons/Button.vue'
 import TheSelect from '@/components/UI/TheSelect/TheSelect.vue'

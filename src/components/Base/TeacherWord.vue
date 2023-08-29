@@ -52,7 +52,7 @@ import {getDocs,  collection} from "firebase/firestore";
 
 import AllStar from '@/assets/img/main/AllStar.vue'
 import AllTeacher from '@/assets/img/main/AllTeacher.vue'
-import TheStars from '@/components/Base/TheStars.vue'
+import TheStars from '@/components/UI/Stars/TheStars.vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'

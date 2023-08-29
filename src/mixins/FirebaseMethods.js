@@ -21,7 +21,6 @@ export default{
   },
 
   async sendDocumentDataBase(selectCollection, nameDocument, obj){
-    this.prossec = true;
     await setDoc(doc(db, selectCollection, `${nameDocument}`), obj);
   },
 
