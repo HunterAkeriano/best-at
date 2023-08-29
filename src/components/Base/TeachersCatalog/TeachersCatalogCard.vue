@@ -95,7 +95,7 @@
 import {ref} from 'vue'
 import TheCalendar from '@/components/UI/Calendar/TheCalendar.vue'
 import Button from '@/components/UI/Buttons/Button.vue'
-import TheStars from '@/components/Base/TheStars.vue'
+import TheStars from '@/components/UI/Stars/TheStars.vue'
 import Heart from '@/assets/icons/Heart.vue'
 import TeachersHelpers from '../../../mixins/TeachersHelpers'
 
