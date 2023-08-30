@@ -178,6 +178,13 @@ async function register(){
         }
       ],
       id: randomNumber,
+      ava: [
+        {
+          name: '',
+          obj: null,
+          url: null,
+        }
+      ],
     }
     
     await createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password);
