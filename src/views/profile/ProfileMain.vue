@@ -15,8 +15,21 @@
         <div class="profile__wrapper-left">
           <div class="profile__wrapper-user" v-if="usersStore.userId !== null">
             <div class="user">
-              <div class="user__photo" style="width: 65px; height: 65px; background: red;">
+              <div class="user__photo"
+              v-for="item in usersStore.user[usersStore.userId].ava" 
+              style="cursor: pointer;">
+                <img 
+                v-if="item.url !== null"
+                style="border-radius: 50px;"
+                :src="item.url"   
+                alt="" height="65" width="65">
+                <img  v-if="item.url == null "  src="@/assets/img/registration/Avatar.svg"   alt="" height="65" width="65">
                 
+
+                <div class="user__photo-input">
+                  <input id="img" @change="onFileSelectedAva($event)" ref="fileInput" type="file" accept="image/* " >
+                  <label for="img">Загрузить фотографию</label>
+                </div>
               </div>
               <div class="user__info">
                 <div class="user__info-name">
@@ -99,7 +112,7 @@
 <script setup>
 import {ref, onBeforeMount, watch} from 'vue'
 import {stateUser} from "@/stores/StateUser";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc} from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
 const usersStore = stateUser();
@@ -152,6 +165,7 @@ async function getUser(){
       urAdress: doc.data().urAdress,
       info: doc.data().info,
       cards: doc.data().cards,
+      ava: doc.data().ava,
     })
   })
 }
@@ -205,6 +219,36 @@ watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
   }
 });
 
+
+// ava
+import FirebaseMethods from '../../mixins/FirebaseMethods';
+
+async function onFileSelectedAva(event) {
+  const top = event.target.files;
+  usersStore.user[usersStore.userId].ava = [];
+  for (let i = 0; i < top.length; i++) {
+    const file = top[i];
+    const img = new Image();
+    await new Promise(resolve => {
+      img.onload = resolve;
+      img.onerror = resolve;
+      img.src = URL.createObjectURL(file);
+    });
+    usersStore.user[usersStore.userId].ava.push({
+      obj: file,
+      name: 'ava-' + Date.now(),
+      url: URL.createObjectURL(file)
+    });     
+  }
+  const userInfo = 'ava-' + Date.now();
+  const docInfo = `users/${userInfo}`;
+  await FirebaseMethods.sendDocumentStorage(usersStore.user[usersStore.userId].ava, docInfo);
+  const userData = {
+    ava: usersStore.user[usersStore.userId].ava,
+  };
+  await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+}
+
 </script>
 
 <style lang="scss">
@@ -229,6 +273,7 @@ watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
       margin-right: 8px;
     }
   }
+
 
   &__title{
     margin-top: 20px;
@@ -299,6 +344,34 @@ watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
                 text-decoration: none;
                 cursor: pointer;
               }
+            }
+          }
+        }
+
+        &__photo{
+          position: relative;
+          z-index: 5;
+          &-input{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            label{
+              display: block;
+              overflow: hidden;
+              opacity: 0;
+              height: 0;
+              visibility: visible;
+              height: 65px;
+              margin-top: -23px;
+              cursor: pointer;
+            }
+            input{
+              opacity: 0;
+              visibility: hidden;
+              pointer-events: none;
+              height: 0;
             }
           }
         }
