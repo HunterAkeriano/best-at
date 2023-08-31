@@ -4,8 +4,7 @@
     <div class="footer__row">
       <div class="footer__row-one">
         <div class="footer__logo">
-          <p>BeBest</p>
-          <span>at</span>
+          <p>GuruLMS</p>
         </div>
         <div class="footer__social">
           <div class="footer__social-one">

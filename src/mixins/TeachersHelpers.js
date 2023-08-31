@@ -462,4 +462,67 @@ export default {
       title: 'Для взрослых'
     },
   ],
+
+  timeStart: [
+    {
+      id: 0,
+      title: '06:00',
+    },
+    {
+      id: 1,
+      title: '08:00',
+    },
+
+    {
+      id: 2,
+      title: '10:00',
+    },
+    {
+      id: 3,
+      title: '12:00',
+    },
+    {
+      id: 3,
+      title: '14:00',
+    },
+    {
+      id: 4,
+      title: '16:00',
+    },
+    {
+      id: 4,
+      title: '18:00',
+    }
+  ],
+
+  typed: [
+    {
+      id: 0,
+      title: 'Beginners',
+    },
+    {
+      id: 1,
+      title: 'Elementary ',
+    },
+    {
+      id: 2,
+      title: 'Pre-Intermediate ',
+    },
+    {
+      id: 3,
+      title: 'Intermediate  ',
+    },
+    {
+      id: 4,
+      title: 'Upper-Intermediate  ',
+    },
+    {
+      id: 5,
+      title: 'Advanced',
+    },
+    {
+      id: 6,
+      title: 'Proficiency ',
+    },
+  ],
 }
