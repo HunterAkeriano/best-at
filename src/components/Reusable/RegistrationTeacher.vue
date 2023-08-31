@@ -56,7 +56,8 @@
     <div class="teacher-forms__two-step" :class="{'teacher-forms_disabled': stepModal.three}"  v-if="stepModal.two">
       <div class="teacher-forms__photo">
         <div class="teacher-forms__photo-img" v-for="item in ava">
-          <img :src="item.url" alt="" height="54" width="54">
+          <img v-if="item.url !== null" :src="item.url" alt="" height="54" width="54">
+          <img v-else src="@/assets/img/registration/Avatar.svg" alt="" height="54" width="54">
         </div>
         <div class="teacher-forms__photo-text">
           <input id="img" @change="onFileSelectedAva($event)"   ref="fileInput" type="file" accept="image/* " >
@@ -264,7 +265,7 @@ const  ava = ref([
   {
     obj: null,
     name: 'ava-' + Date.now(),
-    url: new URL('../../assets/img/registration/Avatar.svg', import.meta.url),
+    url: null,
     }
 ]);
 
@@ -360,7 +361,10 @@ async function register(){
   const userInfo = 'teacher-' + Date.now();
   const avaInfo = `users/teachers/${userInfo}/ava/`;
   const docInfo = `users/teachers/${userInfo}/doc/`;
-  await FirebaseMethods.sendDocumentStorage(ava.value, avaInfo);
+  if(ava.value[0].obj !== null){
+    await FirebaseMethods.sendDocumentStorage(ava.value, avaInfo);
+  }
+  
   await FirebaseMethods.sendDocumentStorage(myPDFs.value, docInfo);
     const objPrivateUser = {
       login: oneStepData.value.login,
@@ -422,8 +426,9 @@ async function register(){
         }
       ],
     }
+    
     await FirebaseMethods.sendDocumentDataBase('allUser', userInfo, allInfo);
-
+   
     await FirebaseMethods.registerUser(oneStepData.value.email, oneStepData.value.password)
 }
 

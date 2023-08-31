@@ -4,8 +4,7 @@
     <div class="header__content" :class="{'header__content_auth': authStore.auth}">
       <div class="header__logo">
         <router-link :to="{ path: `/` }">
-          <p>BeBest</p>
-          <span>at</span>
+          <p>GuruLMS</p>
         </router-link>
       </div>
       <div class="header__link">

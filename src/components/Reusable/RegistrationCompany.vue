@@ -267,6 +267,13 @@ async function sendRegistred(){
           main: false,
         }
       ],
+      ava: [
+        {
+          name: '',
+          obj: null,
+          url: null,
+        }
+      ],
 
 
     }
