@@ -79,13 +79,15 @@
           Пробный урок
         </Button>
 
-        <Button
-            :width="226"
-            :padding="16"
-            is-courses
-        >
-          Профиль преподавателя
-        </Button>
+        <RouterLink :to="`/teachers/${teacher.id}`">
+          <Button
+              :width="226"
+              :padding="16"
+              is-courses
+          >
+            Профиль преподавателя
+          </Button>
+        </RouterLink>
       </div>
     </div>
   </div>

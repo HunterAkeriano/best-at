@@ -248,6 +248,7 @@ onMounted(() => {
 
   &__close {
     position: absolute;
+    cursor: pointer;
     right: 11px;
     top: 11px;
   }

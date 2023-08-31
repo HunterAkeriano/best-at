@@ -16,6 +16,12 @@ const router = createRouter({
       component: () => import("@/views/TeachersCatalogView.vue" /* webpackChunkName: "teachers" */)
     },
     {
+      path: '/teachers/:id',
+      props: true,
+      name: 'teacher',
+      component: () => import("@/views/TeacherView.vue" /* webpackChunkName: "teacher" */)
+    },
+    {
       name: 'Registration Page',
       path: '/registration',
       component: () => import("@/views/RegistrationView.vue" /* webpackChunkName: "registration" */),
@@ -46,7 +52,7 @@ const router = createRouter({
       name: 'Forum Page',
       path: '/forum',
       component: () => import("@/views/forum/ForumMain.vue" /* webpackChunkName: "registration" */),
-    }, 
+    },
     {
       name: 'Forum Theme Page',
       path: '/forum/:id',
@@ -81,7 +87,7 @@ router.beforeEach((to, from, next) => {
       } else {
         next('/');
       }
-    }  
+    }
     else {
       next();
     }
