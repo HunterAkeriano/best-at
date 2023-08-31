@@ -1,9 +1,11 @@
 <template>
   <div class="calendar" :class="{ 'calendar--mini': miniCalendar, 'calendar--month': monthCalendar }" >
     <div class="calendar__header" v-if="!miniCalendar">
-      <button @click="prevBtn">&lt;</button>
-      <h2 class="calendar__header-title">{{ getCalendarTitle() }}</h2>
-      <button @click="nextBtn">&gt;</button>
+      <LArrow @click="prevBtn"/>
+
+      <div class="calendar__header-title">{{ getCalendarTitle() }}</div>
+
+      <RArrow @click="nextBtn"/>
     </div>
     <table class="calendar__table">
       <thead>
@@ -27,6 +29,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import LArrow from '@/assets/icons/LArrow.vue'
+import RArrow from '@/assets/icons/RArrow.vue'
 
 
 const props = defineProps({
@@ -176,14 +180,22 @@ onMounted(() => {
 <style lang="scss">
 .calendar {
   max-width: 800px;
-  border: 1px solid #DCE3E8;
   background: #FFF;
 
   &__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 10px;
+
+    &-title {
+      color: #292C32;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 22px;
+      margin: 0 10px;
+    }
   }
 
   &__table {
@@ -222,6 +234,7 @@ onMounted(() => {
 
 .calendar--mini {
   max-width: 405px;
+  border: 1px solid #DCE3E8;
 
   th {
     width: 50px;
