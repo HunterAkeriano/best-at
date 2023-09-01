@@ -1,211 +1,231 @@
 <template>
-  <div class="main page teacher">
-    <div class="container" v-if="teacher">
+  <div class="main page company">
+    <div class="container" v-if="company">
       <div class="page__navigation">
         <a class="page__navigation-link">
           Главная
         </a>
 
         <p class="page__navigation-current">
-          <span>/</span> {{ teacher.nameUser }}
+          <span>/</span> {{ company.nameUser }}
         </p>
       </div>
 
       <div class="page__content">
-        <div class="page__content-teacher">
-          <div class="teacher__card">
-            <div class="teacher__card-intro">
-              <iframe width="883" height="450" :src="teacher.youtbeIframe" title="YouTube video player"
+        <div class="page__content-company">
+          <div class="company__card">
+            <div class="company__card-intro">
+              <iframe width="883" height="450" :src="company.youtbeIframe" title="YouTube video player"
                       frameborder="0" allowfullscreen
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               />
             </div>
 
-            <div class="teacher__card-content">
-              <div class="teacher__card-left">
-                <img class="teacher__card-pfp" :src="teacher.photo" alt="">
+            <div class="company__card-content">
+              <div class="company__card-left">
+                <img class="company__card-pfp" :src="company.photo" alt="">
 
-                <TheStars :rating="teacher.rate"/>
+                <TheStars :rating="company.rate"/>
 
-                <div class="teacher__card-top">Рекомендуем</div>
+                <div class="company__card-top">Рекомендуем</div>
               </div>
 
-              <div class="teacher__card-right">
+              <div class="company__card-right">
                 <div class="row">
-                  <div class="teacher__card-tag teacher__card-tag--time">12:35 pm</div>
+                  <div class="company__card-tag company__card-tag--time">12:35 pm</div>
 
-                  <div class="teacher__card-tag teacher__card-tag--exp"><span>Стаж:</span> 2 года</div>
+                  <div class="company__card-tag company__card-tag--exp"><span>Стаж:</span> 2 года</div>
                 </div>
 
-                <div class="teacher__card-name">{{ teacher.nameUser }}</div>
+                <div class="company__card-name">{{ company.nameUser }}</div>
 
-                <div class="teacher__card-country">{{ TeachersHelpers.country[teacher.countryUser].title }}</div>
+                <div class="company__card-country">{{ teachersHelpers.country[company.countryUser].title }}</div>
 
-                <div class="teacher__card-column">
-                  <div class="teacher__card-info">
-                    <div class="teacher__card-label">Язык обучения</div>
+                <div class="company__card-column">
+                  <div class="company__card-info">
+                    <div class="company__card-label">Язык обучения</div>
 
-                    <div class="teacher__card-text">{{ TeachersHelpers.langeuages[teacher.langTeacher].title }}</div>
+                    <div class="company__card-text">{{ teachersHelpers.langeuages[company.langTeacher].title }}</div>
                   </div>
 
-                  <div class="teacher__card-info">
-                    <div class="teacher__card-label">Языки общения</div>
+                  <div class="company__card-info">
+                    <div class="company__card-label">Языки общения</div>
 
-                    <div class="teacher__card-text">{{ TeachersHelpers.langeuages[teacher.langTeacher].title }}</div>
+                    <div class="company__card-text">{{ teachersHelpers.langeuages[company.langTeacher].title }}</div>
                   </div>
 
-                  <div class="teacher__card-info">
-                    <div class="teacher__card-label">Кол-во учеников</div>
+                  <div class="company__card-info">
+                    <div class="company__card-label">Кол-во учеников</div>
 
-                    <div class="teacher__card-text">{{ teacher.students }}</div>
+                    <div class="company__card-text">{{ company.students }}</div>
                   </div>
 
-                  <div class="teacher__card-info">
-                    <div class="teacher__card-label">Кол-во проведенных уроков</div>
+                  <div class="company__card-info">
+                    <div class="company__card-label">Кол-во проведенных уроков</div>
 
-                    <div class="teacher__card-text">{{ teacher.isLessons }}</div>
+                    <div class="company__card-text">{{ company.isLessons }}</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="teacher__section">
-            <div class="teacher__section-title">Обо мне</div>
+          <div class="company__section">
+            <div class="company__section-title">Отзывы</div>
+          </div>
 
-            <div class="teacher__description-wrapper">
+          <div class="company__section">
+            <div class="company__section-title">Команда</div>
+
+            <div class="company__team">
+              <div class="company__team-item" v-for="item in 5" :key="item">
+                <img class="company__team-pfp" src="" alt="">
+
+                <div>
+                  <div class="company__team-name">Алексей Кузьменко Андреевич</div>
+
+                  <div class="company__team-lang">Язык обучения: <span>английский</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="company__section">
+            <div class="company__section-title">О нашей команде</div>
+
+            <div class="company__description-wrapper">
               <Quotemarks/>
 
-              <p class="teacher__description">{{ teacher.description }}</p>
+              <p class="company__description">{{ company.description }}</p>
             </div>
           </div>
 
-          <div class="teacher__section">
-            <div class="teacher__section-title">Расписание</div>
+          <div class="company__section">
+            <div class="company__section-title">Расписание</div>
 
             <TheCalendar/>
           </div>
 
-          <div class="teacher__section">
-            <div class="teacher__section-title">Возможности преподователя</div>
+          <div class="company__section">
+            <div class="company__section-title">Возможности преподователя</div>
 
-            <div class="teacher__section-subtitle">Акценты</div>
+            <div class="company__section-subtitle">Акценты</div>
 
-            <div class="teacher__possibilities">
-              <div class="teacher__possibilities-item">British english</div>
+            <div class="company__possibilities">
+              <div class="company__possibilities-item">British english</div>
             </div>
 
-            <div class="teacher__section-subtitle">Возраст</div>
+            <div class="company__section-subtitle">Возраст</div>
 
-            <div class="teacher__possibilities">
-              <div class="teacher__possibilities-item">Adults (18+)</div>
+            <div class="company__possibilities">
+              <div class="company__possibilities-item">Adults (18+)</div>
             </div>
 
-            <div class="teacher__section-subtitle">Аспекты обучения</div>
+            <div class="company__section-subtitle">Аспекты обучения</div>
 
-            <div class="teacher__possibilities">
-              <div class="teacher__possibilities-item">Accent Reduction</div>
+            <div class="company__possibilities">
+              <div class="company__possibilities-item">Accent Reduction</div>
 
-              <div class="teacher__possibilities-item">Business english</div>
+              <div class="company__possibilities-item">Business english</div>
 
-              <div class="teacher__possibilities-item">Grammar Development</div>
+              <div class="company__possibilities-item">Grammar Development</div>
 
-              <div class="teacher__possibilities-item">Phonetics</div>
+              <div class="company__possibilities-item">Phonetics</div>
 
-              <div class="teacher__possibilities-item">Grammar Development</div>
+              <div class="company__possibilities-item">Grammar Development</div>
 
-              <div class="teacher__possibilities-item">Accent Reduction</div>
+              <div class="company__possibilities-item">Accent Reduction</div>
             </div>
           </div>
 
-          <div class="teacher__section">
-            <div class="teacher__section-title">Резюме преподователя</div>
+          <div class="company__section">
+            <div class="company__section-title">Резюме преподователя</div>
 
-            <div class="teacher__section-wrapper">
+            <div class="company__section-wrapper">
               <Education/>
 
               <span>Образование</span>
             </div>
 
-            <div class="teacher__cv">
-              <div class="teacher__cv-year">2015-2017</div>
+            <div class="company__cv">
+              <div class="company__cv-year">2015-2017</div>
 
-              <div class="teacher__cv-info">
-                <div class="teacher__cv-title">Online teacher</div>
+              <div class="company__cv-info">
+                <div class="company__cv-title">Online company</div>
 
-                <div class="teacher__cv-sub">Verbling – England</div>
+                <div class="company__cv-sub">Verbling – England</div>
 
-                <div class="teacher__cv-sub">ELT/TESOL</div>
+                <div class="company__cv-sub">ELT/TESOL</div>
 
-                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                <p class="company__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
                   разработке системы обучения кадров, соответствует насущным потребностям. </p>
               </div>
             </div>
 
-            <div class="teacher__cv">
-              <div class="teacher__cv-year">2015-2017</div>
+            <div class="company__cv">
+              <div class="company__cv-year">2015-2017</div>
 
-              <div class="teacher__cv-info">
-                <div class="teacher__cv-title">Online teacher</div>
+              <div class="company__cv-info">
+                <div class="company__cv-title">Online company</div>
 
-                <div class="teacher__cv-sub">Verbling – England</div>
+                <div class="company__cv-sub">Verbling – England</div>
 
-                <div class="teacher__cv-sub">ELT/TESOL</div>
+                <div class="company__cv-sub">ELT/TESOL</div>
 
-                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                <p class="company__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
                   разработке системы обучения кадров, соответствует насущным потребностям. </p>
               </div>
             </div>
 
-            <div class="teacher__section-wrapper">
+            <div class="company__section-wrapper">
               <Certificates/>
 
               <span>Сертификаты</span>
             </div>
 
-            <div class="teacher__cv">
-              <div class="teacher__cv-year">2015-2017</div>
+            <div class="company__cv">
+              <div class="company__cv-year">2015-2017</div>
 
-              <div class="teacher__cv-info">
-                <div class="teacher__cv-title">Online teacher</div>
+              <div class="company__cv-info">
+                <div class="company__cv-title">Online company</div>
 
-                <div class="teacher__cv-sub">Verbling – England</div>
+                <div class="company__cv-sub">Verbling – England</div>
 
-                <div class="teacher__cv-sub">ELT/TESOL</div>
+                <div class="company__cv-sub">ELT/TESOL</div>
 
-                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                <p class="company__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
                   разработке системы обучения кадров, соответствует насущным потребностям. </p>
               </div>
             </div>
 
-            <div class="teacher__cv">
-              <div class="teacher__cv-year">2015-2017</div>
+            <div class="company__cv">
+              <div class="company__cv-year">2015-2017</div>
 
-              <div class="teacher__cv-info">
-                <div class="teacher__cv-title">Online teacher</div>
+              <div class="company__cv-info">
+                <div class="company__cv-title">Online company</div>
 
-                <div class="teacher__cv-sub">Verbling – England</div>
+                <div class="company__cv-sub">Verbling – England</div>
 
-                <div class="teacher__cv-sub">ELT/TESOL</div>
+                <div class="company__cv-sub">ELT/TESOL</div>
 
-                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                <p class="company__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
                   разработке системы обучения кадров, соответствует насущным потребностям. </p>
               </div>
             </div>
           </div>
 
-          <div class="teacher__section">
-            <div class="teacher__section-title">Оценки учеников</div>
+          <div class="company__section">
+            <div class="company__section-title">Оценки учеников</div>
 
-            <div class="teacher__awards">
-              <div class="teacher__award-wrapper" v-for="award in awards" :key="award.id">
-                <div class="teacher__award-counter">{{ award.counter }}</div>
+            <div class="company__awards">
+              <div class="company__award-wrapper" v-for="award in awards" :key="award.id">
+                <div class="company__award-counter">{{ award.counter }}</div>
 
-                <div class="teacher__award-icon">
+                <div class="company__award-icon">
                   <component :is="award.icon"/>
                 </div>
 
-                <div class="teacher__award-name">{{ award.title }}</div>
+                <div class="company__award-name">{{ award.title }}</div>
               </div>
 
 
@@ -215,16 +235,16 @@
         </div>
 
         <div class="page__content-lessons">
-          <div class="teacher__lessons-wrapper">
-            <div class="teacher__lessons-title">Пробный урок</div>
+          <div class="company__lessons-wrapper">
+            <div class="company__lessons-title">Пробный урок</div>
 
-            <div class="teacher__lessons-row">
+            <div class="company__lessons-row">
               <p>Длительность урока</p>
 
               <span>1,5 часа</span>
             </div>
 
-            <div class="teacher__lessons-row">
+            <div class="company__lessons-row">
               <p>Стоимость курса</p>
 
               <span>1000 $</span>
@@ -239,12 +259,12 @@
             </Button>
           </div>
 
-          <div class="teacher__lessons-wrapper">
-            <div class="teacher__lessons-title">Индивидуальный урок</div>
+          <div class="company__lessons-wrapper">
+            <div class="company__lessons-title">Индивидуальный урок</div>
 
-            <p class="teacher__lessons-amount">Количество уроков</p>
+            <p class="company__lessons-amount">Количество уроков</p>
 
-            <div class="teacher__lessons-options">
+            <div class="company__lessons-options">
               <TheRadio :option="1"/>
 
               <TheRadio :option="2"/>
@@ -256,7 +276,7 @@
 
             <hr>
 
-            <div class="teacher__lessons-row">
+            <div class="company__lessons-row">
               <p>Стоимость курса</p>
 
               <span>1000 $</span>
@@ -271,39 +291,39 @@
             </Button>
           </div>
 
-          <div class="teacher__lessons-wrapper">
-            <div class="teacher__lessons-title">Групповые уроки</div>
+          <div class="company__lessons-wrapper">
+            <div class="company__lessons-title">Групповые уроки</div>
 
-            <div class="teacher__lesson">
-              <div class="teacher__lesson-date">28 июня 2021</div>
+            <div class="company__lesson">
+              <div class="company__lesson-date">28 июня 2021</div>
 
-              <div class="teacher__lesson-title">Базовые навыки испанского языка</div>
+              <div class="company__lesson-title">Базовые навыки испанского языка</div>
 
-              <div class="teacher__lesson-tags">
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--time">1 час</div>
+              <div class="company__lesson-tags">
+                <div class="company__card-tag company__card-tag--mini company__card-tag--time">1 час</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--lvl">Beginners</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--lvl">Beginners</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--years">10-15 лет</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--years">10-15 лет</div>
               </div>
 
-              <div class="teacher__lesson-row">
+              <div class="company__lesson-row">
                 <div style="margin-right: 40px">
-                  <div class="teacher__lesson-label">Зарегистрировались</div>
+                  <div class="company__lesson-label">Зарегистрировались</div>
 
-                  <div class="teacher__lesson-value">10 человек</div>
+                  <div class="company__lesson-value">10 человек</div>
                 </div>
 
                 <div>
-                  <div class="teacher__lesson-label">Максимум:</div>
+                  <div class="company__lesson-label">Максимум:</div>
 
-                  <div class="teacher__lesson-value">15 человек</div>
+                  <div class="company__lesson-value">15 человек</div>
                 </div>
               </div>
 
               <hr>
 
-              <div class="teacher__lessons-row">
+              <div class="company__lessons-row">
                 <p>Стоимость курса</p>
 
                 <span>1000 $</span>
@@ -318,36 +338,36 @@
               </Button>
             </div>
 
-            <div class="teacher__lesson">
-              <div class="teacher__lesson-date">28 июня 2021</div>
+            <div class="company__lesson">
+              <div class="company__lesson-date">28 июня 2021</div>
 
-              <div class="teacher__lesson-title">Базовые навыки испанского языка</div>
+              <div class="company__lesson-title">Базовые навыки испанского языка</div>
 
-              <div class="teacher__lesson-tags">
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--time">1 час</div>
+              <div class="company__lesson-tags">
+                <div class="company__card-tag company__card-tag--mini company__card-tag--time">1 час</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--lvl">Beginners</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--lvl">Beginners</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--years">10-15 лет</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--years">10-15 лет</div>
               </div>
 
-              <div class="teacher__lesson-row">
+              <div class="company__lesson-row">
                 <div style="margin-right: 40px">
-                  <div class="teacher__lesson-label">Зарегистрировались</div>
+                  <div class="company__lesson-label">Зарегистрировались</div>
 
-                  <div class="teacher__lesson-value">10 человек</div>
+                  <div class="company__lesson-value">10 человек</div>
                 </div>
 
                 <div>
-                  <div class="teacher__lesson-label">Максимум:</div>
+                  <div class="company__lesson-label">Максимум:</div>
 
-                  <div class="teacher__lesson-value">15 человек</div>
+                  <div class="company__lesson-value">15 человек</div>
                 </div>
               </div>
 
               <hr>
 
-              <div class="teacher__lessons-row">
+              <div class="company__lessons-row">
                 <p>Стоимость курса</p>
 
                 <span>1000 $</span>
@@ -363,39 +383,39 @@
             </div>
           </div>
 
-          <div class="teacher__lessons-wrapper">
-            <div class="teacher__lessons-title">Учебные курсы</div>
+          <div class="company__lessons-wrapper">
+            <div class="company__lessons-title">Учебные курсы</div>
 
-            <div class="teacher__lesson">
-              <div class="teacher__lesson-date">28 июня 2021</div>
+            <div class="company__lesson">
+              <div class="company__lesson-date">28 июня 2021</div>
 
-              <div class="teacher__lesson-title">Базовые навыки испанского языка</div>
+              <div class="company__lesson-title">Базовые навыки испанского языка</div>
 
-              <div class="teacher__lesson-tags">
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--time">1 час</div>
+              <div class="company__lesson-tags">
+                <div class="company__card-tag company__card-tag--mini company__card-tag--time">1 час</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--lvl">Beginners</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--lvl">Beginners</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--years">10-15 лет</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--years">10-15 лет</div>
               </div>
 
-              <div class="teacher__lesson-row">
+              <div class="company__lesson-row">
                 <div style="margin-right: 40px">
-                  <div class="teacher__lesson-label">Зарегистрировались</div>
+                  <div class="company__lesson-label">Зарегистрировались</div>
 
-                  <div class="teacher__lesson-value">10 человек</div>
+                  <div class="company__lesson-value">10 человек</div>
                 </div>
 
                 <div>
-                  <div class="teacher__lesson-label">Максимум:</div>
+                  <div class="company__lesson-label">Максимум:</div>
 
-                  <div class="teacher__lesson-value">15 человек</div>
+                  <div class="company__lesson-value">15 человек</div>
                 </div>
               </div>
 
               <hr>
 
-              <div class="teacher__lessons-row">
+              <div class="company__lessons-row">
                 <p>Стоимость курса</p>
 
                 <span>1000 $</span>
@@ -410,36 +430,36 @@
               </Button>
             </div>
 
-            <div class="teacher__lesson">
-              <div class="teacher__lesson-date">28 июня 2021</div>
+            <div class="company__lesson">
+              <div class="company__lesson-date">28 июня 2021</div>
 
-              <div class="teacher__lesson-title">Базовые навыки испанского языка</div>
+              <div class="company__lesson-title">Базовые навыки испанского языка</div>
 
-              <div class="teacher__lesson-tags">
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--time">1 час</div>
+              <div class="company__lesson-tags">
+                <div class="company__card-tag company__card-tag--mini company__card-tag--time">1 час</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--lvl">Beginners</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--lvl">Beginners</div>
 
-                <div class="teacher__card-tag teacher__card-tag--mini teacher__card-tag--years">10-15 лет</div>
+                <div class="company__card-tag company__card-tag--mini company__card-tag--years">10-15 лет</div>
               </div>
 
-              <div class="teacher__lesson-row">
+              <div class="company__lesson-row">
                 <div style="margin-right: 40px">
-                  <div class="teacher__lesson-label">Зарегистрировались</div>
+                  <div class="company__lesson-label">Зарегистрировались</div>
 
-                  <div class="teacher__lesson-value">10 человек</div>
+                  <div class="company__lesson-value">10 человек</div>
                 </div>
 
                 <div>
-                  <div class="teacher__lesson-label">Максимум:</div>
+                  <div class="company__lesson-label">Максимум:</div>
 
-                  <div class="teacher__lesson-value">15 человек</div>
+                  <div class="company__lesson-value">15 человек</div>
                 </div>
               </div>
 
               <hr>
 
-              <div class="teacher__lessons-row">
+              <div class="company__lessons-row">
                 <p>Стоимость курса</p>
 
                 <span>1000 $</span>
@@ -467,7 +487,7 @@ import {doc, getDoc} from 'firebase/firestore'
 import {onBeforeMount, ref} from 'vue'
 import TheCalendar from '@/components/UI/Calendar/TheCalendar.vue'
 import TheStars from '@/components/UI/Stars/TheStars.vue'
-import TeachersHelpers from '../mixins/TeachersHelpers'
+import teachersHelpers from '../mixins/teachersHelpers'
 import Quotemarks from '@/assets/icons/Quotemarks.vue'
 import Button from '@/components/UI/Buttons/Button.vue'
 import TheRadio from '@/components/UI/Radio/TheRadio.vue'
@@ -491,14 +511,14 @@ const props = defineProps({
   }
 })
 
-const teacher = ref({})
+const company = ref({})
 
 onBeforeMount(async () => {
-  const teacherRef = doc(db, "publishedTeachers", props.id)
-  const docSnap = await getDoc(teacherRef);
+  const companyRef = doc(db, "publishedTeachers", props.id)
+  const docSnap = await getDoc(companyRef);
 
   if (docSnap.exists()) {
-    teacher.value = docSnap.data()
+    company.value = docSnap.data()
   } else {
     // docSnap.data() will be undefined in this case
     console.log("No such document!")
@@ -592,7 +612,7 @@ const awards = [
   padding: 0 0 30px;
 }
 
-.teacher {
+.company {
 
   &__card {
     background: #FFF;

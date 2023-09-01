@@ -179,8 +179,8 @@ onMounted(() => {
 
 <style lang="scss">
 .calendar {
-  max-width: 800px;
   background: #FFF;
+  max-width: 800px;
 
   &__header {
     display: flex;
@@ -201,6 +201,22 @@ onMounted(() => {
   &__table {
     width: 100%;
     border-collapse: collapse;
+
+    tbody {
+      display: block;
+      max-height: 301px;
+      overflow-y: scroll;
+    }
+
+    thead, tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    thead {
+      width: calc( 100% - 1em );
+    }
 
     th, td {
       text-align: center;
