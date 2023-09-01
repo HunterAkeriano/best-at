@@ -1,6 +1,6 @@
 <template>
-  <div class="main page teacher" v-if="teacher">
-    <div class="container">
+  <div class="main page teacher">
+    <div class="container" v-if="teacher">
       <div class="page__navigation">
         <a class="page__navigation-link">
           Главная
@@ -86,37 +86,132 @@
             <TheCalendar/>
           </div>
 
-          <!--          <div class="teacher__section">-->
-          <!--            <div class="teacher__section-title">Возможности преподователя</div>-->
-          <!--          </div>-->
+          <div class="teacher__section">
+            <div class="teacher__section-title">Возможности преподователя</div>
 
-          <!--          <div class="teacher__section">-->
-          <!--            <div class="teacher__section-title">Резюме преподователя</div>-->
-          <!--          </div>-->
+            <div class="teacher__section-subtitle">Акценты</div>
 
-          <!--          <div class="teacher__section">-->
-          <!--            <div class="teacher__section-title">Оценки учеников</div>-->
-          <!--          </div>-->
+            <div class="teacher__possibilities">
+              <div class="teacher__possibilities-item">British english</div>
+            </div>
 
-          <!--          <div class="teacher__section">-->
-          <!--            <div class="teacher__section-title">Отзывы</div>-->
-          <!--          </div>-->
+            <div class="teacher__section-subtitle">Возраст</div>
 
-          <!--          <div class="teacher__section">-->
-          <!--            <div class="teacher__section-title">Команда</div>-->
+            <div class="teacher__possibilities">
+              <div class="teacher__possibilities-item">Adults (18+)</div>
+            </div>
 
-          <!--            <div class="teacher__team">-->
-          <!--              <div class="teacher__team-item" v-for="item in 5" :key="item">-->
-          <!--                <img class="teacher__team-pfp" src="" alt="">-->
+            <div class="teacher__section-subtitle">Аспекты обучения</div>
 
-          <!--                <div>-->
-          <!--                  <div class="teacher__team-name">Алексей Кузьменко Андреевич</div>-->
+            <div class="teacher__possibilities">
+              <div class="teacher__possibilities-item">Accent Reduction</div>
 
-          <!--                  <div class="teacher__team-lang">Язык обучения: <span>английский</span></div>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
+              <div class="teacher__possibilities-item">Business english</div>
+
+              <div class="teacher__possibilities-item">Grammar Development</div>
+
+              <div class="teacher__possibilities-item">Phonetics</div>
+
+              <div class="teacher__possibilities-item">Grammar Development</div>
+
+              <div class="teacher__possibilities-item">Accent Reduction</div>
+            </div>
+          </div>
+
+          <div class="teacher__section">
+            <div class="teacher__section-title">Резюме преподователя</div>
+
+            <div class="teacher__section-wrapper">
+              <Education/>
+
+              <span>Образование</span>
+            </div>
+
+            <div class="teacher__cv">
+              <div class="teacher__cv-year">2015-2017</div>
+
+              <div class="teacher__cv-info">
+                <div class="teacher__cv-title">Online teacher</div>
+
+                <div class="teacher__cv-sub">Verbling – England</div>
+
+                <div class="teacher__cv-sub">ELT/TESOL</div>
+
+                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                  разработке системы обучения кадров, соответствует насущным потребностям. </p>
+              </div>
+            </div>
+
+            <div class="teacher__cv">
+              <div class="teacher__cv-year">2015-2017</div>
+
+              <div class="teacher__cv-info">
+                <div class="teacher__cv-title">Online teacher</div>
+
+                <div class="teacher__cv-sub">Verbling – England</div>
+
+                <div class="teacher__cv-sub">ELT/TESOL</div>
+
+                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                  разработке системы обучения кадров, соответствует насущным потребностям. </p>
+              </div>
+            </div>
+
+            <div class="teacher__section-wrapper">
+              <Certificates/>
+
+              <span>Сертификаты</span>
+            </div>
+
+            <div class="teacher__cv">
+              <div class="teacher__cv-year">2015-2017</div>
+
+              <div class="teacher__cv-info">
+                <div class="teacher__cv-title">Online teacher</div>
+
+                <div class="teacher__cv-sub">Verbling – England</div>
+
+                <div class="teacher__cv-sub">ELT/TESOL</div>
+
+                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                  разработке системы обучения кадров, соответствует насущным потребностям. </p>
+              </div>
+            </div>
+
+            <div class="teacher__cv">
+              <div class="teacher__cv-year">2015-2017</div>
+
+              <div class="teacher__cv-info">
+                <div class="teacher__cv-title">Online teacher</div>
+
+                <div class="teacher__cv-sub">Verbling – England</div>
+
+                <div class="teacher__cv-sub">ELT/TESOL</div>
+
+                <p class="teacher__cv-text">Укрепление и развитие структуры позволяет выполнять важные задания по
+                  разработке системы обучения кадров, соответствует насущным потребностям. </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="teacher__section">
+            <div class="teacher__section-title">Оценки учеников</div>
+
+            <div class="teacher__awards">
+              <div class="teacher__award-wrapper" v-for="award in awards" :key="award.id">
+                <div class="teacher__award-counter">{{ award.counter }}</div>
+
+                <div class="teacher__award-icon">
+                  <component :is="award.icon"/>
+                </div>
+
+                <div class="teacher__award-name">{{ award.title }}</div>
+              </div>
+
+
+            </div>
+          </div>
+
         </div>
 
         <div class="page__content-lessons">
@@ -150,13 +245,13 @@
             <p class="teacher__lessons-amount">Количество уроков</p>
 
             <div class="teacher__lessons-options">
-              <TheRadio :option="1" />
+              <TheRadio :option="1"/>
 
-              <TheRadio :option="2" />
+              <TheRadio :option="2"/>
 
-              <TheRadio :option="5" />
+              <TheRadio :option="5"/>
 
-              <TheRadio :option="10" />
+              <TheRadio :option="10"/>
             </div>
 
             <hr>
@@ -376,6 +471,17 @@ import TeachersHelpers from '../mixins/TeachersHelpers'
 import Quotemarks from '@/assets/icons/Quotemarks.vue'
 import Button from '@/components/UI/Buttons/Button.vue'
 import TheRadio from '@/components/UI/Radio/TheRadio.vue'
+import Education from '@/assets/icons/teacher/Education.vue'
+import Certificates from '@/assets/icons/teacher/Certificates.vue'
+import OneStar from "@/assets/icons/teacher/OneStar.vue";
+import TwoStars from "@/assets/icons/teacher/TwoStars.vue";
+import Brain from "@/assets/icons/teacher/Brain.vue";
+import Student from "@/assets/icons/teacher/Student.vue";
+import Message from "@/assets/icons/teacher/Message.vue";
+import Books from "@/assets/icons/teacher/Books.vue";
+import Thinking from "@/assets/icons/teacher/Thinking.vue";
+import Book from "@/assets/icons/teacher/Book.vue";
+import Rewards from "@/assets/icons/teacher/Rewards.vue";
 
 
 const props = defineProps({
@@ -398,6 +504,63 @@ onBeforeMount(async () => {
     console.log("No such document!")
   }
 })
+
+const awards = [
+  {
+    id: 0,
+    icon: OneStar,
+    title: 'Великолепен(-а) для начинающих',
+    counter: 45
+  },
+  {
+    id: 1,
+    icon: TwoStars,
+    title: 'Великолепен(-а) для учеников среднего уровня',
+    counter: 156
+  },
+  {
+    id: 2,
+    icon: Brain,
+    title: 'Великолепен(-а) для учеников продвинутого уровня',
+    counter: 95
+  },
+  {
+    id: 3,
+    icon: Student,
+    title: 'Великолепно ладит с детьми',
+    counter: 849
+  },
+  {
+    id: 4,
+    icon: Message,
+    title: 'Великолепное общение',
+    counter: 1885
+  },
+  {
+    id: 5,
+    icon: Books,
+    title: 'Отличные материалы',
+    counter: 34
+  },
+  {
+    id: 6,
+    icon: Thinking,
+    title: 'Превосходит ожидания',
+    counter: 258
+  },
+  {
+    id: 7,
+    icon: Book,
+    title: 'Подробные сведения в теме',
+    counter: 684
+  },
+  {
+    id: 8,
+    icon: Rewards,
+    title: 'Гуру мотивации',
+    counter: 213
+  }
+]
 
 </script>
 
@@ -586,6 +749,29 @@ onBeforeMount(async () => {
       line-height: 22px;
       margin-bottom: 25px;
     }
+
+    &-subtitle {
+      color: #292C32;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 19px;
+      margin-bottom: 14px;
+    }
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+
+      span {
+        display: block;
+        color: #292C32;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 20px;
+        margin-left: 11px;
+      }
+    }
   }
 
   &__description {
@@ -759,6 +945,111 @@ onBeforeMount(async () => {
       font-size: 15px;
       font-weight: 600;
       line-height: 24px;
+    }
+  }
+
+  &__possibilities {
+    display: flex;
+    flex-wrap: wrap;
+
+    &-item {
+      color: #454B58;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 20px;
+      padding: 8px 22px;
+      margin-right: 15px;
+      margin-bottom: 15px;
+      border-radius: 20px;
+      background: #F0F4F8;
+    }
+  }
+
+  &__cv {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+
+    &:nth-last-child(1) {
+      margin-bottom: 0;
+    }
+
+    &-year {
+      color: #FFF;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 20px;
+      padding: 8px 12px;
+      margin-right: 28px;
+      border-radius: 20px;
+      background: #55ABFA;
+      flex-shrink: 0;
+    }
+
+    &-title {
+      color: #292C32;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 22px;
+    }
+
+    &-sub {
+      color: #454B58;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 182.85%;
+    }
+
+    &-text {
+      color: #454B58;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 182.85%;
+    }
+  }
+
+  &__awards {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__award {
+
+    &-wrapper {
+      position: relative;
+      margin-left: 20px;
+      margin-bottom: 30px;
+    }
+
+    &-counter {
+      width: 36px;
+      height: 36px;
+      position: absolute;
+      right: 5px;
+      background: #F04973;
+      border-radius: 100px;
+      color: #FFF;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 36px;
+    }
+
+    &-icon {
+      width: 104px;
+      height: 104px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-name {
+      color: #454B58;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 17px;
+      max-width: 110px;
     }
   }
 }
