@@ -22,6 +22,12 @@ const router = createRouter({
       component: () => import("@/views/TeacherView.vue" /* webpackChunkName: "teacher" */)
     },
     {
+      path: '/companies/:id',
+      props: true,
+      name: 'company',
+      component: () => import("@/views/CompanyView.vue" /* webpackChunkName: "company" */)
+    },
+    {
       name: 'Registration Page',
       path: '/registration',
       component: () => import("@/views/RegistrationView.vue" /* webpackChunkName: "registration" */),
