@@ -1,5 +1,6 @@
 <template>
   <div class="select"
+  v-if="course.idTeacher"
   :class="{ active: isActive }"
   >
     <input type="text"
@@ -49,8 +50,39 @@ const isActive = ref(false);
 function toggleActive(value) {
   isActive.value = value;
 }
+
+import { collection, getDocs, doc, setDoc} from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+
+const array = ref([])
+async function getCourse(){
+  const courses = await getDocs(collection(db, 'course'));
+  courses.forEach((doc)=>{
+    array.value.push({
+      idx: doc.data().idx,
+      id: doc.data().id,
+      about: doc.data().about,
+      date: doc.data().date,
+      lvl: doc.data().lvl,
+      maxStudent: doc.data().maxStudent,
+      name: doc.data().name,
+      plan: doc.data().plan,
+      pricelessons: doc.data().pricelessons,
+      student: doc.data().student,
+      teachers: doc.data().teachers,
+      time: doc.data().time,
+      timeLessons: doc.data().timeLessons,
+      timeOut: doc.data().timeOut,
+      timeTest: doc.data().timeTest,
+      years: doc.data().years,
+    })
+  })
+  searchText.value = course.teacher[course.idTeacher].nameUser;
+
+}
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  getCourse();
 });
 
 onUnmounted(() => {

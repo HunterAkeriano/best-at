@@ -525,4 +525,27 @@ export default {
       title: 'Proficiency ',
     },
   ],
+
+  type: [
+    {
+      id: 0,
+      title: 'Урок',
+    },
+    {
+      id: 1,
+      title: 'Занятие',
+    },
+    {
+      id: 2,
+      title: 'Пара',
+    },
+    {
+      id: 3,
+      title: 'Живой урок',
+    },
+    {
+      id: 4,
+      title: 'Встреча',
+    },
+  ],
 }

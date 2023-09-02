@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import Select from '@/components/UI/SelectTeacherEdit/Select.vue';
+import Select from '@/components/UI/SelectTeacher/Select.vue';
 
 const emits = defineEmits(['activeTeacher', 'click',]);
 function elem(idx){
