@@ -1,6 +1,6 @@
 <template>
   <div class="course-create">
-    <div class="container">
+    <div class="container"  v-if="idCourse !== null">
      
       <div class="course-create__links">
         <p>Главная</p>
