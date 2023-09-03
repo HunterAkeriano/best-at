@@ -90,6 +90,8 @@
               <p>10.07.2021</p>
             </div>
           </div>
+
+          <TheReviews style="margin-top: 30px;"/>
         </div>
 
       </div>
@@ -98,6 +100,10 @@
 </template>
 
 <script setup>
+
+// временно
+import TheReviews from '@/components/Reusable/TheReviews.vue'
+
 import TimeSmall from '@/assets/icons/course/TimeSmall.vue'
 import TimeBig from '@/assets/icons/course/TimeBig.vue'
 import Beginers from '@/assets/icons/course/Beginers.vue'
