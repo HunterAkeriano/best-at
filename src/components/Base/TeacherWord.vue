@@ -162,6 +162,7 @@ onMounted(() => {
         height: 400px;
         width: 320px !important;
         cursor: pointer;
+        overflow: hidden;
         opacity: 1 !important;
         .slide-item{
           &__img{

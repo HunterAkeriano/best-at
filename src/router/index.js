@@ -70,6 +70,16 @@ const router = createRouter({
       component: () => import("@/views/Course/CourseCreate.vue" /* webpackChunkName: "registration" */),
     },
     {
+      name: 'Course Edit',
+      path: '/course-edit/:id',
+      component: () => import("@/views/Course/CourseEdit.vue" /* webpackChunkName: "registration" */),
+    },
+    {
+      name: 'Course Page',
+      path: '/course/:id',
+      component: () => import("@/views/Course/CoursePage.vue" /* webpackChunkName: "registration" */),
+    },
+    {
       name: 'Not Found',
       path: '/:pathMatch(.*)*',
       component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)

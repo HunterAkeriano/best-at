@@ -2,7 +2,8 @@
  <div class="base-info">
   <div class="base-info__input">
     <p>Название курса</p>
-    <input 
+    <input
+    v-model="data.name" 
     style="margin-top: 6px;"
     type="text" name="" id="">
   </div>
@@ -13,7 +14,8 @@
       <div class="base-info__input" style="width: 330px;">
         <p>Дата начала курса</p>
         <input
-        class="date" 
+        class="date"
+        v-model="data.date" 
         style="margin-top: 6px;"
         type="date" name="" id="">
       </div>
@@ -21,9 +23,12 @@
       <div class="base-info__input"
        style="width: 330px; margin-top: 15px;">
         <p>Время начала первого урока</p>
+        
         <TheSelect
           style="margin-top: 6px; width: 330px;"
           :items="TeachersHelpers.timeStart"
+          @setActiveSelect="newTime"
+          :idx="data.time"
           />
       </div>
 
@@ -31,6 +36,7 @@
       style="width: 330px; margin-top: 15px;">
         <p>Кол-во часов на онлайн-уроки</p>
         <input
+        v-model="data.timeLessons"
         style="margin-top: 6px;"
         type="text" name="" id="">
       </div>
@@ -39,6 +45,7 @@
       style="width: 330px; margin-top: 18px;">
         <p>Кол-во часов на самостоятельную работу</p>
         <input
+        v-model="data.timeOut"
         style="margin-top: 6px;"
         type="text" name="" id="">
       </div>
@@ -47,6 +54,7 @@
       style="width: 330px; margin-top: 18px;">
         <p>Кол-во часов на выполнение тестов</p>
         <input
+        v-model="data.timeTest"
         style="margin-top: 6px;"
         type="text" name="" id="">
       </div>
@@ -55,6 +63,7 @@
       style="width: 330px; margin-top: 18px;">
         <p>Стоимость урока</p>
         <input
+        v-model="data.pricelessons"
         style="margin-top: 6px;"
         type="text" name="" id="">
       </div>
@@ -67,6 +76,8 @@
         <TheSelect
           style="margin-top: 6px; width: 330px;"
           :items="TeachersHelpers.typed"
+          @setActiveSelect="addLvl"
+          :idx="data.lvl"
           />
       </div>
       <div class="base-info__input"
@@ -75,19 +86,22 @@
         <TheSelect
           style="margin-top: 6px; width: 330px;"
           :items="TeachersHelpers.years"
+          @setActiveSelect="newYear"
+          :idx="data.years"
           />
       </div>
       <div class="base-info__input" 
       style="width: 330px; margin-top: 13px;">
         <p>Максимальное кол-во учеников</p>
         <input
+        v-model="data.maxStudent"
         style="margin-top: 6px;"
         type="text" name="" id="">
       </div>
       <div class="base-info__input" 
       style="width: 330px; margin-top: 19px;">
         <p>Описание курса</p>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
+        <textarea  v-model="data.about" name="" id="" cols="30" rows="10"></textarea>
       </div>
     </div>
   </div>
@@ -97,6 +111,25 @@
 <script setup>
 import TheSelect from '@/components/UI/TheSelect/TheSelect.vue'
 import TeachersHelpers from '../../../mixins/TeachersHelpers'
+
+const props = defineProps({
+  data:{
+    type: Object,
+    default: {},
+  }
+})
+
+function newTime(idx){
+  props.data.time = idx;
+}
+
+function addLvl(idx){
+  props.data.lvl = idx;
+}
+
+function newYear(idx){
+  props.data.years = idx;
+}
 
 </script>
 

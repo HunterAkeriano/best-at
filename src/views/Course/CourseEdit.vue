@@ -1,18 +1,19 @@
 <template>
   <div class="course-create">
-    <div class="container">
+    <div class="container"  v-if="idCourse !== null">
+     
       <div class="course-create__links">
         <p>Главная</p>
         <span>/</span>
-        <p>Создание курса</p>
+        <p>Редактирование курса</p>
       </div>
       <div class="course-create__title">
-        <h4>Создание курса</h4>
+        <h4>Редактирование курса</h4>
       </div>
 
       <div class="course-create__wrapper"
       style="margin-top: 25px;">
-        <BaseInfo :data="data"/>
+        <BaseInfo :data="coursesArray[idCourse]"/>
         <Teacher @activeTeacher="teachers"/>
       </div>
       <PlanCourse/>
@@ -22,8 +23,8 @@
         :width="200"
         :padding="15"
         :lineHeight="21"
-        @click="createCourse"
-      >Создать урок</TheButton>
+        @click="update"
+      >Редактировать урок</TheButton>
 
       <TheButton
       style="margin-left: 20px;"
@@ -41,36 +42,38 @@
  
 <script setup>
 import {ref, onBeforeMount} from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute()
 
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
 import BaseInfo from '@/components/Base/course/BaseInfo.vue';
-import Teacher from '@/components/Base/course/TeacherCreate.vue';
+import Teacher from '@/components/Base/course/Teacher.vue';
 import PlanCourse from '@/components/Base/course/PlanCourse.vue';
 
 import {stateCourse} from "@/stores/StateCourse";
-const course = stateCourse();
+const courses = stateCourse();
 
-import { collection, getDocs, doc, setDoc} from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc} from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
 async function getTeacher(){
   const usersData = await getDocs(collection(db, 'publishedTeachers'));
   usersData.forEach((doc) => {
-    course.teacher.push({
-      id: course.teacher.length,
+    courses.teacher.push({
+      id: courses.teacher.length,
       nameUser: doc.data().nameUser,
       photo: doc.data().photo,
     })
   })
 }
 
-
 const coursesArray = ref([]);
+const idCourse = ref(null);
+
 async function getCourse(){
   const course = await getDocs(collection(db, 'course'));
   course.forEach((doc)=>{
@@ -97,66 +100,48 @@ async function getCourse(){
 
 onBeforeMount(() => {
   getTeacher();
-  course.plan = [
-      {
-        type: 0,
-        title: '',
-        time: '',
-        date: '',
-      },
-    ],
-  getCourse();
+  getCourse().then(()=>{
+    coursesArray.value.forEach((item)=>{
+      if(item.id == route.params.id){
+        idCourse.value = item.idx;
+        courses.idTeacher = coursesArray.value[idCourse.value].teachers
+        courses.plan = coursesArray.value[idCourse.value].plan
+      }
+    })
+  })
+
 })
 
 function teachers(idx){
-  data.value.teachers = idx;
+  coursesArray.value[idCourse.value].teachers = idx;
 }
 
-const data = ref({
-  name: '',
-  date: '',
-  time: 0,
-  timeLessons: '',
-  timeOut: '',
-  timeTest: '',
-  pricelessons: '',
-  lvl: 0,
-  years: 0,
-  maxStudent: '',
-  about: '',
-  teachers: 0,
-})
+
+async function update(){
+  const userData = {
+      id: coursesArray.value[idCourse.value].id,
+      about: coursesArray.value[idCourse.value].about,
+      date: coursesArray.value[idCourse.value].date,
+      lvl: coursesArray.value[idCourse.value].lvl,
+      maxStudent: coursesArray.value[idCourse.value].maxStudent,
+      name: coursesArray.value[idCourse.value].name,
+      plan: courses.plan,
+      pricelessons: coursesArray.value[idCourse.value].pricelessons,
+      student: coursesArray.value[idCourse.value].student,
+      teachers: coursesArray.value[idCourse.value].teachers,
+      time: coursesArray.value[idCourse.value].time,
+      timeLessons: coursesArray.value[idCourse.value].timeLessons,
+      timeOut: coursesArray.value[idCourse.value].timeOut,
+      timeTest: coursesArray.value[idCourse.value].timeTest,
+      years: coursesArray.value[idCourse.value].years,
+  }
+  await updateDoc(doc(db, "course", coursesArray.value[idCourse.value].id), userData);
+}
 
 function cancel(){
   router.push('/')
 }
 
-
-
-async function createCourse(){
-  const randomNumber = 'course-' + Date.now();
-  const dataInfo = {
-    id: randomNumber,
-    idx: coursesArray.value.length,
-    name: data.value.name,
-    date: data.value.date,
-    time: data.value.time,
-    timeLessons: data.value.timeLessons,
-    timeOut: data.value.timeOut,
-    timeTest: data.value.timeTest,
-    pricelessons: data.value.pricelessons,
-    lvl: data.value.lvl,
-    years: data.value.years,
-    maxStudent: data.value.maxStudent,
-    about: data.value.about,
-    teachers: data.value.teachers,
-    student: [],
-    plan: course.plan,
-  }
-
-  await setDoc(doc(db, "course",  randomNumber), dataInfo);
-  router.push('/')
-}
 
 </script>
 

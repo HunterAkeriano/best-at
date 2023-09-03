@@ -5,5 +5,14 @@ export const stateCourse = defineStore({
   state: () => ({
     teacher: [],
     idTeacher: null,
+    plan: [
+      {
+        type: 0,
+        title: '',
+        time: '',
+        date: '',
+      },
+    ],
+    idTeacher: null,
   }),
 })
