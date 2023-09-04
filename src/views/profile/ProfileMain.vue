@@ -170,12 +170,38 @@ async function getUser(){
   })
 }
 
+async function getStudent(){
+  const usersData = await getDocs(collection(db, 'publicStudentData'));
+  usersData.forEach((doc) => {
+    usersStore.userStudent.push({
+      docName: doc.id,
+      lessons: doc.data().lessons,
+      email: doc.data().email,
+    })
+  })
+}
+
 onBeforeMount(() => {
   userEmail.value = JSON.parse(localStorage.getItem('user'));
+  usersStore.user = [];
+  usersStore.userId = null;
+  usersStore.userStudent = [];
+  usersStore.studentId = null;
+
+
   getUser().then(()=>{
     usersStore.user.forEach((item)=>{
       if(item.email == userEmail.value.email){
         usersStore.userId = item.id;
+        if(item.type.student){
+          getStudent().then(()=>{
+            usersStore.userStudent.forEach((student)=>{
+              if(student.email == userEmail.value.email){
+                usersStore.studentId =  usersStore.user.findIndex(item => item.email === userEmail.value.email);
+              }
+            })
+          });
+        }
       }
     })
   })
