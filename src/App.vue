@@ -9,7 +9,7 @@
 
 <script setup>
 import { RouterView, useRoute } from 'vue-router'
-import { ref, watch } from 'vue'
+import { ref, watch, onBeforeMount } from 'vue'
 import { useModalsStore } from '@/stores/modals'
 
 import TheHeader from '@/components/Base/TheHeader.vue'
@@ -24,6 +24,87 @@ const is404Page = ref(null);
 watch(route, () => {
   is404Page.value = route.name !== 'Not Found';
 });
+
+import {stateUser} from "@/stores/StateUser";
+import { collection, getDocs, doc, updateDoc} from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+
+const usersStore = stateUser();
+
+const userEmail = ref();
+
+async function getUser(){
+  const usersData = await getDocs(collection(db, 'allUser'));
+  usersData.forEach((doc) => {
+    usersStore.user.push({
+      id: usersStore.user.length,
+      docName: doc.id,
+      name: doc.data().name,
+      newName: doc.data().name,
+      email: doc.data().email,
+      login: doc.data().login,
+      password: doc.data().password,
+      phone: doc.data().phone,
+      type: doc.data().type,
+      emailNew: doc.data().email,
+      passwordNew: doc.data().password,
+      type: doc.data().type,
+      country: doc.data().country,
+      language: doc.data().language,
+      time: doc.data().timed,
+      about: doc.data().about,
+      timedZone: doc.data().timedZone,
+      langArr: doc.data().langArr,
+      yearStudent: doc.data().yearStudent,
+      langTeacher: doc.data().langTeacher,
+      itemTeacher: doc.data().itemTeacher,
+      lessonsPrice: doc.data().lessonsPrice,
+      urAdress: doc.data().urAdress,
+      info: doc.data().info,
+      cards: doc.data().cards,
+      ava: doc.data().ava,
+    })
+  })
+}
+
+async function getStudent(){
+  const usersData = await getDocs(collection(db, 'publicStudentData'));
+  usersData.forEach((doc) => {
+    usersStore.userStudent.push({
+      docName: doc.id,
+      lessons: doc.data().lessons,
+      email: doc.data().email,
+    })
+  })
+}
+
+onBeforeMount(() => {
+  userEmail.value = JSON.parse(localStorage.getItem('user'));
+  usersStore.user = [];
+  usersStore.userId = null;
+  usersStore.userStudent = [];
+  usersStore.studentId = null;
+
+  if(userEmail.value){
+    getUser().then(()=>{
+    usersStore.user.forEach((item)=>{
+      if(item.email == userEmail.value.email){
+        usersStore.userId = item.id;
+        if(item.type.student){
+          getStudent().then(()=>{
+            usersStore.userStudent.forEach((student)=>{
+              if(student.email == userEmail.value.email){
+                usersStore.studentId =  usersStore.userStudent.findIndex(item => item.email === userEmail.value.email);
+              }
+            })
+          });
+        }
+      }
+    })
+  })
+  } 
+})
+
 
 </script>
 

@@ -97,6 +97,14 @@ async function editUser() {
         phone: usersStore.user[usersStore.userId].phone,
       };
       await updateDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName), userData);
+      if(usersStore.studentId !== null){
+        usersStore.userStudent[usersStore.studentId].email =  usersStore.user[usersStore.userId].email
+        const studentData = {
+          email: usersStore.userStudent[usersStore.studentId].email,
+          name: usersStore.user[usersStore.userId].name,
+        }
+        await updateDoc(doc(db, "publicStudentData", usersStore.user[usersStore.studentId].docName), studentData);
+      }
     });
 }
 </script>

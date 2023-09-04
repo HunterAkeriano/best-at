@@ -134,6 +134,7 @@ async function register(){
       RePassword: formData.value.RePassword,
     };
     const publicInfo = {
+      email: formData.value.email,
       name: '',
       surname: '',
       phone: '',
