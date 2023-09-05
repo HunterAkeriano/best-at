@@ -4,21 +4,21 @@
       <div class="course-create__links">
         <p>Главная</p>
         <span>/</span>
-        <p>Создание группового урока</p>
+        <p>Редактирование группового урока</p>
       </div>
       <div class="course-create__title">
-        <h4>Создание группового урока</h4>
+        <h4>Редактирование группового урока</h4>
       </div>
 
       <div class="course-create__wrapper"
       style="margin-top: 25px;">
         <BaseInfo 
-        :data="data" 
+        :data="less[lessId]" 
         :teached="teached"
-        v-if="teached.length > 0"/>
+        v-if="lessId !== null"/>
         <Teacher 
-        @activeTeacher="teachers"
         style="height: 681px;"
+        @activeTeacher="teachers"
         v-if="lessons.student.length > 0"
         />
       </div>
@@ -27,8 +27,8 @@
         :width="200"
         :padding="15"
         :lineHeight="21"
-        @click="createLessons"
-      >Создать урок</TheButton>
+        @click="editLess"
+      >Редактировать урок</TheButton>
 
       <TheButton
       style="margin-left: 20px;"
@@ -46,10 +46,10 @@
  
 <script setup>
 import {ref, onBeforeMount} from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
-
+const route = useRoute();
 
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
@@ -59,7 +59,7 @@ import Teacher from '@/components/Base/lessons/Teacher.vue';
 import {stateCourse} from "@/stores/StateCourse";
 const course = stateCourse();
 
-import { collection, getDocs, doc, setDoc} from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc} from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
 
@@ -84,17 +84,34 @@ async function getStudent(){
   const stud = await getDocs(collection(db, 'publicStudentData'));
   stud.forEach((doc)=>{
     lessons.student.push({
+      id: doc.id,
       name: doc.data().name,
       email: doc.data().email,
+      lessons: doc.data().lessons,
     })
   })
 }
 const less = ref([]);
+const lessId = ref(null);
 async function getLessons(){
   const stud = await getDocs(collection(db, 'lessons'));
   stud.forEach((doc)=>{
     less.value.push({
-      id: doc.data().about,
+      id: doc.data().id,
+      idx: less.value.length,
+      name: doc.data().name,
+      teachers:  doc.data().teachers,
+      dateLessons: doc.data().dateLessons,
+      datePeriod: doc.data().datePeriod,
+      lessonsStart:  doc.data().lessonsStart,
+      lessonsTime: doc.data().lessonsTime,
+      priceLessons: doc.data().priceLessons,
+      minStudent: doc.data().minStudent,
+      lvlStudent: doc.data().lvlStudent,
+      yearsStudent: doc.data().yearsStudent,
+      about: doc.data().about,
+      maxStudent: doc.data().maxStudent,
+      users: doc.data().users,
     })
   })
 }
@@ -104,58 +121,50 @@ onBeforeMount(() => {
   lessons.students = [];
   getTeacher();
   getStudent();
-  getLessons();
+  getLessons().then(()=>{
+    less.value.forEach((item)=>{
+      if(item.id == route.params.id){
+        lessId.value = item.idx;
+        lessons.students = item.users;
+      }
+    })
+  });
 
 })
 
 function teachers(idx){
-  data.value.teachers = idx;
+  less.value[lessId].teachers = idx;
 }
 
-
+async function editLess(){
+  const student = lessons.students.map((doc) => {
+    const { lessons, ...newObject } = doc;
+    return newObject;
+  });
+  const data = {
+    name: less.value[lessId.value].name,
+    teachers: less.value[lessId.value].teachers,
+    dateLessons: less.value[lessId.value].dateLessons,
+    datePeriod: less.value[lessId.value].datePeriod,
+    lessonsStart: less.value[lessId.value].lessonsStart,
+    lessonsTime: less.value[lessId.value].lessonsTime,
+    priceLessons: less.value[lessId.value].priceLessons,
+    minStudent: less.value[lessId.value].minStudent,
+    lvlStudent: less.value[lessId.value].lvlStudent,
+    yearsStudent: less.value[lessId.value].yearsStudent,
+    about: less.value[lessId.value].about,
+    maxStudent: less.value[lessId.value].maxStudent,
+    users:  student,
+  }
+  await updateDoc(doc(db, "lessons", less.value[lessId.value].id), data);
+  
+}
 
 function cancel(){
   router.push('/')
 }
 
 
-const data = ref({
-  name: '',
-  teachers: 0,
-  dateLessons: '',
-  datePeriod: ['', ''],
-  lessonsStart: 0,
-  lessonsTime: 0,
-  priceLessons: '',
-  minStudent: '',
-  lvlStudent: 0,
-  yearsStudent: 0,
-  about: '',
-  maxStudent: '',
-})
-async function createLessons(){
-  const randomNumber = 'lessons-' + Date.now();
-  const dataInfo = {
-    id: randomNumber,
-    idx: less.value.length,
-    name: data.value.name,
-    teachers:  data.value.teachers,
-    dateLessons: data.value.dateLessons,
-    datePeriod: data.value.datePeriod,
-    lessonsStart: data.value.lessonsStart,
-    lessonsTime: data.value.lessonsTime,
-    priceLessons: data.value.priceLessons,
-    minStudent: data.value.minStudent,
-    lvlStudent: data.value.lvlStudent,
-    yearsStudent: data.value.yearsStudent,
-    about: data.value.about,
-    maxStudent: data.value.maxStudent,
-    users: lessons.students,
-  }
-
-  await setDoc(doc(db, "lessons",  randomNumber), dataInfo);
-  router.push('/')
-}
 
 </script>
 
