@@ -48,6 +48,26 @@
           <img src="@/assets/img/lessons/photo.png" alt="">
         </div>
       </div>
+      <div class="lessons__btn">
+        <TheButton
+        :width="200"
+        :padding="15"
+        :lineHeight="21"
+      >Перенести урок</TheButton>
+      <router-link :to="{ path: `/lessons-edit/${$route.params.id}` }">
+        <TheButton
+          :width="225"
+          :padding="15"
+          :lineHeight="21"
+        >Редактировать урок</TheButton>
+      </router-link>
+      <TheButton
+        :width="171"
+        :padding="15"
+        :lineHeight="21"
+        :isCourses="true"
+      >Отменить урок</TheButton>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +79,7 @@ import IdUser from '@/assets/icons/lessons/IdUser.vue'
 import User from '@/assets/icons/lessons/User.vue'
 
 import TeacherHelper from '../../mixins/TeachersHelpers.js'
+import TheButton from '@/components/UI/Buttons/Button.vue'
 
 import { ref, watch, onBeforeMount } from 'vue'
 import {stateLessons} from '@/stores/StateLessons.js'
@@ -107,10 +128,7 @@ onBeforeMount(() => {
 })
 
 function formatDate(inputDate) {
-  // Создаем объект Date из входной строки
   const date = new Date(inputDate);
-
-  // Определяем названия месяцев
   const months = [
     'января',
     'февраля',
@@ -325,6 +343,14 @@ function formatDate(inputDate) {
         height: 100%;
       }
     }
+  }
+
+  &__btn{
+    display: flex;
+    align-items: center;
+    margin-top: 31px;
+    gap: 15px;
+    margin-bottom: 50px;
   }
 }
 </style>
