@@ -25,7 +25,7 @@
         <div class="forum__theme-item"
         v-for="item in paginateUsers()"
         >
-        <router-link :to="{ path: `/forum/${item.router}` }">
+        <router-link :to="{ path: `/forum/${$route.params.id}/${item.router}` }">
           <ThemeIcon/>
           <p>{{ item.title }} <span>от {{ item.inOut }}</span></p>
           <p>{{ item.timed }} <span>от {{ item.out }}</span></p>

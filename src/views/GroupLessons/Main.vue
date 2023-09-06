@@ -53,6 +53,7 @@
         :width="200"
         :padding="15"
         :lineHeight="21"
+        @click="modals.currentModal = 5"
       >Перенести урок</TheButton>
       <router-link :to="{ path: `/lessons-edit/${$route.params.id}` }">
         <TheButton
@@ -66,6 +67,7 @@
         :padding="15"
         :lineHeight="21"
         :isCourses="true"
+        @click="modals.currentModal = 4"
       >Отменить урок</TheButton>
       </div>
     </div>
@@ -91,6 +93,9 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
+import {useModalsStore} from "@/stores/modals";
+const modals = useModalsStore();
+
 async function getLessons(){
   const stud = await getDocs(collection(db, 'lessons'));
   stud.forEach((doc)=>{
@@ -100,8 +105,10 @@ async function getLessons(){
       name: doc.data().name,
       teachers:  doc.data().teachers,
       dateLessons: doc.data().dateLessons,
+      dateLessonsCopy: doc.data().dateLessons,
       datePeriod: doc.data().datePeriod,
       lessonsStart:  doc.data().lessonsStart,
+      lessonsStartCopy:  doc.data().lessonsStart,
       lessonsTime: doc.data().lessonsTime,
       priceLessons: doc.data().priceLessons,
       minStudent: doc.data().minStudent,
