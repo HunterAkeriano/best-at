@@ -70,6 +70,11 @@ const router = createRouter({
       component: () => import("@/views/ArticleView.vue" /* webpackChunkName: "article" */),
     },
     {
+      name: 'Forum Chat Page',
+      path: '/forum/:id/:chatid',
+      component: () => import("@/views/forum/ForumChat.vue" /* webpackChunkName: "registration" */),
+    },
+    {
       name: 'Course Create',
       path: '/course-create',
       component: () => import("@/views/Course/CourseCreate.vue" /* webpackChunkName: "registration" */),
