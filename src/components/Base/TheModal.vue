@@ -36,10 +36,11 @@
 
       <div class="modal__times">
         <div class="modal__times-item"
-             v-for="(hour, index) in hoursArray" :key="index"
-             :class="{ 'modal__times-item--active': hour === '09:00' }"
+             v-for="hour in TeachersHelpers.timeStart" :key="hour.id"
+             :class="{ 'modal__times-item--active': hour.id === selectedHour }"
+             @click="selectedHour = hour.id"
         >
-          <span>{{ hour }}</span>
+          <span>{{ hour.title }}</span>
         </div>
       </div>
 
@@ -60,8 +61,8 @@
       <div class="modal__times">
         <div class="modal__times-item"
              v-for="hour in TeachersHelpers.timeStart" :key="hour.id"
-             :class="{ 'modal__times-item--active': hour.title === selectedHour }"
-             @click="selectedHour = hour.title"
+             :class="{ 'modal__times-item--active': hour.id === selectedHour }"
+             @click="selectedHour = hour.id"
         >
           <span>{{ hour.title }}</span>
         </div>
@@ -215,8 +216,9 @@ async function deletesUser() {
   background: #FFF;
   z-index: 1001;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
 
   &__bg {
     width: 100%;
@@ -244,7 +246,6 @@ async function deletesUser() {
     font-size: 50px;
     font-weight: 600;
     max-width: 865px;
-    margin-top: 268px;
     text-align: center;
   }
 
