@@ -55,13 +55,14 @@
     <div class="modal__body modal__body--big" v-else-if="modalsStore.currentModal === 5">
       <p class="modal__body-label">Дата урока</p>
 
-      <input class="modal__body-input" type="date" v-model="selectedDate"/>
+      <input class="modal__body-input" type="date" v-model="lessons.lessons[lessons.idLess].dateLessonsCopy"/>
 
       <div class="modal__times">
         <div class="modal__times-item"
-             v-for="hour in TeachersHelpers.timeStart" :key="hour.id"
-             :class="{ 'modal__times-item--active': hour.title === selectedHour }"
-             @click="selectedHour = hour.title"
+             v-for="(hour, idx) in TeachersHelpers.timeStart" :key="hour.id"
+             :class="{ 'modal__times-item--active': isActiveHour(hour)}"
+             style="cursor: pointer;"
+             @click="setActiveHour(idx)"
         >
           <span>{{ hour.title }}</span>
         </div>
@@ -74,7 +75,7 @@
       <Button
           :width="240"
           :padding="11"
-          @click="modalsStore.closeModal"
+          @click="newDateLessons"
       >
         Перенести
       </Button>
@@ -168,9 +169,21 @@ const title = computed(() => {
   return modals[modalsStore.currentModal]
 })
 
+import {stateLessons} from '@/stores/StateLessons.js'
+const lessons = stateLessons();
 
 const selectedDate = ref()
-const selectedHour = ref()
+function isActiveHour(hour) {
+  return hour.title === TeachersHelpers.timeStart[lessons.lessons[lessons.idLess].lessonsStartCopy].title;
+}
+function setActiveHour(idx) {
+  lessons.lessons[lessons.idLess].lessonsStartCopy = idx;
+}
+
+async function newDateLessons(){
+  await lessons.newDateTime();
+  modalsStore.currentModal = undefined;
+}
 
 // Удаление аккаунта
 import {deleteDoc, doc} from "firebase/firestore";
