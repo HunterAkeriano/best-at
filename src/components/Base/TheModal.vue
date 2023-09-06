@@ -5,7 +5,7 @@
     </div>
 
     <div class="modal__close" @click="modalsStore.closeModal">
-      <Close />
+      <Close/>
     </div>
 
     <h1 class="modal__title">{{ title }}</h1>
@@ -32,7 +32,7 @@
     <div class="modal__body modal__body--big" v-else-if="modalsStore.currentModal === 0">
       <p class="modal__body-label">Дата урока</p>
 
-      <div class="modal__body-input" />
+      <input class="modal__body-input" type="date" v-model="selectedDate"/>
 
       <div class="modal__times">
         <div class="modal__times-item"
@@ -55,20 +55,21 @@
     <div class="modal__body modal__body--big" v-else-if="modalsStore.currentModal === 5">
       <p class="modal__body-label">Дата урока</p>
 
-      <div class="modal__body-input" />
+      <input class="modal__body-input" type="date" v-model="selectedDate"/>
 
       <div class="modal__times">
         <div class="modal__times-item"
-             v-for="(hour, index) in hoursArray" :key="index"
-             :class="{ 'modal__times-item--active': hour === '09:00' }"
+             v-for="hour in TeachersHelpers.timeStart" :key="hour.id"
+             :class="{ 'modal__times-item--active': hour.title === selectedHour }"
+             @click="selectedHour = hour.title"
         >
-          <span>{{ hour }}</span>
+          <span>{{ hour.title }}</span>
         </div>
       </div>
 
       <p class="modal__body-label">Причина переноса</p>
 
-      <textarea class="modal__body-textarea modal__body-textarea--small" />
+      <textarea class="modal__body-textarea modal__body-textarea--small"/>
 
       <Button
           :width="240"
@@ -82,11 +83,11 @@
     <div class="modal__body modal__body--big" v-else-if="modalsStore.currentModal === 6">
       <p class="modal__body-label">Напишите ваш отзыв</p>
 
-      <textarea class="modal__body-textarea" />
+      <textarea class="modal__body-textarea"/>
 
       <p class="modal__body-label">Как вы оцените преподавателя?</p>
 
-      <div class="modal__body-select" />
+      <div class="modal__body-select"/>
 
       <Button
           :width="340"
@@ -102,7 +103,7 @@
 
       <p class="modal__body-label" v-else>Причина исключения</p>
 
-      <textarea class="modal__body-textarea" />
+      <textarea class="modal__body-textarea"/>
 
       <Button
           :width="280"
@@ -144,81 +145,65 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
-import { useModalsStore } from '@/stores/modals'
+import {computed, ref} from 'vue'
+import {useModalsStore} from '@/stores/modals'
 import Close from '@/assets/icons/modal/Close.vue'
 import Button from '@/components/UI/Buttons/Button.vue'
-
+import TeachersHelpers from '../../mixins/TeachersHelpers'
 
 const modalsStore = useModalsStore()
 
 const modals = [
-    'Пробный урок',
-    'Действительно ли удаляем ваш аккаунт?',
-    'Исключить из команды',
-    'Действительно исключить преподавателя из команды?',
-    'Отменить урок',
-    'Перенести урок',
-    'Добавить отзыв о преподавателе',
-    'Исключить ученика'
+  'Пробный урок',
+  'Действительно ли удаляем ваш аккаунт?',
+  'Исключить из команды',
+  'Действительно исключить преподавателя из команды?',
+  'Отменить урок',
+  'Перенести урок',
+  'Добавить отзыв о преподавателе',
+  'Исключить ученика'
 ]
 
 const title = computed(() => {
   return modals[modalsStore.currentModal]
 })
 
-const hoursArray = ref([])
 
-function getHours() {
-  const startHour = 9
-  const endHour = 23
-  for (let hour = startHour; hour <= endHour; hour++) {
-    const currentTime = new Date()
-    currentTime.setHours(hour, 0, 0)
-    const hours = String(currentTime.getHours()).padStart(2, '0')
-    const minutes = String(currentTime.getMinutes()).padStart(2, '0')
-    hoursArray.value.push(`${hours}:${minutes}`);
-  }
-}
+const selectedDate = ref()
+const selectedHour = ref()
 
 // Удаление аккаунта
 import {deleteDoc, doc} from "firebase/firestore";
-import { db, auth } from "@/firebase/firebase";
+import {db, auth} from "@/firebase/firebase";
 import {deleteUser, signInWithEmailAndPassword} from "firebase/auth";
 
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 import {stateUser} from "@/stores/StateUser";
+
 const usersStore = stateUser();
 const router = useRouter();
 
 
-async function deletesUser(){
+async function deletesUser() {
   signInWithEmailAndPassword(auth, usersStore.user[usersStore.userId].email, usersStore.user[usersStore.userId].password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      deleteUser(user).then(async () => {
-      await deleteDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName));
-      usersStore.user = [];
-      usersStore.userId = null;
-      usersStore.auth = null;
-      localStorage.setItem('user', null)
-      await router.push('/');
-      modalsStore.closeModal();
-  }).catch((e) => {
-    console.log(e);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+      .then((userCredential) => {
+        const user = userCredential.user;
+        deleteUser(user).then(async () => {
+          await deleteDoc(doc(db, "allUser", usersStore.user[usersStore.userId].docName));
+          usersStore.user = [];
+          usersStore.userId = null;
+          usersStore.auth = null;
+          localStorage.setItem('user', null)
+          await router.push('/');
+          modalsStore.closeModal();
+        }).catch((e) => {
+          console.log(e);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 }
-
-
-
-
-onMounted(() => {
-  getHours()
-})
 
 </script>
 
@@ -289,6 +274,7 @@ onMounted(() => {
     &-input {
       width: 340px;
       height: 35px;
+      padding: 0 17px;
       margin-bottom: 24px;
       border-radius: 20px;
       background: #F2F5FA;
