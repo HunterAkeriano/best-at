@@ -85,6 +85,16 @@ const router = createRouter({
       component: () => import("@/views/GroupLessons/Create.vue" /* webpackChunkName: "registration" */),
     },
     {
+      name: 'Lessons Edit Page',
+      path: '/lessons-edit/:id',
+      component: () => import("@/views/GroupLessons/Edit.vue" /* webpackChunkName: "registration" */),
+    },
+    {
+      name: 'Lessons Main Page',
+      path: '/lessons/:id',
+      component: () => import("@/views/GroupLessons/Main.vue" /* webpackChunkName: "registration" */),
+    },
+    {
       name: 'Not Found',
       path: '/:pathMatch(.*)*',
       component: () => import("@/views/NotFound.vue" /* webpackChunkName: "not-found" */)

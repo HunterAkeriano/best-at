@@ -7,5 +7,7 @@ export const stateLessons = defineStore({
     students: [],
     idStudent: null,
     idTeacher: null,
+    lessons: [],
+    idLess: null,
   }),
 })
