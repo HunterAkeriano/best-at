@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import {doc, updateDoc} from "firebase/firestore";
+import {doc, updateDoc, deleteDoc} from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
 export const stateLessons = defineStore({
@@ -23,6 +23,9 @@ export const stateLessons = defineStore({
       }
       await updateDoc(doc(db, "lessons",  this.lessons[this.idLess].id), newData);
 
+    },
+    async deleteLessons(){
+      await deleteDoc(doc(db, "lessons", this.lessons[this.idLess].id));
     }
   }
 })

@@ -5,6 +5,7 @@ export const stateForum = defineStore({
   state: () => ({
     forum: [],
     idForum: null,
-    idTheme: null, 
+    idTheme: null,
+    idChat: null, 
   }),
 })

@@ -67,6 +67,7 @@
         :padding="15"
         :lineHeight="21"
         :isCourses="true"
+        @click="modals.currentModal = 4"
       >Отменить урок</TheButton>
       </div>
     </div>

@@ -137,7 +137,7 @@
           :width="280"
           :padding="11"
           v-else-if="modalsStore.currentModal === 4"
-          @click="modalsStore.closeModal"
+          @click="deleteLessons"
       >
         Отменить
       </Button>
@@ -216,6 +216,14 @@ async function deletesUser() {
       .catch((error) => {
         console.log(error);
       });
+}
+
+// удаление урока
+async function deleteLessons(){
+  await lessons.deleteLessons();
+  await router.push('/');
+  modalsStore.currentModal = undefined;
+
 }
 
 </script>
