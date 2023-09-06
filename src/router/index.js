@@ -65,6 +65,11 @@ const router = createRouter({
       component: () => import("@/views/forum/ForumTheme.vue" /* webpackChunkName: "registration" */),
     },
     {
+      name: 'Article Page',
+      path: '/article',
+      component: () => import("@/views/ArticleView.vue" /* webpackChunkName: "article" */),
+    },
+    {
       name: 'Course Create',
       path: '/course-create',
       component: () => import("@/views/Course/CourseCreate.vue" /* webpackChunkName: "registration" */),
