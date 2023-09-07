@@ -2,7 +2,9 @@
   <div class="profile">
     <div class="container">
       <div class="profile__links">
-        <p><router-link :to="{ path: `/` }">Главная</router-link></p>
+        <p>
+          <router-link :to="{ path: `/` }">Главная</router-link>
+        </p>
         <span>/</span>
         <p style="cursor: pointer;">Личный кабинет</p>
       </div>
@@ -16,18 +18,18 @@
           <div class="profile__wrapper-user" v-if="usersStore.userId !== null">
             <div class="user">
               <div class="user__photo"
-              v-for="item in usersStore.user[usersStore.userId].ava" 
-              style="cursor: pointer;">
-                <img 
-                v-if="item.url !== null"
-                style="border-radius: 50px;"
-                :src="item.url"   
-                alt="" height="65" width="65">
-                <img  v-if="item.url == null "  src="@/assets/img/registration/Avatar.svg"   alt="" height="65" width="65">
-                
+                   v-for="item in usersStore.user[usersStore.userId].ava"
+                   style="cursor: pointer;">
+                <img
+                    v-if="item.url !== null"
+                    style="border-radius: 50px;"
+                    :src="item.url"
+                    alt="" height="65" width="65">
+                <img v-if="item.url == null " src="@/assets/img/registration/Avatar.svg" alt="" height="65" width="65">
+
 
                 <div class="user__photo-input">
-                  <input id="img" @change="onFileSelectedAva($event)" ref="fileInput" type="file" accept="image/* " >
+                  <input id="img" @change="onFileSelectedAva($event)" ref="fileInput" type="file" accept="image/* ">
                   <label for="img">Загрузить фотографию</label>
                 </div>
               </div>
@@ -46,46 +48,54 @@
 
             <div class="links">
               <div class="links__items"
-              :class="{'active': SELECTED_ROUTER == ''}"
-              @click="selectRouter('')">
+                   :class="{'active': SELECTED_ROUTER === ''}"
+                   @click="selectRouter('')">
                 <UserIcon/>
                 <p>Аккаунт</p>
               </div>
-              <div class="links__items" 
-              :class="{'active': SELECTED_ROUTER == 'data'}"
-              @click="selectRouter('data')">
+              <div class="links__items"
+                   :class="{'active': SELECTED_ROUTER === 'data'}"
+                   @click="selectRouter('data')">
                 <DataIcon/>
                 <p>Личные данные</p>
               </div>
               <div class="links__items"
-              :class="{'active': SELECTED_ROUTER == 'lessons'}"
-              @click="selectRouter('lessons')"
+                   :class="{'active': SELECTED_ROUTER === 'lessons'}"
+                   @click="selectRouter('lessons')"
               >
                 <LessonsIcon/>
                 <p>Мои уроки</p>
               </div>
-              <div class="links__items" v-if="usersStore.user[usersStore.userId].type.student">
+              <div class="links__items" v-if="usersStore.user[usersStore.userId].type.student"
+                   :class="{'active': SELECTED_ROUTER === 'teachers'}"
+                   @click="selectRouter('teachers')"
+              >
                 <TeacherIcon/>
                 <p>Мои преподаватели</p>
               </div>
               <div class="links__items"
-              :class="{'active': SELECTED_ROUTER == 'payments'}"
-              @click="selectRouter('payments')">
+                   :class="{'active': SELECTED_ROUTER === 'payments'}"
+                   @click="selectRouter('payments')">
                 <PaymentIcon/>
                 <p>Платежная информация</p>
               </div>
-              <div class="links__items" 
-              @click="selectRouter('poslugi')" 
-              :class="{'active': SELECTED_ROUTER == 'poslugi'}"
-              v-if="usersStore.user[usersStore.userId].type.teachers || usersStore.user[usersStore.userId].type.company">
+              <div class="links__items"
+                   @click="selectRouter('poslugi')"
+                   :class="{'active': SELECTED_ROUTER === 'poslugi'}"
+                   v-if="usersStore.user[usersStore.userId].type.teachers || usersStore.user[usersStore.userId].type.company">
                 <EduIcon/>
                 <p>Услуги</p>
               </div>
-              <div class="links__items">
+              <div class="links__items"
+                   :class="{'active': SELECTED_ROUTER === 'statistics'}"
+                   @click="selectRouter('statistics')">
                 <StatsIcon/>
                 <p>Статистика</p>
               </div>
-              <div class="links__items" v-if="usersStore.user[usersStore.userId].type.company">
+              <div class="links__items" v-if="usersStore.user[usersStore.userId].type.company"
+                   :class="{'active': SELECTED_ROUTER === 'team'}"
+                   @click="selectRouter('team')"
+              >
                 <CommandIcon/>
                 <p>Команда компании</p>
               </div>
@@ -97,12 +107,16 @@
           </div>
         </div>
         <div class="profile__wrapper-info" v-if="usersStore.userId !== null">
-          <ProfileMain v-if="SELECTED_ROUTER == ''"/>
-          <ProfileDataStudent v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.student"/>
-          <ProfileDataTeacher v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.teachers"/>
-          <ProfileDataCompany v-if="SELECTED_ROUTER == 'data' && usersStore.user[usersStore.userId].type.company"/>
-          <ProfilePayment v-if="SELECTED_ROUTER == 'payments'"/>
-          <ProfilePoslugi v-if="SELECTED_ROUTER == 'poslugi'  && usersStore.user[usersStore.userId].type.teachers"/>
+          <ProfileMain v-if="SELECTED_ROUTER === ''"/>
+          <ProfileDataStudent v-if="SELECTED_ROUTER === 'data' && usersStore.user[usersStore.userId].type.student"/>
+          <ProfileDataTeacher v-if="SELECTED_ROUTER === 'data' && usersStore.user[usersStore.userId].type.teachers"/>
+          <ProfileDataCompany v-if="SELECTED_ROUTER === 'data' && usersStore.user[usersStore.userId].type.company"/>
+          <ProfilePayment v-if="SELECTED_ROUTER === 'payments'"/>
+          <ProfilePoslugi v-if="SELECTED_ROUTER === 'poslugi'  && usersStore.user[usersStore.userId].type.teachers"/>
+          <ProfileTeachers v-if="SELECTED_ROUTER === 'teachers'  && usersStore.user[usersStore.userId].type.student"/>
+          <ProfileTeachers v-if="SELECTED_ROUTER === 'team'  && usersStore.user[usersStore.userId].type.company" is-company/>
+          <ProfileLessons v-if="SELECTED_ROUTER === 'lessons'"/>
+          <ProfileStatistics v-if="SELECTED_ROUTER === 'statistics'"/>
         </div>
       </div>
     </div>
@@ -112,8 +126,8 @@
 <script setup>
 import {ref, onBeforeMount, watch} from 'vue'
 import {stateUser} from "@/stores/StateUser";
-import { collection, getDocs, doc, updateDoc} from "firebase/firestore";
-import { db } from "@/firebase/firebase";
+import {collection, getDocs, doc, updateDoc} from "firebase/firestore";
+import {db} from "@/firebase/firebase";
 
 const usersStore = stateUser();
 
@@ -123,6 +137,9 @@ import ProfileDataTeacher from '@/components/Base/profile/data/ProfileDataTeache
 import ProfileDataCompany from '@/components/Base/profile/data/ProfileDataCompany.vue'
 import ProfilePayment from '@/components/Base/profile/ProfilePayment.vue'
 import ProfilePoslugi from '@/components/Base/profile/ProfilePoslugi.vue'
+import ProfileTeachers from '@/components/Base/profile/ProfileTeachers.vue'
+import ProfileLessons from '@/components/Base/profile/ProfileLessons.vue'
+import ProfileStatistics from '@/components/Base/profile/ProfileStatistics.vue'
 
 import UserIcon from '@/assets/icons/profile/UserIcon.vue'
 import DataIcon from '@/assets/icons/profile/DataIcon.vue'
@@ -136,7 +153,7 @@ import CommandIcon from '@/assets/icons/profile/CommandIcon.vue'
 
 const userEmail = ref();
 
-async function getUser(){
+async function getUser() {
   const usersData = await getDocs(collection(db, 'allUser'));
   usersData.forEach((doc) => {
     usersStore.user.push({
@@ -151,7 +168,6 @@ async function getUser(){
       type: doc.data().type,
       emailNew: doc.data().email,
       passwordNew: doc.data().password,
-      type: doc.data().type,
       country: doc.data().country,
       language: doc.data().language,
       time: doc.data().timed,
@@ -170,7 +186,7 @@ async function getUser(){
   })
 }
 
-async function getStudent(){
+async function getStudent() {
   const usersData = await getDocs(collection(db, 'publicStudentData'));
   usersData.forEach((doc) => {
     usersStore.userStudent.push({
@@ -189,15 +205,15 @@ onBeforeMount(() => {
   usersStore.studentId = null;
 
 
-  getUser().then(()=>{
-    usersStore.user.forEach((item)=>{
-      if(item.email == userEmail.value.email){
+  getUser().then(() => {
+    usersStore.user.forEach((item) => {
+      if (item.email == userEmail.value.email) {
         usersStore.userId = item.id;
-        if(item.type.student){
-          getStudent().then(()=>{
-            usersStore.userStudent.forEach((student)=>{
-              if(student.email == userEmail.value.email){
-                usersStore.studentId =  usersStore.user.findIndex(item => item.email === userEmail.value.email);
+        if (item.type.student) {
+          getStudent().then(() => {
+            usersStore.userStudent.forEach((student) => {
+              if (student.email == userEmail.value.email) {
+                usersStore.studentId = usersStore.user.findIndex(item => item.email === userEmail.value.email);
               }
             })
           });
@@ -211,7 +227,7 @@ onBeforeMount(() => {
 
 
 // роутинг
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 
 const router = useRouter();
 
@@ -220,12 +236,12 @@ const SELECTED_ROUTER = ref('');
 function selectRouter(queryParam) {
   if (queryParam === "") {
     SELECTED_ROUTER.value = '';
-    router.push({ query: null }); 
+    router.push({query: null});
   } else {
     SELECTED_ROUTER.value = queryParam;
-    const currentQuery = { ...router.currentRoute.value.query };
+    const currentQuery = {...router.currentRoute.value.query};
     currentQuery.param = queryParam;
-    router.push({ query: currentQuery });
+    router.push({query: currentQuery});
   }
 }
 
@@ -264,7 +280,7 @@ async function onFileSelectedAva(event) {
       obj: file,
       name: 'ava-' + Date.now(),
       url: URL.createObjectURL(file)
-    });     
+    });
   }
   const userInfo = 'ava-' + Date.now();
   const docInfo = `users/${userInfo}`;
@@ -278,13 +294,13 @@ async function onFileSelectedAva(event) {
 </script>
 
 <style lang="scss">
-.profile{
+.profile {
   margin-top: 93px;
   margin-bottom: 40px;
   font-family: Montserrat;
   flex: 1 1 auto;
 
-  &__links{
+  &__links {
     display: flex;
     align-items: center;
     color: #7D7F83;
@@ -293,7 +309,7 @@ async function onFileSelectedAva(event) {
     font-weight: 400;
     line-height: 16px; /* 114.286% */
 
-    span{
+    span {
       display: block;
       margin-left: 10px;
       margin-right: 8px;
@@ -301,10 +317,10 @@ async function onFileSelectedAva(event) {
   }
 
 
-  &__title{
+  &__title {
     margin-top: 20px;
 
-    h3{
+    h3 {
       color: #292C32;
       font-family: EB Garamond;
       font-size: 50px;
@@ -314,38 +330,38 @@ async function onFileSelectedAva(event) {
     }
   }
 
-  &__wrapper{
+  &__wrapper {
     display: flex;
 
 
-    &-left{
+    &-left {
       max-width: 240px;
       width: 100%;
     }
 
-    &-user{
-      .user{
+    &-user {
+      .user {
         display: flex;
         gap: 16px;
         margin-top: 26px;
 
-        &__info{
+        &__info {
           max-width: 150px;
 
-          &-name{
+          &-name {
             min-height: 41px;
 
-            p{
+            p {
               color: #292C32;
               font-size: 15px;
               font-style: normal;
               font-weight: 700;
-              line-height: 20px; 
+              line-height: 20px;
             }
           }
 
-          &-type{
-            p{
+          &-type {
+            p {
               cursor: default;
               color: #8B919E;
               font-size: 13px;
@@ -355,17 +371,18 @@ async function onFileSelectedAva(event) {
               text-decoration-line: underline;
               transition: all .25s;
 
-              &.active{
+              &.active {
                 color: #F04973;
                 text-decoration: none;
               }
             }
-            p:nth-child(3){
+
+            p:nth-child(3) {
               margin-top: -5px;
             }
 
-            p:last-child{
-              &:hover{
+            p:last-child {
+              &:hover {
                 color: #F04973;
                 text-decoration: none;
                 cursor: pointer;
@@ -374,16 +391,18 @@ async function onFileSelectedAva(event) {
           }
         }
 
-        &__photo{
+        &__photo {
           position: relative;
           z-index: 5;
-          &-input{
+
+          &-input {
             position: absolute;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            label{
+
+            label {
               display: block;
               overflow: hidden;
               opacity: 0;
@@ -393,7 +412,8 @@ async function onFileSelectedAva(event) {
               margin-top: -23px;
               cursor: pointer;
             }
-            input{
+
+            input {
               opacity: 0;
               visibility: hidden;
               pointer-events: none;
@@ -403,10 +423,10 @@ async function onFileSelectedAva(event) {
         }
       }
 
-      .links{
+      .links {
         margin-top: 10px;
 
-        &__items{
+        &__items {
           display: flex;
           align-items: center;
           gap: 12px;
@@ -416,7 +436,7 @@ async function onFileSelectedAva(event) {
           border-top: 1px solid #DCE3E8;
           transition: all .25s;
 
-          p{
+          p {
             color: #454B58;
             font-size: 15px;
             font-style: normal;
@@ -425,13 +445,13 @@ async function onFileSelectedAva(event) {
           }
 
           &.active,
-          &:hover{
-            p{
+          &:hover {
+            p {
               color: #F04973;
             }
 
-            svg{
-              path{
+            svg {
+              path {
                 fill: #F04973;
               }
             }
@@ -440,7 +460,7 @@ async function onFileSelectedAva(event) {
       }
     }
 
-    &-info{
+    &-info {
       margin-left: 110px;
       margin-top: 25px;
     }

@@ -10,7 +10,7 @@
     <table class="calendar__table">
       <thead>
       <tr>
-        <th></th>
+        <th class="hours"></th>
         <th v-for="day in daysArray.length" :key="day">
           {{ getLocalDate(daysArray[day-1]) }}
         </th>
@@ -206,6 +206,18 @@ onMounted(() => {
       display: block;
       max-height: 301px;
       overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #DFE3E7;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #F04973;
+      }
     }
 
     thead, tbody tr {
@@ -215,7 +227,7 @@ onMounted(() => {
     }
 
     thead {
-      width: calc( 100% - 1em );
+      width: calc( 100% - 4px );
     }
 
     th, td {
@@ -240,11 +252,16 @@ onMounted(() => {
 }
 
 .calendar--month {
-  max-width: 940px;
+  max-width: 920px;
 
   th {
     min-width: 27px;
     min-height: 27px;
+  }
+
+  .hours {
+    text-align: left;
+    width: 54px!important;
   }
 }
 

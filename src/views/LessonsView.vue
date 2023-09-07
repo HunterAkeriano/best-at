@@ -115,7 +115,7 @@
         <div class="page__content-wrapper" v-if="paginateUsers().length > 0">
           <div class="page__content-lessons">
             <LessonCard
-                v-for="lesson in lessonsArray" :key="lesson.idx"
+                v-for="lesson in paginateUsers()" :key="lesson.idx"
                 :card="lesson" :teacher="getTeacher(lesson.teachers)"
             />
           </div>
