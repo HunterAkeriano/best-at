@@ -44,6 +44,7 @@
       <span>{{ card.priceLessons }} $</span>
     </div>
 
+    <router-link :to="{ path: `/lessons/${card.id}` }">
     <Button
         :width="380"
         :padding="16"
@@ -51,6 +52,7 @@
     >
       Забронировать
     </Button>
+  </router-link>
   </div>
 </template>
 

@@ -36,7 +36,7 @@
 
       <div class="teacher-forms__input" style="margin-top: 15px;">
         <p class="teacher-forms__input-text">Ваш телефон</p>
-        <input :class="{'error': v1$?.phone?.$error}" v-model="oneStepData.phone" v-on:keydown="onKeyDown" type="text" >
+        <input :class="{'error': v1$?.phone?.$error}" v-model="oneStepData.phone" type="text" >
         <span v-if="v1$?.phone?.$error">Заполните поле</span>
         <IconError class="error-icons" v-if="v1$?.phone?.$error"/>
       </div>

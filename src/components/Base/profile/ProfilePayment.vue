@@ -14,7 +14,7 @@
         <div class="card"
         @click="editCardFun(idx)">
           <div class="card__img">
-            <component :is="selectCard(card.number)"/>
+            <component :is="selectCard(card.number)" style="height: 47px;"/>
           </div>
           <div class="card__info">
             <h5>{{ infoCard(card.number) }}</h5>
