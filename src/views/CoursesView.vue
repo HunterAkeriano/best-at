@@ -115,7 +115,7 @@
         <div class="page__content-wrapper" v-if="paginateUsers().length > 0">
           <div class="page__content-courses">
             <CourseCard
-                v-for="course in coursesArray" :key="course.idx"
+                v-for="course in paginateUsers()" :key="course.idx"
                 :card="course" :teacher="getTeacher(course.teachers)"
             />
           </div>
@@ -232,7 +232,7 @@ function filteredByTeachTime() {
 }
 
 function filteredByPrice() {
-  return filteredByTeachTime().filter(course => +(course.pricelessons) >= value.value[0] && +(course.pricelessons) <= value.value[1])
+  return filteredByTeachTime().filter(course => Number(course.pricelessons) >= value.value[0] && Number(course.pricelessons) <= value.value[1])
 }
 
 function filteredByTeachYear() {
@@ -260,6 +260,7 @@ function paginateUsers() {
   let from = (currentPage.value - 1) * 6
   let to = from + 6
   if (isApplied.value) {
+    console.log(filteredByTeachYear())
     return filteredByTeachYear().slice(from, to)
   } else {
     return coursesArray.value.slice(from, to)
