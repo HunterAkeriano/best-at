@@ -21,7 +21,7 @@
           :slides-per-view="4"
           :spaceBetween="58"
           >
-            <SwiperSlide v-for="item in arrayTeacher">
+            <SwiperSlide v-for="item in arrayTeacher.slice(0, 5)">
               <div class="slide-item">
                 <div class="slide-item__img">
                   <img width="155" height="155" :src="item.photo" alt="">
@@ -36,7 +36,7 @@
               </div>
             </SwiperSlide>
 
-            <SwiperSlide style="background: none;"/>
+            <SwiperSlide />
            
 
           </Swiper>
@@ -206,6 +206,8 @@ onMounted(() => {
 
       &-slide:last-child{
         margin-right: 100px !important;
+        width: 0 !important;
+        background: none !important;
       }
     }
   } 
