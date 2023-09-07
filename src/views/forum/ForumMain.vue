@@ -25,7 +25,7 @@
         <router-link :to="{ path: `/forum/${item.router}` }">
           <ThemeIcon/>
           <p>{{ item.title }}</p>
-          <p>{{ item.theme.length }}</p>
+          <p style="transform: translateX(10px);">{{ item.theme.length }}</p>
           <p>{{ item.timed }}</p>
         </router-link>
         </div>
