@@ -28,7 +28,7 @@
         <router-link :to="{ path: `/forum/${$route.params.id}/${item.router}` }">
           <ThemeIcon/>
           <p>{{ item.title }} <span>от {{ item.inOut }}</span></p>
-          <p>{{ item.timed }} <span>от {{ item.out }}</span></p>
+          <p style="transform: translateX(37px);">{{ item.timed }} <span>от {{ item.out }}</span></p>
           <p>{{ item.messangers.length }}</p>
           <p>{{ item.timed }}</p>
         </router-link>
