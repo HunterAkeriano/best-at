@@ -75,8 +75,17 @@
         <Button
             :width="161"
             :padding="16"
+            v-if="!isCompany"
         >
           Пробный урок
+        </Button>
+
+        <Button
+            :width="161"
+            :padding="16"
+            v-else
+        >
+          Исключить
         </Button>
 
         <RouterLink :to="`/teachers/${teacher.id}`">
@@ -107,6 +116,10 @@ defineProps({
     type: Object,
     default: () => {
     }
+  },
+  isCompany: {
+    type: Boolean,
+    default: false
   }
 })
 

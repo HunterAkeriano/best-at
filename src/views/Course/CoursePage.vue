@@ -1,6 +1,6 @@
 <template>
   <div class="course-page">
-    <div class="container"  v-if="idCourse !== null">
+    <div class="container" v-if="idCourse !== null">
       <div class="course-page__links">
         <p>Главная</p>
         <span>/</span>
@@ -9,7 +9,7 @@
         <p>{{ coursesArray[idCourse].name }}</p>
       </div>
       <div class="course-page__title">
-        <h3>{{  coursesArray[idCourse].name }}</h3>
+        <h3>{{ coursesArray[idCourse].name }}</h3>
       </div>
       <div class="course-page__wrapper">
 
@@ -21,39 +21,49 @@
           <div class="price">
             <div class="price-item">
               <p>Зарегистрировались</p>
-              <h5>{{coursesArray[idCourse].student.length}} человек</h5>
+              <h5>{{ coursesArray[idCourse].student.length }} человек</h5>
             </div>
             <div class="price-item">
               <p>Максимум:</p>
-              <h5>{{coursesArray[idCourse].maxStudent}} человек</h5>
+              <h5>{{ coursesArray[idCourse].maxStudent }} человек</h5>
             </div>
           </div>
 
           <div class="elem">
             <p>Стоимость курса</p>
-            <h5>{{coursesArray[idCourse].pricelessons}} $</h5>
+            <h5>{{ coursesArray[idCourse].pricelessons }} $</h5>
           </div>
 
           <TheButton
-          style="margin-top: 11px; width: 100%; text-transform: uppercase;"
-            :width="200"
-            :padding="15"
-            :lineHeight="21"
-          >записаться на курс</TheButton>
+              style="margin-top: 11px; width: 100%; text-transform: uppercase;"
+              :width="200"
+              :padding="15"
+              :lineHeight="21"
+          >записаться на курс
+          </TheButton>
         </div>
 
         <div class="course-page__wrapper-main">
           <div class="base">
             <div class="base__start">
-              <h5>Старт: <span>{{ formatDate(coursesArray[idCourse].date)}}</span></h5>
-              <p><TimeSmall/> {{ TeachersHelpers.timeStart[coursesArray[idCourse].time].title }}</p>
+              <h5>Старт: <span>{{ formatDate(coursesArray[idCourse].date) }}</span></h5>
+              <p>
+                <TimeSmall/>
+                {{ TeachersHelpers.timeStart[coursesArray[idCourse].time].title }}
+              </p>
             </div>
             <div class="base__label">
-              <p><Beginers/>{{ TeachersHelpers.typed[coursesArray[idCourse].lvl].title }}</p>
-              <p><People/> {{ TeachersHelpers.years[coursesArray[idCourse].years].title }}</p>
+              <p>
+                <Beginers/>
+                {{ TeachersHelpers.typed[coursesArray[idCourse].lvl].title }}
+              </p>
+              <p>
+                <People/>
+                {{ TeachersHelpers.years[coursesArray[idCourse].years].title }}
+              </p>
             </div>
             <div class="base__text">
-              <p>{{ coursesArray[idCourse].about }}</p> 
+              <p>{{ coursesArray[idCourse].about }}</p>
             </div>
             <div class="base__time">
               <div class="base__time-item">
@@ -64,12 +74,12 @@
               <div class="base__time-item">
                 <TimeBig/>
                 <p>Самостоятельная работа:</p>
-                <h5>{{ coursesArray[idCourse].timeOut}} часов</h5>
+                <h5>{{ coursesArray[idCourse].timeOut }} часов</h5>
               </div>
               <div class="base__time-item">
                 <TimeBig/>
                 <p>Выполнение тестов:</p>
-                <h5>{{ coursesArray[idCourse].timeTest}} часов</h5>
+                <h5>{{ coursesArray[idCourse].timeTest }} часов</h5>
               </div>
             </div>
           </div>
@@ -86,7 +96,7 @@
             <div class="plan__item" v-for="item in coursesArray[idCourse].plan">
               <p>{{ TeachersHelpers.type[item.type].title }}</p>
               <p>{{ item.title }}</p>
-              <p>{{item.time}} ч</p>
+              <p>{{ item.time }} ч</p>
               <p>10.07.2021</p>
             </div>
           </div>
@@ -111,16 +121,17 @@ import People from '@/assets/icons/course/People.vue'
 import TheButton from '@/components/UI/Buttons/Button.vue'
 
 import TeachersHelpers from '../../mixins/TeachersHelpers.js'
-import { ref, onBeforeMount } from "vue";
-import { useRoute } from 'vue-router';
+import {ref, onBeforeMount} from "vue";
+import {useRoute} from 'vue-router';
+
 const route = useRoute()
 
-import { collection, getDocs} from "firebase/firestore";
-import { db } from "@/firebase/firebase";
+import {collection, getDocs} from "firebase/firestore";
+import {db} from "@/firebase/firebase";
 
 const teacher = ref([]);
 
-async function getTeacher(){
+async function getTeacher() {
   const usersData = await getDocs(collection(db, 'publishedTeachers'));
   usersData.forEach((doc) => {
     teacher.value.push({
@@ -134,9 +145,9 @@ async function getTeacher(){
 const coursesArray = ref([]);
 const idCourse = ref(null);
 
-async function getCourse(){
+async function getCourse() {
   const course = await getDocs(collection(db, 'course'));
-  course.forEach((doc)=>{
+  course.forEach((doc) => {
     coursesArray.value.push({
       idx: doc.data().idx,
       id: doc.data().id,
@@ -160,9 +171,9 @@ async function getCourse(){
 
 onBeforeMount(() => {
   getTeacher();
-  getCourse().then(()=>{
-    coursesArray.value.forEach((item)=>{
-      if(item.id == route.params.id){
+  getCourse().then(() => {
+    coursesArray.value.forEach((item) => {
+      if (item.id == route.params.id) {
         idCourse.value = item.idx;
       }
     })
@@ -171,26 +182,25 @@ onBeforeMount(() => {
 })
 
 function formatDate(inputDate) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const options = {day: 'numeric', month: 'long', year: 'numeric'};
   return new Date(inputDate).toLocaleDateString('ru-RU', options).replace(/ г\.$/, '');
 }
-
 
 
 </script>
 
 <style lang="scss" scoped>
-.course-page{
+.course-page {
   flex: 1 1 auto;
 
-  &__links{
+  &__links {
     display: flex;
     align-items: center;
     margin-top: 93px;
     padding-left: 1px;
 
     p,
-    span{
+    span {
       color: #454B58;
       font-family: Montserrat;
       font-size: 14px;
@@ -198,17 +208,20 @@ function formatDate(inputDate) {
       font-weight: 400;
       line-height: 16px; /* 114.286% */
     }
-    p{
+
+    p {
       margin-right: 9px;
     }
-    span{
+
+    span {
       margin-right: 8px;
     }
   }
 
-  &__title{
+  &__title {
     margin-top: 20px;
-    h3{
+
+    h3 {
       color: #292C32;
       font-family: EB Garamond;
       font-size: 50px;
@@ -218,14 +231,14 @@ function formatDate(inputDate) {
     }
   }
 
-  &__wrapper{
+  &__wrapper {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-top: 24px;
     margin-bottom: 40px;
 
-    &-teacher{
+    &-teacher {
       max-width: 330px;
       width: 100%;
       border-radius: 10px;
@@ -236,14 +249,14 @@ function formatDate(inputDate) {
       padding-right: 25px;
       padding-bottom: 44px;
 
-      img{
+      img {
         width: 155px;
         height: 155px;
         border-radius: 100%;
         margin-left: 63px;
       }
 
-      h3{
+      h3 {
         max-width: 227px;
         margin: 0 auto;
         color: #292C32;
@@ -256,7 +269,8 @@ function formatDate(inputDate) {
         margin-top: 25px;
         height: 43px;
       }
-      p{
+
+      p {
         color: #8B919E;
         text-align: center;
         font-family: Montserrat;
@@ -267,7 +281,7 @@ function formatDate(inputDate) {
         margin-top: 3px;
       }
 
-      .price{
+      .price {
         display: flex;
         justify-content: space-between;
         border-top: 1px solid #DCE3E8;
@@ -276,7 +290,8 @@ function formatDate(inputDate) {
         padding-top: 12px;
         padding-bottom: 19px;
         padding-right: 7px;
-        p{
+
+        p {
           margin: 0;
           text-align: start;
           color: #8B919E;
@@ -286,7 +301,8 @@ function formatDate(inputDate) {
           font-weight: 500;
           line-height: 23px; /* 164.286% */
         }
-        h5{
+
+        h5 {
           color: #292C32;
           font-family: Montserrat;
           font-size: 15px;
@@ -296,17 +312,17 @@ function formatDate(inputDate) {
         }
       }
 
-      .elem{
+      .elem {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-top: 11px;
 
-        p{
+        p {
           font-size: 15px;
         }
 
-        h5{
+        h5 {
           color: #292C32;
           font-family: Montserrat;
           font-size: 16px;
@@ -318,10 +334,11 @@ function formatDate(inputDate) {
 
     }
 
-    &-main{
+    &-main {
       max-width: 1000px;
       width: 100%;
-      .base{
+
+      .base {
         border-radius: 10px;
         background: #FFF;
         box-shadow: 0px 10px 60px 0px rgba(42, 102, 193, 0.15);
@@ -330,11 +347,11 @@ function formatDate(inputDate) {
         padding-right: 50px;
         padding-bottom: 40px;
 
-        &__start{
+        &__start {
           display: flex;
           align-items: center;
 
-          h5{
+          h5 {
             color: #292C32;
             font-family: Montserrat;
             margin-right: 33px;
@@ -343,7 +360,7 @@ function formatDate(inputDate) {
             font-weight: 600;
             line-height: normal;
 
-            span{
+            span {
               color: #8B919E;
               font-family: Montserrat;
               font-size: 13px;
@@ -354,7 +371,7 @@ function formatDate(inputDate) {
             }
           }
 
-          p{
+          p {
             display: flex;
             align-items: center;
             color: #8B919E;
@@ -364,23 +381,25 @@ function formatDate(inputDate) {
             font-weight: 500;
             line-height: normal;
 
-            svg{
+            svg {
               margin-right: 5px;
             }
           }
         }
 
-        &__label{
+        &__label {
           display: flex;
           align-items: center;
           margin-top: 18px;
 
-          p{
+          p {
             display: flex;
             align-items: center;
-            svg{
+
+            svg {
               margin-right: 5px;
             }
+
             color: #292C32;
             font-family: Montserrat;
             font-size: 12px;
@@ -392,17 +411,19 @@ function formatDate(inputDate) {
             margin-right: 17px;
           }
 
-          p:nth-child(1){
+          p:nth-child(1) {
             background: #E1DAFF;
           }
-          p:nth-child(2){
+
+          p:nth-child(2) {
             background: #D0EEFB;
           }
         }
 
-        &__text{
+        &__text {
           margin-top: 14px;
-          p{
+
+          p {
             color: #454B58;
             font-family: Montserrat;
             font-size: 14px;
@@ -412,13 +433,13 @@ function formatDate(inputDate) {
           }
         }
 
-        &__time{
+        &__time {
           display: flex;
           align-items: center;
           margin-top: 36px;
 
-          &-item{
-            p{
+          &-item {
+            p {
               color: #8B919E;
               font-family: Montserrat;
               font-size: 15px;
@@ -428,7 +449,7 @@ function formatDate(inputDate) {
               margin-top: 3px;
             }
 
-            h5{
+            h5 {
               color: #292C32;
               font-family: Montserrat;
               font-size: 18px;
@@ -439,14 +460,14 @@ function formatDate(inputDate) {
             }
           }
 
-          &-item:nth-child(2){
+          &-item:nth-child(2) {
             margin-left: 150px;
             margin-right: 98px;
           }
         }
       }
 
-      .plan{
+      .plan {
         border-radius: 10px;
         background: #FFF;
         box-shadow: 0px 10px 60px 0px rgba(42, 102, 193, 0.15);
@@ -454,7 +475,7 @@ function formatDate(inputDate) {
         margin-top: 33px;
 
 
-        h3{
+        h3 {
           color: #292C32;
           font-family: Montserrat;
           font-size: 20px;
@@ -463,13 +484,14 @@ function formatDate(inputDate) {
           line-height: 22px; /* 110% */
         }
 
-        &__head{
+        &__head {
           display: flex;
           align-items: center;
           padding: 15px 0;
           background: #FDE4EA;
           margin-top: 20px;
-          p{
+
+          p {
             color: #292C32;
             font-family: Montserrat;
             font-size: 15px;
@@ -479,27 +501,29 @@ function formatDate(inputDate) {
             text-align: center;
           }
 
-          p:nth-child(1){
+          p:nth-child(1) {
             width: 188px;
           }
-          p:nth-child(2){
+
+          p:nth-child(2) {
             text-align: start;
             width: 474px;
             padding-left: 28px;
           }
-          p:nth-child(3){
+
+          p:nth-child(3) {
             text-align: start;
             width: 151px;
           }
         }
 
-        &__item{
+        &__item {
           display: flex;
           align-items: center;
           border: 1px solid #EEE;
           background: #FFF;
 
-          p{
+          p {
             color: #292C32;
             border: 1px solid #EEE;
             font-family: Montserrat;
@@ -511,19 +535,22 @@ function formatDate(inputDate) {
             border-top: 0;
           }
 
-          p:nth-child(1){
+          p:nth-child(1) {
             padding-left: 19px;
             width: 194px;
           }
-          p:nth-child(2){
+
+          p:nth-child(2) {
             padding-left: 22px;
             width: 459px;
           }
-          p:nth-child(3){
+
+          p:nth-child(3) {
             text-align: center;
             width: 120px;
           }
-          p:nth-child(4){
+
+          p:nth-child(4) {
             text-align: center;
             width: 128px;
           }
