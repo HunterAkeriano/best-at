@@ -65,6 +65,11 @@ const router = createRouter({
       component: () => import("@/views/forum/ForumTheme.vue" /* webpackChunkName: "registration" */),
     },
     {
+      name: 'Article Page',
+      path: '/article',
+      component: () => import("@/views/ArticleView.vue" /* webpackChunkName: "article" */),
+    },
+    {
       name: 'Forum Chat Page',
       path: '/forum/:id/:chatid',
       component: () => import("@/views/forum/ForumChat.vue" /* webpackChunkName: "registration" */),
@@ -80,8 +85,13 @@ const router = createRouter({
       component: () => import("@/views/Course/CourseEdit.vue" /* webpackChunkName: "registration" */),
     },
     {
+      path: '/courses',
+      name: 'courses',
+      component: () => import("@/views/CoursesView.vue" /* webpackChunkName: "courses" */)
+    },
+    {
       name: 'Course Page',
-      path: '/course/:id',
+      path: '/courses/:id',
       component: () => import("@/views/Course/CoursePage.vue" /* webpackChunkName: "registration" */),
     },
     {
@@ -93,6 +103,11 @@ const router = createRouter({
       name: 'Lessons Edit Page',
       path: '/lessons-edit/:id',
       component: () => import("@/views/GroupLessons/Edit.vue" /* webpackChunkName: "registration" */),
+    },
+    {
+      path: '/lessons',
+      name: 'lessons',
+      component: () => import("@/views/LessonsView.vue" /* webpackChunkName: "lessons" */)
     },
     {
       name: 'Lessons Main Page',
