@@ -1,6 +1,6 @@
 <template>
   <div class="forum" >
-    <div class="container" v-if="forums.idForum !== null">
+    <div class="container" v-if="forums.idForum !== null && forums.idChat !== null">
       <div class="forum__links">
         <p>Главная</p>
         <span>/</span>
@@ -32,12 +32,13 @@
               <p>#{{ +item.id + 1 }}</p>
             </div>
             <div class="text__content">
-              <p>{{ item.text }}</p>
+              <p
+              :style="{ fontFamily: item.fonts, fontSize:  `${item.fz}px` }" 
+              >{{ item.text }}</p>
             </div>
           </div>
         </div>
       </div>
-
       <ThePagination
         v-if="pages>1"
         :total-pages="pages"
@@ -45,6 +46,41 @@
         style="margin-top: 32px;"
         @changePage="changePage"
       />
+      <div class="forum__input" v-if="user.userId !== null">
+        <h5>{{ forums.forum[forums.idForum].theme[forums.idChat].title }}</h5>
+
+        <div class="forum__input-text">
+          <div class="head">
+            <div class="head__fonts">
+              <select  v-model="msgData.fonts"  name="" id="">
+                <option v-for="item in fonts" :value="item.font" :style="{ fontFamily: item.font }">{{ item.font }}</option>
+              </select>
+            </div>
+            <div class="head__fz">
+              <select @change="changeFont"  v-model="msgData.fz">
+                <option v-for="item in fz" :value="item.fz">{{ item.fz }}</option>
+              </select>
+            </div>
+            <div class="head__style">
+              <IconStyle/>
+            </div>
+          </div>
+          <div class="body">
+            <textarea 
+            :style="{ fontFamily: msgData.fonts, fontSize:  `${msgData.fz}px` }" 
+            v-model="msgData.text"
+            placeholder="Сообщение" name="" id="" cols="30" rows="10"></textarea>
+          </div>
+          <TheButton
+            :width="145"
+            :padding="9"
+            :lineHeight="21"
+            :isCourses="true"
+            style="margin-top: 20px; margin-bottom: 50px;"
+            @click="sendMessage"
+          >Отправить</TheButton>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +89,8 @@
 import {ref, computed, onBeforeMount} from 'vue';
 import ThePagination from '@/components/UI/pagination/ThePagination.vue'
 import TheStar from '../../components/UI/Stars/TheStars.vue';
+import IconStyle from '@/assets/icons/forum/IconStyle.vue'
+import TheButton from '@/components/UI/Buttons/Button.vue'
 
 import {stateUser} from '@/stores/StateUser.js'
 const user = stateUser();
@@ -117,13 +155,148 @@ onBeforeMount(() => {
 })
 
 
+const fonts = ref([
+  {
+    id: 0,
+    font: 'Roboto',
+  },
+  {
+    id: 1,
+    font: 'Arial',
+  },
+  {
+    id: 2,
+    font: 'Helvetica',
+  },
+  {
+    id: 3,
+    font: 'Times New Roman',
+  },
+  {
+    id: 4,
+    font: 'Verdana',
+  },
+  {
+    id: 5,
+    font: 'Georgia',
+  },
+  {
+    id: 6,
+    font: 'Courier New',
+  },
+  {
+    id: 7,
+    font: 'Tahoma',
+  },
+  {
+    id: 8,
+    font: 'Verdana',
+  },
+  {
+    id: 9,
+    font: 'Impact',
+  },
+  {
+    id: 10,
+    font: 'Comic Sans MS',
+  },
+])
 
-async function addDocs(){
-  forums.forum[forums.idForum].theme.push(item.value[0]);
+const fz = ref([
+  {
+    id: 0,
+    fz: 8,
+  },
+  {
+    id: 1,
+    fz: 9,
+  },
+  {
+    id: 2,
+    fz: 10,
+  },
+  {
+    id: 3,
+    fz: 11,
+  },
+  {
+    id: 4,
+    fz: 12,
+  },
+  {
+    id: 5,
+    fz: 13,
+  },
+  {
+    id: 6,
+    fz: 14,
+  },
+  {
+    id: 7,
+    fz: 15,
+  },
+  {
+    id: 8,
+    fz: 16,
+  },
+  {
+    id: 9,
+    fz: 17,
+  },
+  {
+    id: 10,
+    fz: 18,
+  },
+  {
+    id: 11,
+    fz: 19,
+  },
+  {
+    id: 12,
+    fz: 20,
+  }
+])
+
+const msgData = ref({
+  fonts:  'Roboto',
+  fz: 8,
+  text: '',
+})
+function changeFont(){
+  console.log(msgData.value)
+}
+
+function getFormattedDate() {
+  const currentDate = new Date();
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const year = currentDate.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+const formattedDate = getFormattedDate();
+
+
+
+async function sendMessage(){
+  const msg = {
+    id: forums.forum[forums.idForum].theme[forums.idChat].messangers.length,
+    text: msgData.value.text,
+    fz: msgData.value.fz,
+    fonts: msgData.value.fonts,
+    user: {
+      name: user.user[user.userId].name,
+      ava: user.user[user.userId].ava[0].url,
+    },
+    date: formattedDate,
+  }
+
+  forums.forum[forums.idForum].theme[forums.idChat].messangers.push(msg)
+  msgData.value.text = '';
+  currentPage.value = Math.ceil(forums.forum[forums.idForum].theme[forums.idChat].messangers.length / 2);
   const data = {
     theme: forums.forum[forums.idForum].theme,
   }
-  await updateDoc(doc(db, 'forum', forums.forum[forums.idForum].idx),  data);
+  await updateDoc(doc(db, "forum",  forums.forum[forums.idForum].idx), data);
 }
 </script>
 
@@ -198,6 +371,8 @@ async function addDocs(){
   }
 
   &__msg{
+    height: 691px;
+    border: 1px solid #DCE3E8;
     &-item{
       display: flex;
       height: 345px;
@@ -272,6 +447,63 @@ async function addDocs(){
             line-height: 25px; /* 178.571% */
           }
         }
+      }
+    }
+  }
+
+  &__input{
+    margin-top: 59px;
+    width: 913px;
+    h5{
+      color: #292C32;
+      font-family: Montserrat;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 22px; /* 110% */
+    }
+
+    .head{
+      border: 1px solid #DCE3E8;
+      display: flex;
+      align-items: center;
+      margin-top: 23px;
+
+      select{
+        padding: 15px 18px;
+        border: 0;
+        outline: 0;
+      }
+
+      &__fonts{
+        select{
+          width: 175px;
+          height: 50px;
+        }
+      }
+
+      &__fz{
+        border-left: 1px solid #DCE3E8;
+        border-right: 1px solid #DCE3E8;
+        select{
+          width: 100px;
+        }
+      }
+
+      &__style{
+        margin-left: 13px;
+        transform: translateY(2px);
+      }
+    }
+
+    .body{
+      textarea{
+        width: 100%;
+        outline: 0;
+        border: 1px solid #DCE3E8;
+        resize: none;
+        height: 228px;
+        padding: 10px;
       }
     }
   }
